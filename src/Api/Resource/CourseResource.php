@@ -1,8 +1,12 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Api\Resource;
+
 use ApiPlatform\Metadata\{ApiResource, ApiProperty, Get, GetCollection, Post, Patch, Delete, Link};
 use App\Api\State\{ReadProvider, WriteProcessor};
+
 #[ApiResource(shortName: 'Course', operations: [
     new GetCollection(uriTemplate: '/courses'),
     new Get(uriTemplate: '/courses/{id}'),

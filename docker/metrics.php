@@ -5,7 +5,7 @@ require dirname(__DIR__).'/vendor/autoload.php';
 header('Content-Type: text/plain; version=0.0.4');
 try {
     // DBAL 4 no longer parses the url in DriverManager.
-    $params=(new Doctrine\DBAL\Tools\DsnParser(['mysql'=>'pdo_mysql']))->parse($_ENV['DATABASE_URL']); $db=Doctrine\DBAL\DriverManager::getConnection($params);
+    $params=(new Doctrine\DBAL\Tools\DsnParser(['mysql'=>'pdo_mysql']))->parse($_ENV['DATABASE_URL']); $params['driverOptions']=[PDO::ATTR_TIMEOUT=>2]; $db=Doctrine\DBAL\DriverManager::getConnection($params);
     echo "university_database_up 1\n";
     foreach($db->fetchAllAssociative('SELECT status,COUNT(*) n FROM purchases GROUP BY status') as $r) echo 'university_purchases{status="'.$r['status'].'"} '.$r['n']."\n";
     echo 'university_outbox_pending '.$db->fetchOne('SELECT COUNT(*) FROM outbox WHERE published_at IS NULL')."\n";

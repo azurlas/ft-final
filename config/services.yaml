@@ -1,3 +1,5 @@
+parameters:
+  default_consumer: native-consumer
 services:
   _defaults:
     autowire: true

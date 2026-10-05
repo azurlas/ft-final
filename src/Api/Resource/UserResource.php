@@ -1,8 +1,12 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Api\Resource;
+
 use ApiPlatform\Metadata\{ApiResource, ApiProperty, Get, GetCollection, Post, Patch, Delete, Link};
 use App\Api\State\{ReadProvider, WriteProcessor};
+
 #[ApiResource(shortName: 'User', operations: [
     new Get(uriTemplate: '/me', uriVariables: [], extraProperties: ['action' => 'me']),
     new Post(uriTemplate: '/register', input: RegisterInput::class, read: false, extraProperties: ['action' => 'register'])

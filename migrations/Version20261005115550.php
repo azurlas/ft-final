@@ -15,7 +15,10 @@ final class Version20261005115550 extends AbstractMigration
         return 'University model, integrity constraints, and payment recovery indexes';
     }
 
-    public function isTransactional(): bool { return false; }
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 
     public function up(Schema $schema): void
     {

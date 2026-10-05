@@ -1,8 +1,12 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Api\Resource;
+
 use ApiPlatform\Metadata\{ApiResource, ApiProperty, Get, GetCollection, Post, Patch, Delete, Link};
 use App\Api\State\{ReadProvider, WriteProcessor};
+
 #[ApiResource(shortName: 'Enrollment', operations: [
     new GetCollection(uriTemplate: '/enrollments')
 ], provider: ReadProvider::class, processor: WriteProcessor::class, extraProperties: ['kind' => 'enrollments'])]

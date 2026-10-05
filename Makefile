@@ -20,11 +20,10 @@ lint:
 check:
 	bash scripts/check.sh
 helm-check:
-	helm lint helm/university
-	helm template university helm/university -f helm/university/values-local.yaml > /dev/null
+	bash scripts/helm-check.sh
 setup-local:
 	bash scripts/setup-local.sh
 smoke:
 	python3 scripts/smoke.py
 experiments:
-	python3 scripts/experiments/run.py
+	python3 scripts/experiments.py

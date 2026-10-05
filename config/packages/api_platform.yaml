@@ -11,6 +11,8 @@ api_platform:
     jsonopenapi: ['application/vnd.openapi+json']
     html: ['text/html']
   defaults:
+    denormalization_context:
+      allow_extra_attributes: false
     pagination_items_per_page: 20
     pagination_maximum_items_per_page: 100
   swagger:

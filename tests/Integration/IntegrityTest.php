@@ -1,14 +1,28 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Tests\Integration;
+
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+
 final class IntegrityTest extends KernelTestCase
 {
     private Connection $db;
-    protected function setUp(): void { self::bootKernel(); $this->db = self::getContainer()->get(Connection::class); $this->db->beginTransaction(); }
-    protected function tearDown(): void { if ($this->db->isTransactionActive()) { $this->db->rollBack(); } parent::tearDown(); }
+    protected function setUp(): void
+    {
+        self::bootKernel();
+        $this->db = self::getContainer()->get(Connection::class);
+        $this->db->beginTransaction();
+    }
+    protected function tearDown(): void
+    {
+        if ($this->db->isTransactionActive()) {
+            $this->db->rollBack();
+        } parent::tearDown();
+    }
     public function testNegativeCoursePriceIsRejectedByDatabase(): void
     {
         $this->expectException(Exception::class);

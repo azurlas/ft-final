@@ -1,7 +1,11 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
+
 #[ORM\Entity]
 #[ORM\Table(name: 'mock_receipts')]
 #[ORM\UniqueConstraint(name: 'uniq_mock_receipts_0', columns: ['purchase_id'])]

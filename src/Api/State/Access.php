@@ -34,10 +34,10 @@ final class Access
             throw new NotFoundHttpException();
         }
     }
-    public function enrolled(int $courseId): void
+    public function enrolled(int $courseId, bool $allowAdmin = true): void
     {
         $u = $this->user();
-        if (!$u->isAdmin && !$this->db->fetchOne('SELECT id FROM enrollments WHERE user_id=? AND course_id=?', [$u->id, $courseId])) {
+        if ((!$allowAdmin || !$u->isAdmin) && !$this->db->fetchOne('SELECT id FROM enrollments WHERE user_id=? AND course_id=?', [$u->id, $courseId])) {
             throw new AccessDeniedHttpException('Course enrollment required');
         }
     }

@@ -5,7 +5,7 @@ framework:
       payments:
         dsn: '%env(REDIS_QUEUE_DSN)%'
         options:
-          consumer: '%env(default::HOSTNAME)%'
+          consumer: '%env(default:default_consumer:HOSTNAME)%'
           redeliver_timeout: 120
           delete_after_ack: true
         retry_strategy:

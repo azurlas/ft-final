@@ -1,7 +1,11 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
+
 #[ORM\Entity]
 #[ORM\Table(name: 'grades')]
 #[ORM\UniqueConstraint(name: 'uniq_grades_0', columns: ['assignment_id', 'user_id'])]

@@ -11,3 +11,8 @@
 /.DS_Store
 
 /public/bundles/
+
+/config/reference.php
+/scripts/__pycache__/
+
+/.php-cs-fixer.cache

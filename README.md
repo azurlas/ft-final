@@ -14,7 +14,7 @@ make setup-local
 make smoke
 ```
 
-Requires Docker/OrbStack, its Kubernetes cluster, PHP 8.3 with the extensions in `composer.json`, Composer, Helm, and Python 3. Setup starts OrbStack Kubernetes if needed and always selects `orbstack` explicitly. It never changes the global kubectl context. Generated secrets live in ignored `output/secrets/` files and are reused on upgrades. Set `KUBECTL_BIN` to override the local CLI path.
+Requires Docker/OrbStack, its Kubernetes cluster, PHP 8.3 with the extensions in `composer.json`, Composer, Helm, and Python 3. Setup starts OrbStack Kubernetes if needed and always selects `orbstack` explicitly. It restores the original global kubectl context if OrbStack startup changes it. Generated secrets live in ignored `output/secrets/` files and are reused on upgrades. Set `KUBECTL_BIN` to override the local CLI path.
 
 | Endpoint | URL |
 | --- | --- |

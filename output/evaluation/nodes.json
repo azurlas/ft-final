@@ -1,0 +1,423 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Node",
+            "metadata": {
+                "annotations": {
+                    "alpha.kubernetes.io/provided-node-ip": "192.168.139.2,fd07:b51a:cc66::2",
+                    "flannel.alpha.coreos.com/backend-data": "null",
+                    "flannel.alpha.coreos.com/backend-type": "host-gw",
+                    "flannel.alpha.coreos.com/backend-v6-data": "null",
+                    "flannel.alpha.coreos.com/kube-subnet-manager": "true",
+                    "flannel.alpha.coreos.com/public-ip": "192.168.139.2",
+                    "flannel.alpha.coreos.com/public-ipv6": "fd07:b51a:cc66::2",
+                    "k3s.io/hostname": "orbstack",
+                    "k3s.io/internal-ip": "192.168.139.2,fd07:b51a:cc66::2",
+                    "k3s.io/node-args": "[\"server\",\"--apiVersion\",\"kubelet.config.k8s.io/v1beta1\",\"--housekeepingInterval\",\"5m\",\"--kind\",\"KubeletConfiguration\",\"--volumeStatsAggPeriod\",\"5m\",\"--disable\",\"metrics-server,traefik,coredns\",\"--disable-helm-controller\",\"--https-listen-port\",\"26443\",\"--lb-server-port\",\"26444\",\"--docker\",\"--container-runtime-endpoint\",\"unix:///var/run/docker.sock.real\",\"--protect-kernel-defaults\",\"--flannel-backend\",\"host-gw\",\"--cluster-cidr\",\"192.168.194.0/25,fd07:b51a:cc66:a::/72\",\"--service-cidr\",\"192.168.194.128/25,fd07:b51a:cc66:a:8000::/112\",\"--tls-san\",\"k8s.orb.local\",\"--tls-san\",\"docker.orb.local\",\"--write-kubeconfig\",\"/run/kubeconfig.yml\",\"--kube-apiserver-arg\",\"event-ttl=30m\",\"--kube-proxy-arg\",\"iptables-sync-period=5m\",\"--kube-proxy-arg\",\"iptables-min-sync-period=5s\",\"--kubelet-arg\",\"--allowed-unsafe-sysctls\",\"net.*\",\"--kubelet-arg\",\"--node-status-update-frequency\",\"1m\",\"--kubelet-arg\",\"--file-check-frequency\",\"1m\",\"--kubelet-arg\",\"--feature-gates\",\"PodAndContainerStatsFromCRI=true\",\"--kubelet-arg\",\"--config\",\"/etc/kubelet.conf\",\"--kube-controller-manager-arg\",\"controllers=*,tokencleaner,-validatingadmissionpolicy-status-controller\",\"--kube-controller-manager-arg\",\"node-cidr-mask-size-ipv4=25\",\"--kube-controller-manager-arg\",\"node-monitor-period=30s\",\"--kube-controller-manager-arg\",\"node-monitor-grace-period=3m\",\"--kube-controller-manager-arg\",\"pvclaimbinder-sync-period=5m\",\"--kube-controller-manager-arg\",\"concurrent-cron-job-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-daemonset-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-deployment-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-endpoint-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-ephemeralvolume-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-gc-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-horizontal-pod-autoscaler-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-job-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-namespace-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-replicaset-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-resource-quota-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-service-endpoint-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-serviceaccount-token-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-statefulset-syncs=1\",\"--kube-controller-manager-arg\",\"concurrent-ttl-after-finished-syncs=1\",\"--kube-controller-manager-arg\",\"mirroring-concurrent-service-endpoint-syncs=1\",\"--kube-controller-manager-arg\",\"node-cidr-mask-size-ipv6=72\"]",
+                    "k3s.io/node-config-hash": "D2FVFQYAXDE5C5ETVY62H6YYM32RJVWBAWR3XS4CGN3266VLFZVA====",
+                    "k3s.io/node-env": "{}",
+                    "node.alpha.kubernetes.io/ttl": "0",
+                    "volumes.kubernetes.io/controller-managed-attach-detach": "true"
+                },
+                "creationTimestamp": "2025-09-20T20:02:21Z",
+                "finalizers": [
+                    "wrangler.cattle.io/node"
+                ],
+                "labels": {
+                    "beta.kubernetes.io/arch": "arm64",
+                    "beta.kubernetes.io/instance-type": "k3s",
+                    "beta.kubernetes.io/os": "linux",
+                    "kubernetes.io/arch": "arm64",
+                    "kubernetes.io/hostname": "orbstack",
+                    "kubernetes.io/os": "linux",
+                    "node-role.kubernetes.io/control-plane": "true",
+                    "node-role.kubernetes.io/master": "true",
+                    "node.kubernetes.io/instance-type": "k3s"
+                },
+                "name": "orbstack",
+                "resourceVersion": "241970",
+                "uid": "9243f313-022b-4804-9d69-0734258b7b37"
+            },
+            "spec": {
+                "podCIDR": "192.168.194.0/25",
+                "podCIDRs": [
+                    "192.168.194.0/25",
+                    "fd07:b51a:cc66:a::/72"
+                ],
+                "providerID": "k3s://orbstack"
+            },
+            "status": {
+                "addresses": [
+                    {
+                        "address": "192.168.139.2",
+                        "type": "InternalIP"
+                    },
+                    {
+                        "address": "fd07:b51a:cc66::2",
+                        "type": "InternalIP"
+                    },
+                    {
+                        "address": "orbstack",
+                        "type": "Hostname"
+                    }
+                ],
+                "allocatable": {
+                    "cpu": "10",
+                    "ephemeral-storage": "201907083516",
+                    "memory": "12304840Ki",
+                    "pods": "110"
+                },
+                "capacity": {
+                    "cpu": "10",
+                    "ephemeral-storage": "202688Mi",
+                    "memory": "12304840Ki",
+                    "pods": "110"
+                },
+                "conditions": [
+                    {
+                        "lastHeartbeatTime": "2026-10-05T13:10:03Z",
+                        "lastTransitionTime": "2026-03-17T12:56:01Z",
+                        "message": "kubelet has sufficient memory available",
+                        "reason": "KubeletHasSufficientMemory",
+                        "status": "False",
+                        "type": "MemoryPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2026-10-05T13:10:03Z",
+                        "lastTransitionTime": "2026-03-17T12:56:01Z",
+                        "message": "kubelet has no disk pressure",
+                        "reason": "KubeletHasNoDiskPressure",
+                        "status": "False",
+                        "type": "DiskPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2026-10-05T13:10:03Z",
+                        "lastTransitionTime": "2026-03-17T12:56:01Z",
+                        "message": "kubelet has sufficient PID available",
+                        "reason": "KubeletHasSufficientPID",
+                        "status": "False",
+                        "type": "PIDPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2026-10-05T13:10:03Z",
+                        "lastTransitionTime": "2026-03-23T04:28:59Z",
+                        "message": "kubelet is posting ready status",
+                        "reason": "KubeletReady",
+                        "status": "True",
+                        "type": "Ready"
+                    }
+                ],
+                "daemonEndpoints": {
+                    "kubeletEndpoint": {
+                        "Port": 10250
+                    }
+                },
+                "images": [
+                    {
+                        "names": [
+                            "nn-final-model:latest"
+                        ],
+                        "sizeBytes": 5134455293
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 5109732307
+                    },
+                    {
+                        "names": [
+                            "registry.thesoul.io/tsp/devops/docker-library/php-composer-phpunit/php-composer-phpunit@sha256:b5cc34e65fafd706f481433d93bdb49f5ed1b7e6af821850d5e3ca5efb5fdf48",
+                            "registry.thesoul.io/tsp/devops/docker-library/php-composer-phpunit/php-composer-phpunit:8.3-withoutxdebug"
+                        ],
+                        "sizeBytes": 1898114633
+                    },
+                    {
+                        "names": [
+                            "midterm/university:final-20261005b"
+                        ],
+                        "sizeBytes": 954597766
+                    },
+                    {
+                        "names": [
+                            "midterm/university:final-20261005c"
+                        ],
+                        "sizeBytes": 954585669
+                    },
+                    {
+                        "names": [
+                            "midterm/university:final-20261005"
+                        ],
+                        "sizeBytes": 954576563
+                    },
+                    {
+                        "names": [
+                            "midterm/university:local-20261005e"
+                        ],
+                        "sizeBytes": 954095414
+                    },
+                    {
+                        "names": [
+                            "midterm/university:local-20261005d"
+                        ],
+                        "sizeBytes": 954079465
+                    },
+                    {
+                        "names": [
+                            "midterm/university:local-20261005c"
+                        ],
+                        "sizeBytes": 954069917
+                    },
+                    {
+                        "names": [
+                            "midterm/university:local-20261005b"
+                        ],
+                        "sizeBytes": 948100722
+                    },
+                    {
+                        "names": [
+                            "midterm/university:local-20261005"
+                        ],
+                        "sizeBytes": 948100408
+                    },
+                    {
+                        "names": [
+                            "midterm/university:impl"
+                        ],
+                        "sizeBytes": 948097390
+                    },
+                    {
+                        "names": [
+                            "midterm/university:dev"
+                        ],
+                        "sizeBytes": 947710419
+                    },
+                    {
+                        "names": [
+                            "server-app:latest"
+                        ],
+                        "sizeBytes": 875660219
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 837670522
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 837670489
+                    },
+                    {
+                        "names": [
+                            "mysql@sha256:b3b90af2a6552ae30c266fdb7d5dd55f3afb72404bb78d37fe8a23eb857fd3fb",
+                            "mysql:8.4"
+                        ],
+                        "sizeBytes": 812407457
+                    },
+                    {
+                        "names": [
+                            "mysql@sha256:2952e3be7807f06fc18de50b3ea1a632d5c70d63482ff7d7376fe3aa8999babf",
+                            "mysql:8.4.8"
+                        ],
+                        "sizeBytes": 792762367
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 741446536
+                    },
+                    {
+                        "names": [
+                            "grafana/grafana@sha256:2175aaa91c96733d86d31cf270d5310b278654b03f5718c59de12a865380a31f",
+                            "grafana/grafana:12.3.1"
+                        ],
+                        "sizeBytes": 700860037
+                    },
+                    {
+                        "names": [
+                            "nn-final-app:latest"
+                        ],
+                        "sizeBytes": 685838618
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 685827890
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 679292997
+                    },
+                    {
+                        "names": [
+                            "phpswoole/swoole@sha256:29d5341e98bf92d76ae43d06279108c63dcf36c24159f67086d01ea70cb07cc7",
+                            "phpswoole/swoole:6.0-php8.3"
+                        ],
+                        "sizeBytes": 670797524
+                    },
+                    {
+                        "names": [
+                            "ingate-backend:latest"
+                        ],
+                        "sizeBytes": 651145898
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 651142986
+                    },
+                    {
+                        "names": [
+                            "admin-php:latest"
+                        ],
+                        "sizeBytes": 647969801
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 647467293
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 647467093
+                    },
+                    {
+                        "names": [
+                            "neo4j@sha256:0c83938a8d825ade6e42ab81c4ab9a99a7e7ff05fb2fd248fd0636bbc6aa9aab",
+                            "neo4j:latest"
+                        ],
+                        "sizeBytes": 633801487
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 571853944
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 571853944
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 571836232
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 571836232
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 571835830
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 571835830
+                    },
+                    {
+                        "names": [
+                            "ass2-worker:latest"
+                        ],
+                        "sizeBytes": 571710934
+                    },
+                    {
+                        "names": [
+                            "ass2-php-fpm:latest"
+                        ],
+                        "sizeBytes": 571710934
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 568999675
+                    },
+                    {
+                        "names": [
+                            "quay.io/argoproj/argocd@sha256:a8532a23ed5f6e65afaf2a082b65fc74614549e54774f6b25fe3c993faa7bea3",
+                            "quay.io/argoproj/argocd:v3.2.1"
+                        ],
+                        "sizeBytes": 553373301
+                    },
+                    {
+                        "names": [
+                            "php@sha256:2c337daa0f4adb5251f5620ec5b166f7cbbbb889058e93be44948c81a26b8a74",
+                            "php:8.4-fpm"
+                        ],
+                        "sizeBytes": 511109524
+                    },
+                    {
+                        "names": [
+                            "mysql/mysql-server@sha256:d6c8301b7834c5b9c2b733b10b7e630f441af7bc917c74dba379f24eeeb6a313",
+                            "mysql/mysql-server:8.0"
+                        ],
+                        "sizeBytes": 507390081
+                    },
+                    {
+                        "names": [
+                            "amazon/aws-cli@sha256:fdd8d1fcbea9c371678dee5a40df8b178c7a781b4586605756ee28114c97ead6",
+                            "amazon/aws-cli:2.37.4"
+                        ],
+                        "sizeBytes": 491815991
+                    },
+                    {
+                        "names": [
+                            "postgres@sha256:b477759d38be47671d54a054d832791f8ddb9f0eaf6faf51ed17516087793a66",
+                            "postgres:16"
+                        ],
+                        "sizeBytes": 474059927
+                    },
+                    {
+                        "names": null,
+                        "sizeBytes": 341893450
+                    },
+                    {
+                        "names": [
+                            "prom/prometheus@sha256:63805ebb8d2b3920190daf1cb14a60871b16fd38bed42b857a3182bc621f4996",
+                            "prom/prometheus:v3.5.0"
+                        ],
+                        "sizeBytes": 303241391
+                    },
+                    {
+                        "names": [
+                            "rancher/local-path-provisioner@sha256:1eba82e9c386038b4af6d69cca7519fac738c28c42735ed48ce70c882ad0d80f",
+                            "rancher/local-path-provisioner:v0.0.36"
+                        ],
+                        "sizeBytes": 288893936
+                    },
+                    {
+                        "names": [
+                            "postgres@sha256:20edbde7749f822887a1a022ad526fde0a47d6b2be9a8364433605cf65099416",
+                            "postgres:16-alpine"
+                        ],
+                        "sizeBytes": 271565094
+                    },
+                    {
+                        "names": [
+                            "envoyproxy/gateway@sha256:9d67017c442a70e6ae9f1a358e6c80eb653c67c2e40823d9a991e0daf37ba926",
+                            "envoyproxy/gateway:v1.9.2"
+                        ],
+                        "sizeBytes": 258250001
+                    },
+                    {
+                        "names": [
+                            "rustfs/rustfs@sha256:8cc9801755448b71a786705ce76692c77e14936cccd87cf2fc31842e58f4d1ff",
+                            "rustfs/rustfs:1.0.0"
+                        ],
+                        "sizeBytes": 246884836
+                    }
+                ],
+                "nodeInfo": {
+                    "architecture": "arm64",
+                    "bootID": "181e9e64-21c3-4a2e-836f-afed9749b9ee",
+                    "containerRuntimeVersion": "docker://29.4.0",
+                    "kernelVersion": "7.0.14-orbstack-00380-ga7e0a2dc9535",
+                    "kubeProxyVersion": "",
+                    "kubeletVersion": "v1.35.6+orb1",
+                    "machineID": "82ddc538b9e95ae7c1d309201ccb5f9d",
+                    "operatingSystem": "linux",
+                    "osImage": "OrbStack",
+                    "swap": {
+                        "capacity": 13673889792
+                    },
+                    "systemUUID": "82ddc538b9e95ae7c1d309201ccb5f9d"
+                }
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}

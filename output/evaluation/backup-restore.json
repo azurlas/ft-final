@@ -1,0 +1,50 @@
+{
+  "backup": {
+    "key": "mysql/20261005-131644-fdbe4387.sql.gz",
+    "createdAt": "2026-10-05T13:16:44+00:00",
+    "sha256": "d66a373c600ccf56a03c89e0b6bfb511fda8195ab2333963e9b28a1b8edb3a30",
+    "bytes": 13188
+  },
+  "restore": {
+    "database": "university_restore_20261005131644_acbd85",
+    "checksumVerified": true,
+    "rowHashes": {
+      "users": "97e0db6551052b76419fdff6d3c18f22b0ecf1115532d9dbeb60c6c374a3c98e",
+      "courses": "94ba6dbb4188306ae925eae8591e8063e60bdd2ab12e7d7ce7b909424485b700",
+      "assignments": "55e9148ab365894cafd5b24253f88f7f94d825f4f3f88db2259049f526d49206",
+      "enrollments": "41a6eb8581a9c46c5da52af0c6f2f6674db827930e5566046b55d84dcf44adc7",
+      "purchases": "7e2a3579e5b7488ae78e04532b2a8630d683b9057a577dcb26a32b5ead9e4470",
+      "payment_attempts": "b6322e8434ecdfe921d000a341fe3ccb16637d6d145917ef082361f70a2c92ea",
+      "submissions": "9253e7f59e33da2634f624324aa6fb6d477b1f3eb6b43316140e60d146f98405",
+      "grades": "2808137d42d38c16a0d3f5d8732d182bf116a29ad2809285c75da06d68b12aa2",
+      "mock_receipts": "89347dbd5c548e73683435619324beea473cabbfc9b4e899b35f016c2e55517e"
+    },
+    "matchesCurrentSource": true,
+    "counts": {
+      "users": 26,
+      "courses": 8,
+      "assignments": 8,
+      "enrollments": 38,
+      "purchases": 48,
+      "payment_attempts": 85,
+      "submissions": 6,
+      "grades": 5,
+      "mock_receipts": 32
+    },
+    "violations": 0,
+    "sourceCounts": {
+      "users": 26,
+      "courses": 8,
+      "assignments": 8,
+      "enrollments": 38,
+      "purchases": 48,
+      "payment_attempts": 85,
+      "submissions": 6,
+      "grades": 5,
+      "mock_receipts": 32
+    }
+  },
+  "backupSeconds": 0.9575594160705805,
+  "restoreSeconds": 0.542733334004879,
+  "snapshotAgeSecondsAtVerification": 1.200032
+}

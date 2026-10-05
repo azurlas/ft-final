@@ -1,0 +1,19 @@
+{
+  "type": "payment",
+  "scenario": "published_queue_loss",
+  "namespace": "midterm",
+  "repetition": 1,
+  "purchaseId": 8,
+  "accepted": true,
+  "publishedOutboxRowsBeforeLoss": 1,
+  "status": "succeeded",
+  "recovered": true,
+  "recoverySeconds": 11.583405207842588,
+  "observationSeconds": 11.583406124962494,
+  "rightCensored": false,
+  "counts": {
+    "receipts": 1,
+    "enrollments": 1,
+    "attempts": 1
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-10-05T13:21:40.173193+00:00",
+  "makeCheck": "passed",
+  "tests": 8,
+  "assertions": 98,
+  "phpstanLevel": 5,
+  "helmCheck": "passed",
+  "httpChecks": {
+    "/api/docs.html": 200,
+    "/health/ready": 200,
+    "/api/me": 401,
+    "/api/courses": 200,
+    "/api/docs.jsonopenapi": 200
+  },
+  "swaggerAssetsChecked": 11,
+  "openApiVersion": "3.2.0",
+  "gatewayChecks": {
+    "midterm/Gateway/university": "Programmed",
+    "midterm/HTTPRoute/university": "Accepted",
+    "midterm-baseline/Gateway/university": "Programmed",
+    "midterm-baseline/HTTPRoute/university": "Accepted",
+    "midterm-monitoring/Gateway/monitoring": "Programmed",
+    "midterm-monitoring/HTTPRoute/grafana": "Accepted"
+  },
+  "interactiveBrowserVerified": false
+}

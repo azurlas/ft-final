@@ -85,6 +85,6 @@ final class CheckoutService
     }
     public static function outbox(Connection $db, int $id, int $delay = 0): void
     {
-        $db->executeStatement("INSERT INTO outbox (type,aggregate_id,payload,available_at,delivery_count,created_at) VALUES ('payment',?,?,DATE_ADD(UTC_TIMESTAMP(),INTERVAL ? SECOND),0,UTC_TIMESTAMP())", [$id,json_encode(['purchaseId' => $id,'requestId' => (json_decode($db->fetchOne('SELECT metadata FROM purchases WHERE id=?',[$id]),true)[0]['requestId'] ?? '')]),$delay]);
+        $db->executeStatement("INSERT INTO outbox (type,aggregate_id,payload,available_at,delivery_count,created_at) VALUES ('payment',?,?,DATE_ADD(UTC_TIMESTAMP(),INTERVAL ? SECOND),0,UTC_TIMESTAMP())", [$id,json_encode(['purchaseId' => $id,'requestId' => (json_decode($db->fetchOne('SELECT metadata FROM purchases WHERE id=?', [$id]), true)[0]['requestId'] ?? '')]),$delay]);
     }
 }

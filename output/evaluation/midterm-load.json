@@ -1,0 +1,1213 @@
+{
+  "type": "load",
+  "namespace": "midterm",
+  "concurrency": 20,
+  "requests": 300,
+  "elapsedSeconds": 1.7500219580251724,
+  "statusCounts": {
+    "200": 300
+  },
+  "p95LatencyMs": 452.4012911133468,
+  "samples": [
+    {
+      "status": 200,
+      "latencyMs": 282.24112489260733
+    },
+    {
+      "status": 200,
+      "latencyMs": 488.6554579716176
+    },
+    {
+      "status": 200,
+      "latencyMs": 236.05754086747766
+    },
+    {
+      "status": 200,
+      "latencyMs": 66.11191690899432
+    },
+    {
+      "status": 200,
+      "latencyMs": 332.9849170986563
+    },
+    {
+      "status": 200,
+      "latencyMs": 459.5184999052435
+    },
+    {
+      "status": 200,
+      "latencyMs": 452.4012911133468
+    },
+    {
+      "status": 200,
+      "latencyMs": 593.697041971609
+    },
+    {
+      "status": 200,
+      "latencyMs": 98.36100018583238
+    },
+    {
+      "status": 200,
+      "latencyMs": 653.1126250047237
+    },
+    {
+      "status": 200,
+      "latencyMs": 625.8502500131726
+    },
+    {
+      "status": 200,
+      "latencyMs": 425.30879098922014
+    },
+    {
+      "status": 200,
+      "latencyMs": 561.316000064835
+    },
+    {
+      "status": 200,
+      "latencyMs": 186.1387910321355
+    },
+    {
+      "status": 200,
+      "latencyMs": 938.8296669349074
+    },
+    {
+      "status": 200,
+      "latencyMs": 300.6825828924775
+    },
+    {
+      "status": 200,
+      "latencyMs": 522.3739170469344
+    },
+    {
+      "status": 200,
+      "latencyMs": 202.79133296571672
+    },
+    {
+      "status": 200,
+      "latencyMs": 388.66329193115234
+    },
+    {
+      "status": 200,
+      "latencyMs": 126.5732089523226
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.982166975736618
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.604750132188201
+    },
+    {
+      "status": 200,
+      "latencyMs": 16.8142500333488
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.883250014856458
+    },
+    {
+      "status": 200,
+      "latencyMs": 15.266665956005454
+    },
+    {
+      "status": 200,
+      "latencyMs": 5.2118750754743814
+    },
+    {
+      "status": 200,
+      "latencyMs": 5.477166036143899
+    },
+    {
+      "status": 200,
+      "latencyMs": 21.922875195741653
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.960958061739802
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.419291021302342
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.525500005111098
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.380582952871919
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.488207960501313
+    },
+    {
+      "status": 200,
+      "latencyMs": 14.403415843844414
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.11858307942748
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.69150010496378
+    },
+    {
+      "status": 200,
+      "latencyMs": 19.214333035051823
+    },
+    {
+      "status": 200,
+      "latencyMs": 19.02649994008243
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.128166923299432
+    },
+    {
+      "status": 200,
+      "latencyMs": 15.651875175535679
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.028084015473723
+    },
+    {
+      "status": 200,
+      "latencyMs": 14.77749994955957
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.577290879562497
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.503500044345856
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.172917041927576
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.209041155874729
+    },
+    {
+      "status": 200,
+      "latencyMs": 17.048166831955314
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.858166893944144
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.063874932006001
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.75591698847711
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.40054196305573
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.442541981115937
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.191624915227294
+    },
+    {
+      "status": 200,
+      "latencyMs": 4.629833856597543
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.532792028039694
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.787916136905551
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.29087496176362
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.448707992210984
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.941708089783788
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.741708101704717
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.236042181029916
+    },
+    {
+      "status": 200,
+      "latencyMs": 219.18458282016218
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.306041989475489
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.79862518236041
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.289250148460269
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.295666124671698
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.297958014532924
+    },
+    {
+      "status": 200,
+      "latencyMs": 14.641457935795188
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.561332805082202
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.626791907474399
+    },
+    {
+      "status": 200,
+      "latencyMs": 19.687833031639457
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.27616604976356
+    },
+    {
+      "status": 200,
+      "latencyMs": 20.489708054810762
+    },
+    {
+      "status": 200,
+      "latencyMs": 23.484583012759686
+    },
+    {
+      "status": 200,
+      "latencyMs": 28.04308314807713
+    },
+    {
+      "status": 200,
+      "latencyMs": 24.14341690018773
+    },
+    {
+      "status": 200,
+      "latencyMs": 14.693166129291058
+    },
+    {
+      "status": 200,
+      "latencyMs": 16.788750188425183
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.929749855771661
+    },
+    {
+      "status": 200,
+      "latencyMs": 15.552707947790623
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.624959159642458
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.901249971240759
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.476083124056458
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.013625051826239
+    },
+    {
+      "status": 200,
+      "latencyMs": 212.79112482443452
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.917457984760404
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.725291911512613
+    },
+    {
+      "status": 200,
+      "latencyMs": 476.17333312518895
+    },
+    {
+      "status": 200,
+      "latencyMs": 534.4468748662621
+    },
+    {
+      "status": 200,
+      "latencyMs": 406.751292059198
+    },
+    {
+      "status": 200,
+      "latencyMs": 503.10245784930885
+    },
+    {
+      "status": 200,
+      "latencyMs": 557.3328749742359
+    },
+    {
+      "status": 200,
+      "latencyMs": 585.977042093873
+    },
+    {
+      "status": 200,
+      "latencyMs": 5.643167067319155
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.032499950379133
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.646625025197864
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.386582972481847
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.575792122632265
+    },
+    {
+      "status": 200,
+      "latencyMs": 5.719332955777645
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.459417011588812
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.563499992713332
+    },
+    {
+      "status": 200,
+      "latencyMs": 16.64812513627112
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.09249989874661
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.216791087761521
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.09987497329712
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.604667011648417
+    },
+    {
+      "status": 200,
+      "latencyMs": 217.13829203508794
+    },
+    {
+      "status": 200,
+      "latencyMs": 14.356792205944657
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.994040941819549
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.055291069671512
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.15325016528368
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.086957899853587
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.867875069379807
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.020167101174593
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.918457966297865
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.157124975696206
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.373041870072484
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.153041962534189
+    },
+    {
+      "status": 200,
+      "latencyMs": 5.757999839261174
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.728292141109705
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.265624918043613
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.087417110800743
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.085749879479408
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.137541944161057
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.877457844093442
+    },
+    {
+      "status": 200,
+      "latencyMs": 4.645166918635368
+    },
+    {
+      "status": 200,
+      "latencyMs": 5.142624955624342
+    },
+    {
+      "status": 200,
+      "latencyMs": 5.723042180761695
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.153208928182721
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.690624963492155
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.500625051558018
+    },
+    {
+      "status": 200,
+      "latencyMs": 3.7955830339342356
+    },
+    {
+      "status": 200,
+      "latencyMs": 5.5725001730024815
+    },
+    {
+      "status": 200,
+      "latencyMs": 5.267916014418006
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.178000010550022
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.597042040899396
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.829125039279461
+    },
+    {
+      "status": 200,
+      "latencyMs": 5.679499823600054
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.891541933640838
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.763666851446033
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.124208103865385
+    },
+    {
+      "status": 200,
+      "latencyMs": 5.57633419521153
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.517875034362078
+    },
+    {
+      "status": 200,
+      "latencyMs": 15.04679094068706
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.031249977648258
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.3879170920699835
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.0095409862697124
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.03887490555644
+    },
+    {
+      "status": 200,
+      "latencyMs": 16.950583085417747
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.775750175118446
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.896625135093927
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.261250030249357
+    },
+    {
+      "status": 200,
+      "latencyMs": 16.36404194869101
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.075167123228312
+    },
+    {
+      "status": 200,
+      "latencyMs": 219.78374989703298
+    },
+    {
+      "status": 200,
+      "latencyMs": 17.444959143176675
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.974000070244074
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.169707868248224
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.68225016631186
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.706334115937352
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.929042145609856
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.501000003889203
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.913457859307528
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.212583975866437
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.630292093381286
+    },
+    {
+      "status": 200,
+      "latencyMs": 17.20791612751782
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.397749884054065
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.42125011049211
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.084333131089807
+    },
+    {
+      "status": 200,
+      "latencyMs": 14.533374924212694
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.0214998498559
+    },
+    {
+      "status": 200,
+      "latencyMs": 14.581667026504874
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.8007078263908625
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.455707993358374
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.112458046525717
+    },
+    {
+      "status": 200,
+      "latencyMs": 18.633791944012046
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.538666948676109
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.272582992911339
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.645999900996685
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.904833950102329
+    },
+    {
+      "status": 200,
+      "latencyMs": 14.770042151212692
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.357707833871245
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.321083970367908
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.972582967951894
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.930708074942231
+    },
+    {
+      "status": 200,
+      "latencyMs": 15.414291992783546
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.481041925027966
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.150833124294877
+    },
+    {
+      "status": 200,
+      "latencyMs": 17.91720907203853
+    },
+    {
+      "status": 200,
+      "latencyMs": 29.50283302925527
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.432999908924103
+    },
+    {
+      "status": 200,
+      "latencyMs": 15.639082994312048
+    },
+    {
+      "status": 200,
+      "latencyMs": 31.683291075751185
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.839833110570908
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.675708090886474
+    },
+    {
+      "status": 200,
+      "latencyMs": 17.85041717812419
+    },
+    {
+      "status": 200,
+      "latencyMs": 14.124000212177634
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.072416884824634
+    },
+    {
+      "status": 200,
+      "latencyMs": 220.852707978338
+    },
+    {
+      "status": 200,
+      "latencyMs": 17.241166904568672
+    },
+    {
+      "status": 200,
+      "latencyMs": 225.2715420909226
+    },
+    {
+      "status": 200,
+      "latencyMs": 1006.7142080515623
+    },
+    {
+      "status": 200,
+      "latencyMs": 15.130457933992147
+    },
+    {
+      "status": 200,
+      "latencyMs": 224.0257910452783
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.395750032737851
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.650250129401684
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.384999983012676
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.545166881754994
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.418874910101295
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.476750183850527
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.709832957014441
+    },
+    {
+      "status": 200,
+      "latencyMs": 14.331541955471039
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.872791822999716
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.700125057250261
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.468249950557947
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.39662498421967
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.71858387067914
+    },
+    {
+      "status": 200,
+      "latencyMs": 220.06720793433487
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.963124921545386
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.930416967719793
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.127957936376333
+    },
+    {
+      "status": 200,
+      "latencyMs": 216.40579192899168
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.198041029274464
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.088415954262018
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.473415980115533
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.722791913896799
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.299750043079257
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.1217909678816795
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.666875142604113
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.336499962955713
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.863874970003963
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.26962504349649
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.85070800036192
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.618125131353736
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.013958878815174
+    },
+    {
+      "status": 200,
+      "latencyMs": 20.117416977882385
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.505458038300276
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.869083857163787
+    },
+    {
+      "status": 200,
+      "latencyMs": 16.151374904438853
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.783832985907793
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.68241591565311
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.66525001078844
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.664166925475001
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.746124804019928
+    },
+    {
+      "status": 200,
+      "latencyMs": 18.737290985882282
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.958916205912828
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.088291019201279
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.354583892971277
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.64641710743308
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.085292022675276
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.118666803464293
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.987625155597925
+    },
+    {
+      "status": 200,
+      "latencyMs": 6.736957933753729
+    },
+    {
+      "status": 200,
+      "latencyMs": 23.589874850586057
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.555458091199398
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.892667135223746
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.129625072702765
+    },
+    {
+      "status": 200,
+      "latencyMs": 27.27437485009432
+    },
+    {
+      "status": 200,
+      "latencyMs": 16.226291889324784
+    },
+    {
+      "status": 200,
+      "latencyMs": 17.75745884515345
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.013208052143455
+    },
+    {
+      "status": 200,
+      "latencyMs": 18.008625134825706
+    },
+    {
+      "status": 200,
+      "latencyMs": 19.057166995480657
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.617958080023527
+    },
+    {
+      "status": 200,
+      "latencyMs": 18.016916001215577
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.108208050951362
+    },
+    {
+      "status": 200,
+      "latencyMs": 14.000457944348454
+    },
+    {
+      "status": 200,
+      "latencyMs": 192.66216713003814
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.382749976590276
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.099375059828162
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.920708999037743
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.063459139317274
+    },
+    {
+      "status": 200,
+      "latencyMs": 1016.1682080943137
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.436292134225368
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.707625050097704
+    },
+    {
+      "status": 200,
+      "latencyMs": 5.035000154748559
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.226332979276776
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.927750056609511
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.539250051602721
+    },
+    {
+      "status": 200,
+      "latencyMs": 8.860332891345024
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.338208198547363
+    },
+    {
+      "status": 200,
+      "latencyMs": 16.314666951075196
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.967542020604014
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.398583116009831
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.274749947711825
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.523750187829137
+    },
+    {
+      "status": 200,
+      "latencyMs": 14.553125016391277
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.718667017295957
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.133500047028065
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.853417010977864
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.40995798818767
+    },
+    {
+      "status": 200,
+      "latencyMs": 7.8560831025242805
+    },
+    {
+      "status": 200,
+      "latencyMs": 9.014707989990711
+    },
+    {
+      "status": 200,
+      "latencyMs": 10.092417011037469
+    },
+    {
+      "status": 200,
+      "latencyMs": 12.621042085811496
+    },
+    {
+      "status": 200,
+      "latencyMs": 18.1837088894099
+    },
+    {
+      "status": 200,
+      "latencyMs": 17.140124924480915
+    },
+    {
+      "status": 200,
+      "latencyMs": 11.612707981839776
+    },
+    {
+      "status": 200,
+      "latencyMs": 16.50475012138486
+    },
+    {
+      "status": 200,
+      "latencyMs": 13.3866670075804
+    }
+  ]
+}

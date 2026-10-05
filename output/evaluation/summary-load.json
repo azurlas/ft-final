@@ -1,0 +1,25 @@
+[
+  {
+    "type": "load",
+    "namespace": "midterm-baseline",
+    "concurrency": 20,
+    "requests": 300,
+    "elapsedSeconds": 1.4802684169262648,
+    "statusCounts": {
+      "200": 299,
+      "429": 1
+    },
+    "p95LatencyMs": 224.04541703872383
+  },
+  {
+    "type": "load",
+    "namespace": "midterm",
+    "concurrency": 20,
+    "requests": 300,
+    "elapsedSeconds": 1.7500219580251724,
+    "statusCounts": {
+      "200": 300
+    },
+    "p95LatencyMs": 452.4012911133468
+  }
+]

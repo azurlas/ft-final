@@ -1,6 +1,6 @@
 # University backend implementation plan
 
-Date: 2026-10-05. Design source: [approved specification](../../docs.md). Status: awaiting approval of this written plan and selection of execution method. This plan was written directly with the user's approval because the brainstorming workflow's referenced `writing-plans` skill is not installed.
+Date: 2026-10-05. Design source: [approved specification](../../docs.md). Status: approved; sequential execution completed in this session. This plan was written directly with the user's approval because the brainstorming workflow's referenced `writing-plans` skill is not installed.
 
 ## Execution and completion contract
 
@@ -70,7 +70,7 @@ Keep files focused by operation; avoid a single controller or service containing
 
 ## Task 1: establish reproducible runtime and validation entrypoints
 
-Dependencies: approved plan. Status: pending.
+Dependencies: approved plan. Status: complete.
 
 Create Composer/Symfony kernel configuration, console/front controller, the minimal RoadRunner configuration, Docker image/entrypoints, test dependency Compose file, and Makefile. Include `pdo_mysql`, Redis, `pcntl`, `intl`, `mbstring`, DOM/XML, and required core extensions. Configure Symfony Flex to remain on `7.4.*`. Register API Platform, Doctrine, migrations, security/JWT, RoadRunner, Twig, and Monolog bundles.
 
@@ -93,7 +93,7 @@ Commit: `build: establish PHP 8.3 Symfony and RoadRunner runtime`.
 
 ## Task 2: implement entities, migrations, and repeatable seed data
 
-Dependencies: Task 1. Status: pending.
+Dependencies: Task 1. Status: complete.
 
 Create the eleven entity classes in `src/Entity`: User, Course, CourseEnrollment, Assignment, Submission, Grade, CoursePurchase, PaymentAttempt, OutboxMessage, MockPaymentReceipt, and PaymentCircuitState. Create typed purchase/attempt/result enums and value normalization helpers where useful.
 
@@ -120,7 +120,7 @@ Commit: `feat: model courses academic records and payment recovery state`.
 
 ## Task 3: authentication, authorization, and course/enrollment API
 
-Dependencies: Tasks 1-2. Status: pending.
+Dependencies: Tasks 1-2. Status: complete.
 
 Create registration/login/current-user resources, Symfony JSON login, Lexik JWT configuration, user provider, and owner/admin/enrollment access policies. Use a local Kubernetes Secret for JWT keys and never add the private key to source control. Reject attempts to pass administrator attributes during public registration.
 
@@ -138,7 +138,7 @@ Commit: `feat: add JWT course administration and student enrollment`.
 
 ## Task 4: implement payment DTO, fixtures, and isolated mock endpoint
 
-Dependencies: Tasks 1-3. Status: pending.
+Dependencies: Tasks 1-3. Status: complete.
 
 Create `PaymentDetailsDto`, `PaymentContext`, `PaymentResult`, `PaymentServiceInterface`, `MockPaymentService`, and `HttpPaymentService`. The details DTO has exactly beneficiaryName, cardNumber, expiryDate, and cvv. The mock class owns the six approved hard-coded synthetic credentials and outcome rules.
 
@@ -154,7 +154,7 @@ Commit: `feat: add DTO payment interface and hard-coded mock scenarios`.
 
 ## Task 5: checkout, attempts, and bounded business retries
 
-Dependencies: Tasks 2-4. Status: pending.
+Dependencies: Tasks 2-4. Status: complete.
 
 Create `CheckoutService`, checkout/status API resources, `ProcessPurchase` message, handler, and focused settlement/attempt repositories. Save purchase, price/currency snapshot, metadata list, idempotency fingerprint, and initial outbox row in one transaction in the resilient profile. Baseline dispatches after committing its pending purchase without an outbox.
 
@@ -170,7 +170,7 @@ Commit: `feat: process queued purchases with bounded retries and atomic enrollme
 
 ## Task 6: outbox recovery, circuit breaker, and worker lifecycle
 
-Dependencies: Task 5. Status: pending.
+Dependencies: Task 5. Status: complete.
 
 Create `OutboxRelay`, `PurchaseReconciler`, `PaymentCircuitBreaker`, `RunPaymentRelayCommand`, and failure checkpoint support limited to the experiment profile. Lease publication rows, mark Redis acceptance, recover an expired publisher, and safely republish unfinished/due work even after broker loss. Do not automatically revive a terminal failed/declined purchase.
 
@@ -186,7 +186,7 @@ Commit: `feat: recover payment work with outbox reconciliation and circuit break
 
 ## Task 7: assignments, private submissions, and grading
 
-Dependencies: Tasks 2-3. Status: pending; execute after Task 6 in the recommended order.
+Dependencies: Tasks 2-3. Status: complete.
 
 Create assignment API resources/processors, `SubmissionService`, `S3Storage`, `CleanupOrphanObjectsCommand`, grade resources/processors, and authorized metadata/download providers. Configure AWS S3 endpoint/path-style signing for RustFS and distinct file/backup buckets.
 
@@ -202,7 +202,7 @@ Commit: `feat: add private assignment submissions and administrator grading`.
 
 ## Task 8: PDF report and complete OpenAPI contract
 
-Dependencies: Tasks 3, 5, 7. Status: pending.
+Dependencies: Tasks 3, 5, 7. Status: complete.
 
 Create `CourseReportService`, report/download controller/resource, and `templates/reports/course.html.twig`. Render escaped names/comments, student-assignment rows, submission status, grades, averages of recorded grades, and UTC generation time with Dompdf. Keep assets/fonts local and disable remote fetching.
 
@@ -223,7 +223,7 @@ Commit: `feat: export course PDF reports and generated API documentation`.
 
 ## Task 9: application Helm chart and local deployment scripts
 
-Dependencies: Tasks 1-8. Status: pending.
+Dependencies: Tasks 1-8. Status: complete.
 
 Create the application chart, ordinary/resilient/baseline/local values, templates for API/worker/mock workloads, MySQL/RustFS/queue Redis stateful storage, cache Redis, services, config/secrets, migration/seed/bucket-init jobs, health checks, graceful rollout/disruption controls, Gateway API routes, and namespace-scoped RBAC where needed.
 
@@ -250,7 +250,7 @@ Commit: `deploy: add Helm profiles and OrbStack setup`.
 
 ## Task 10: provision logs, metrics, Grafana, and official dashboard
 
-Dependencies: Tasks 1, 6, 9. Status: pending.
+Dependencies: Tasks 1, 6, 9. Status: complete.
 
 Create Monolog JSON configuration, resettable request/job correlation processors, Symfony request logging, and sanctioned outcome events. Add the business metrics exporter and health/backlog indicators; avoid user/purchase IDs as metric labels.
 
@@ -266,7 +266,7 @@ Commit: `observability: provision RoadRunner Grafana dashboards and VictoriaLogs
 
 ## Task 11: backup, restore, and controlled failure experiments
 
-Dependencies: Tasks 6-10. Status: pending.
+Dependencies: Tasks 6-10. Status: complete.
 
 Create `BackupDatabaseCommand`, isolated restore verification, a 15-minute backup CronJob, retention cleanup, and checksum/snapshot inventory. Never overwrite the live database for a demonstration. Restore to a temporary database/workload and verify schema/record/grade/enrollment invariants.
 
@@ -282,7 +282,7 @@ Commit: `test: add measured fault injection and backup recovery experiments`.
 
 ## Task 12: final verification, documentation, and handoff
 
-Dependencies: Tasks 1-11. Status: pending.
+Dependencies: Tasks 1-11. Status: complete.
 
 Run the agreed checks once against the completed implementation and rerun only affected checks after fixes. Complete the README/setup quick path, update `docs.md` from approved design into the assignment's final technical report, record resolved versions/runtime settings/limitations, and link actual experiment data and dashboard/report evidence. Retain the approved design/plan history in Git.
 
@@ -322,3 +322,7 @@ Within implementation, checkpoints are technical verification points, not repeat
 - [Envoy Gateway Helm quickstart](https://gateway.envoyproxy.io/docs/tasks/quickstart/).
 - [VictoriaLogs Kubernetes collector](https://docs.victoriametrics.com/helm/victoria-logs-collector/).
 - Additional component references are recorded in the approved specification.
+
+## Delivery record
+
+Tasks 1–8 were implemented and verified together in the application commit; deployment/monitoring, resilience checks, and final artifacts follow in grouped commits. Final file paths and measured results are indexed in [docs.md](../../docs.md). Eight tests / 98 assertions, static checks, Helm checks, live payment/file/report smoke, three repetitions of availability and queue/checkpoint failures, and isolated restore passed. The node-outage branch was not executed because unrelated OrbStack workloads were present; the separately guarded script and limitation are delivered as specified.

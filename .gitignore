@@ -7,6 +7,8 @@
 /helm/*/charts/
 /output/secrets/
 /output/tmp/
+/output/reports/course-report.pdf
+/output/reports/rendered/
 /rr
 /.DS_Store
 

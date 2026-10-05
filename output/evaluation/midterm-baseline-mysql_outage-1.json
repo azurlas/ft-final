@@ -1,0 +1,257 @@
+{
+  "type": "availability",
+  "namespace": "midterm-baseline",
+  "scenario": "mysql_outage",
+  "repetition": 1,
+  "endpoint": "/health/ready",
+  "injectedRelativeSeconds": 2.0030452080536634,
+  "stats": {
+    "windowSeconds": 19.301349833142012,
+    "requests": 33,
+    "failedRequests": 15,
+    "requestAvailability": 0.5454545454545454,
+    "sampledTimeAvailability": 0.22369033748318118,
+    "outageCount": 1,
+    "mttrSeconds": 14.983824375085533,
+    "mtbfOperatingSeconds": 4.31752545805648,
+    "mttfSeconds": 2.237960583064705,
+    "mttfRightCensored": false,
+    "censoredAtSeconds": null,
+    "failureRatePerSecond": 0.051809847945604164,
+    "recoveryRightCensored": false,
+    "maxLatencyMs": 3004.96704201214
+  },
+  "samples": [
+    {
+      "utc": "2026-10-05T12:41:53Z",
+      "monotonic": 1642673.575251625,
+      "relativeSeconds": 1.25030055642128e-07,
+      "status": 200,
+      "latencyMs": 7.836375152692199
+    },
+    {
+      "utc": "2026-10-05T12:41:53Z",
+      "monotonic": 1642673.780317041,
+      "relativeSeconds": 0.20506554120220244,
+      "status": 200,
+      "latencyMs": 13.301541795954108
+    },
+    {
+      "utc": "2026-10-05T12:41:54Z",
+      "monotonic": 1642673.983264166,
+      "relativeSeconds": 0.4080126660410315,
+      "status": 200,
+      "latencyMs": 14.824958983808756
+    },
+    {
+      "utc": "2026-10-05T12:41:54Z",
+      "monotonic": 1642674.1834765,
+      "relativeSeconds": 0.6082250000908971,
+      "status": 200,
+      "latencyMs": 16.387500101700425
+    },
+    {
+      "utc": "2026-10-05T12:41:54Z",
+      "monotonic": 1642674.388575166,
+      "relativeSeconds": 0.8133236661087722,
+      "status": 200,
+      "latencyMs": 14.252624940127134
+    },
+    {
+      "utc": "2026-10-05T12:41:54Z",
+      "monotonic": 1642674.593642833,
+      "relativeSeconds": 1.0183913330547512,
+      "status": 200,
+      "latencyMs": 9.553708136081696
+    },
+    {
+      "utc": "2026-10-05T12:41:54Z",
+      "monotonic": 1642674.798183375,
+      "relativeSeconds": 1.222931875148788,
+      "status": 200,
+      "latencyMs": 13.248665956780314
+    },
+    {
+      "utc": "2026-10-05T12:41:55Z",
+      "monotonic": 1642675.003175541,
+      "relativeSeconds": 1.4279240411706269,
+      "status": 200,
+      "latencyMs": 14.298999914899468
+    },
+    {
+      "utc": "2026-10-05T12:41:55Z",
+      "monotonic": 1642675.205786041,
+      "relativeSeconds": 1.6305345410946757,
+      "status": 200,
+      "latencyMs": 11.313041904941201
+    },
+    {
+      "utc": "2026-10-05T12:41:55Z",
+      "monotonic": 1642675.407481,
+      "relativeSeconds": 1.832229500170797,
+      "status": 200,
+      "latencyMs": 17.911332892253995
+    },
+    {
+      "utc": "2026-10-05T12:41:55Z",
+      "monotonic": 1642675.612592625,
+      "relativeSeconds": 2.0373411250766367,
+      "status": 200,
+      "latencyMs": 6.351832998916507
+    },
+    {
+      "utc": "2026-10-05T12:41:55Z",
+      "monotonic": 1642675.813212083,
+      "relativeSeconds": 2.237960583064705,
+      "status": 503,
+      "latencyMs": 12.468458153307438
+    },
+    {
+      "utc": "2026-10-05T12:41:56Z",
+      "monotonic": 1642676.018097541,
+      "relativeSeconds": 2.442846041172743,
+      "status": 503,
+      "latencyMs": 10.08354197256267
+    },
+    {
+      "utc": "2026-10-05T12:41:56Z",
+      "monotonic": 1642676.222102,
+      "relativeSeconds": 2.6468505000229925,
+      "status": 503,
+      "latencyMs": 7.533375173807144
+    },
+    {
+      "utc": "2026-10-05T12:41:56Z",
+      "monotonic": 1642676.424203833,
+      "relativeSeconds": 2.848952333210036,
+      "status": 503,
+      "latencyMs": 13.845041859894991
+    },
+    {
+      "utc": "2026-10-05T12:41:56Z",
+      "monotonic": 1642676.624772291,
+      "relativeSeconds": 3.049520791042596,
+      "status": 503,
+      "latencyMs": 11.329959146678448
+    },
+    {
+      "utc": "2026-10-05T12:41:56Z",
+      "monotonic": 1642676.829863041,
+      "relativeSeconds": 3.2546115410514176,
+      "status": 503,
+      "latencyMs": 12.887499993667006
+    },
+    {
+      "utc": "2026-10-05T12:41:57Z",
+      "monotonic": 1642677.029965625,
+      "relativeSeconds": 3.454714125022292,
+      "status": 503,
+      "latencyMs": 13.181708054617047
+    },
+    {
+      "utc": "2026-10-05T12:41:57Z",
+      "monotonic": 1642677.234577541,
+      "relativeSeconds": 3.6593260411173105,
+      "status": 503,
+      "latencyMs": 10.654083918780088
+    },
+    {
+      "utc": "2026-10-05T12:41:57Z",
+      "monotonic": 1642677.438254541,
+      "relativeSeconds": 3.8630030411295593,
+      "status": 503,
+      "latencyMs": 8.636333979666233
+    },
+    {
+      "utc": "2026-10-05T12:42:00Z",
+      "monotonic": 1642677.643145875,
+      "relativeSeconds": 4.067894375184551,
+      "status": 0,
+      "latencyMs": 3003.230500034988
+    },
+    {
+      "utc": "2026-10-05T12:42:03Z",
+      "monotonic": 1642680.646415291,
+      "relativeSeconds": 7.07116379099898,
+      "status": 0,
+      "latencyMs": 3004.96704201214
+    },
+    {
+      "utc": "2026-10-05T12:42:04Z",
+      "monotonic": 1642683.651418541,
+      "relativeSeconds": 10.076167041203007,
+      "status": 503,
+      "latencyMs": 1059.7677498590201
+    },
+    {
+      "utc": "2026-10-05T12:42:05Z",
+      "monotonic": 1642684.711222166,
+      "relativeSeconds": 11.135970666073263,
+      "status": 503,
+      "latencyMs": 1026.9214999862015
+    },
+    {
+      "utc": "2026-10-05T12:42:08Z",
+      "monotonic": 1642685.738166791,
+      "relativeSeconds": 12.162915291031823,
+      "status": 0,
+      "latencyMs": 3002.948750043288
+    },
+    {
+      "utc": "2026-10-05T12:42:10Z",
+      "monotonic": 1642688.741156458,
+      "relativeSeconds": 15.165904958033934,
+      "status": 503,
+      "latencyMs": 2055.846708128229
+    },
+    {
+      "utc": "2026-10-05T12:42:11Z",
+      "monotonic": 1642690.797036458,
+      "relativeSeconds": 17.221784958150238,
+      "status": 200,
+      "latencyMs": 1031.8507498595864
+    },
+    {
+      "utc": "2026-10-05T12:42:11Z",
+      "monotonic": 1642691.828910125,
+      "relativeSeconds": 18.253658625064418,
+      "status": 200,
+      "latencyMs": 8.619165979325771
+    },
+    {
+      "utc": "2026-10-05T12:42:12Z",
+      "monotonic": 1642692.032396125,
+      "relativeSeconds": 18.457144625019282,
+      "status": 200,
+      "latencyMs": 13.87337502092123
+    },
+    {
+      "utc": "2026-10-05T12:42:12Z",
+      "monotonic": 1642692.234909,
+      "relativeSeconds": 18.6596575002186,
+      "status": 200,
+      "latencyMs": 9.122165851294994
+    },
+    {
+      "utc": "2026-10-05T12:42:12Z",
+      "monotonic": 1642692.4387425,
+      "relativeSeconds": 18.86349100014195,
+      "status": 200,
+      "latencyMs": 10.858708061277866
+    },
+    {
+      "utc": "2026-10-05T12:42:12Z",
+      "monotonic": 1642692.641318083,
+      "relativeSeconds": 19.06606658315286,
+      "status": 200,
+      "latencyMs": 15.342041850090027
+    },
+    {
+      "utc": "2026-10-05T12:42:12Z",
+      "monotonic": 1642692.845195541,
+      "relativeSeconds": 19.26994404103607,
+      "status": 200,
+      "latencyMs": 8.886167081072927
+    }
+  ]
+}

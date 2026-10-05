@@ -1,0 +1,30 @@
+{
+  "grafanaVersion": "12.3.1",
+  "datasources": [
+    {
+      "name": "Prometheus",
+      "uid": "prometheus",
+      "type": "prometheus",
+      "url": "http://prometheus:9090"
+    },
+    {
+      "name": "VictoriaLogs",
+      "uid": "victorialogs",
+      "type": "victoriametrics-logs-datasource",
+      "url": "http://vlogs-victoria-logs-single-server:9428"
+    }
+  ],
+  "officialRoadRunnerPanels": 9,
+  "metrics": {
+    "rr_http_request_duration_seconds_count": {
+      "series": 11
+    },
+    "university_purchases": {
+      "series": 7
+    },
+    "envoy_http_downstream_rq_total": {
+      "series": 16
+    }
+  },
+  "correlatedPaymentLogs": 3
+}

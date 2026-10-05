@@ -3,7 +3,16 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 KUBECTL_BIN="${KUBECTL_BIN:-/Users/nariman/.orbstack/bin/kubectl}"
 [[ -x "$KUBECTL_BIN" ]] || KUBECTL_BIN=kubectl
-if ! "$KUBECTL_BIN" --context orbstack get nodes >/dev/null 2>&1; then orb start k8s; fi
+original_kube_context=$("$KUBECTL_BIN" config current-context 2>/dev/null || true)
+restore_context() {
+  if [[ -n "$original_kube_context" ]] && [[ "$("$KUBECTL_BIN" config current-context 2>/dev/null || true)" != "$original_kube_context" ]]; then
+    "$KUBECTL_BIN" config use-context "$original_kube_context" >/dev/null
+  fi
+}
+if ! "$KUBECTL_BIN" --context orbstack get nodes >/dev/null 2>&1; then
+  if ! orb start k8s; then restore_context; exit 1; fi
+  restore_context
+fi
 "$KUBECTL_BIN" --context orbstack get nodes
 for ns in midterm midterm-baseline midterm-monitoring midterm-gateway; do
   "$KUBECTL_BIN" --context orbstack create namespace "$ns" --dry-run=client -o yaml | "$KUBECTL_BIN" --context orbstack apply -f - >/dev/null

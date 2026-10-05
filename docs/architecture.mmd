@@ -29,6 +29,8 @@ flowchart TB
         BACKUP --> S3
         PROM -. scrapes every API pod and Envoy .-> API
         PROM -. scrapes .-> GATEWAY
+        PROM -. scrapes .-> WORKER
+        PROM -. scrapes .-> MOCK
         API -. JSON stderr .-> COLLECTOR
         WORKER -. JSON stderr .-> COLLECTOR
         MOCK -. JSON stderr .-> COLLECTOR

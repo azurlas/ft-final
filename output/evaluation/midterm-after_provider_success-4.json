@@ -1,0 +1,17 @@
+{
+  "type": "checkpoint",
+  "scenario": "after_provider_success",
+  "namespace": "midterm",
+  "repetition": 4,
+  "purchaseId": 47,
+  "checkpointObserved": true,
+  "status": "succeeded",
+  "recovered": true,
+  "recoverySeconds": 8.458201000001281,
+  "elapsedSeconds": 9.039460875093937,
+  "counts": {
+    "receipts": 1,
+    "enrollments": 1,
+    "attempts": 1
+  }
+}

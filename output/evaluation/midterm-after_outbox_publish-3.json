@@ -1,0 +1,17 @@
+{
+  "type": "checkpoint",
+  "scenario": "after_outbox_publish",
+  "namespace": "midterm",
+  "repetition": 3,
+  "purchaseId": 19,
+  "checkpointObserved": true,
+  "status": "succeeded",
+  "recovered": true,
+  "recoverySeconds": 7.986543708946556,
+  "elapsedSeconds": 8.349976792000234,
+  "counts": {
+    "receipts": 1,
+    "enrollments": 1,
+    "attempts": 1
+  }
+}

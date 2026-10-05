@@ -1,0 +1,41 @@
+flowchart TB
+    CLIENT[Student / administrator / Swagger client]
+    subgraph LOCAL[OrbStack Kubernetes: one local node]
+        EG[Envoy Gateway controller]
+        GATEWAY[Envoy data plane: 2 replicas]
+        API[PHP 8.3 / RoadRunner API: 2 replicas]
+        WORKER[Supervisor / Messenger workers: 2 replicas]
+        MOCK[Mock payment HTTP endpoint]
+        MYSQL[(MySQL: business records, outbox, payment receipts)]
+        QUEUE[(Redis queues: AOF, no eviction)]
+        CACHE[(Redis cache: bounded, disposable)]
+        S3[(RustFS: private files and backup bucket)]
+        BACKUP[Scheduled database backup / restore verification]
+        PROM[Prometheus]
+        COLLECTOR[VictoriaLogs collector DaemonSet]
+        VLOGS[(VictoriaLogs)]
+        GRAFANA[Grafana]
+        EG -. configures .-> GATEWAY
+        GATEWAY --> API
+        API --> MYSQL
+        API --> CACHE
+        API --> S3
+        WORKER --> MYSQL
+        WORKER --> QUEUE
+        WORKER --> MOCK
+        MOCK --> MYSQL
+        WORKER -. publishes outbox jobs .-> QUEUE
+        BACKUP --> MYSQL
+        BACKUP --> S3
+        PROM -. scrapes every API pod and Envoy .-> API
+        PROM -. scrapes .-> GATEWAY
+        API -. JSON stderr .-> COLLECTOR
+        WORKER -. JSON stderr .-> COLLECTOR
+        MOCK -. JSON stderr .-> COLLECTOR
+        GATEWAY -. access logs .-> COLLECTOR
+        COLLECTOR --> VLOGS
+        GRAFANA --> PROM
+        GRAFANA --> VLOGS
+    end
+    CLIENT --> GATEWAY
+    CLIENT --> GRAFANA

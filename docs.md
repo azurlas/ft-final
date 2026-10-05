@@ -1,6 +1,6 @@
 # Fault-Tolerant University Backend
 
-Design specification, 2026-10-05. Status: written after approval of the architecture, domain defaults, payment interface, observability, and OrbStack deployment design; awaiting review of this written specification. Application implementation and experimental evaluation have not started.
+Design specification, 2026-10-05. Status: written specification approved by the user. The [implementation plan](docs/plans/2026-10-05-university-backend-implementation.md) is awaiting review and selection of execution method. Application implementation and experimental evaluation have not started.
 
 ## 1. Purpose and success criteria
 

@@ -1,0 +1,11 @@
+remoteWrite:
+  - url: http://vlogs-victoria-logs-single-server:9428
+    maxDiskUsagePerURL: 1GiB
+collector:
+  excludeFilter: 'NOT kubernetes.pod_namespace:in(midterm,midterm-baseline,midterm-monitoring,midterm-gateway)'
+resources:
+  requests: {cpu: 30m, memory: 64Mi}
+  limits: {cpu: 500m, memory: 256Mi}
+extraArgs:
+  loggerFormat: json
+  tmpDataPath: /var/lib/vl-collector

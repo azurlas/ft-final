@@ -1,0 +1,24 @@
+{{- if .Values.backupEnabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata: {name: mysql-backup}
+spec:
+  schedule: "*/15 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: {{ .Values.image }}
+              imagePullPolicy: IfNotPresent
+              args: [console, app:backup]
+              envFrom:
+                - configMapRef: {name: university-config}
+                - secretRef: {name: {{ .Values.secretName }}}
+{{- end }}

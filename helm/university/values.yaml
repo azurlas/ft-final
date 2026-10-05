@@ -1,0 +1,13 @@
+image: midterm/university:dev
+profile: resilient
+hostname: midterm.k8s.orb.local
+apiReplicas: 2
+workerReplicas: 2
+gatewayReplicas: 2
+gatewayPort: 80
+secretName: university-secrets
+storageClass: local-path
+backupEnabled: true
+resources:
+  requests: {cpu: 100m, memory: 160Mi}
+  limits: {cpu: "2", memory: 512Mi}

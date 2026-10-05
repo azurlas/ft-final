@@ -1,0 +1,102 @@
+{{- range $role := list "api" "worker" "mock" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $role }}
+spec:
+  replicas: {{ if eq $role "api" }}{{ $.Values.apiReplicas }}{{ else if eq $role "worker" }}{{ $.Values.workerReplicas }}{{ else }}1{{ end }}
+  selector:
+    matchLabels: {app: university, component: {{ $role }}}
+  strategy:
+    rollingUpdate: {maxUnavailable: 0, maxSurge: 1}
+  template:
+    metadata:
+      labels: {app: university, component: {{ $role }}, profile: {{ $.Values.profile }}}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") $ | sha256sum }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: {{ if eq $role "worker" }}"9100"{{ else }}"2112"{{ end }}
+    spec:
+      terminationGracePeriodSeconds: 40
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels: {app: university, component: {{ $role }}}
+                topologyKey: kubernetes.io/hostname
+      initContainers:
+        - name: wait-schema
+          image: {{ $.Values.image }}
+          imagePullPolicy: IfNotPresent
+          args: [console, app:wait-schema]
+          envFrom:
+            - configMapRef: {name: university-config}
+            - secretRef: {name: {{ $.Values.secretName }}}
+      containers:
+        - name: {{ $role }}
+          image: {{ $.Values.image }}
+          imagePullPolicy: IfNotPresent
+          args: [{{ $role }}]
+          envFrom:
+            - configMapRef: {name: university-config}
+            - secretRef: {name: {{ $.Values.secretName }}}
+          env:
+            - {name: APP_ROLE, value: {{ $role }}}
+          ports:
+            - {name: http, containerPort: 8080}
+            - {name: metrics, containerPort: {{ if eq $role "worker" }}9100{{ else }}2112{{ end }}}
+          resources: {{ toYaml $.Values.resources | nindent 12 }}
+          {{- if ne $role "worker" }}
+          startupProbe:
+            httpGet: {path: /health/live, port: http}
+            periodSeconds: 2
+            failureThreshold: 60
+          livenessProbe:
+            httpGet: {path: /health/live, port: http}
+            periodSeconds: 10
+          readinessProbe:
+            httpGet: {path: /health/ready, port: http}
+            periodSeconds: 2
+            timeoutSeconds: 4
+          {{- else }}
+          livenessProbe:
+            exec: {command: [php, /app/docker/worker-health.php]}
+            periodSeconds: 10
+          readinessProbe:
+            httpGet: {path: /health, port: metrics}
+            periodSeconds: 5
+          {{- end }}
+          volumeMounts:
+            - {name: jwt, mountPath: /app/config/jwt, readOnly: true}
+      volumes:
+        - name: jwt
+          secret:
+            secretName: {{ $.Values.secretName }}
+            items:
+              - {key: private.pem, path: private.pem}
+              - {key: public.pem, path: public.pem}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $role }}
+spec:
+  selector: {app: university, component: {{ $role }}}
+  ports:
+    - {name: http, port: 8080, targetPort: http}
+    - {name: metrics, port: {{ if eq $role "worker" }}9100{{ else }}2112{{ end }}, targetPort: metrics}
+---
+{{ if and (ne $role "mock") (eq $.Values.profile "resilient") }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ $role }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels: {app: university, component: {{ $role }}}
+---
+{{ end }}
+{{- end }}

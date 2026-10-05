@@ -1,0 +1,171 @@
+{
+  "title": "University reliability",
+  "uid": "university-reliability",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Purchases by status",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "max by (status,profile) (university_purchases)",
+          "refId": "A",
+          "legendFormat": "{{profile}} {{status}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Outbox backlog",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "max by (profile) (university_outbox_pending)",
+          "refId": "A",
+          "legendFormat": "{{profile}} {{status}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Oldest pending purchase (seconds)",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "max by (profile) (university_purchase_oldest_pending_seconds)",
+          "refId": "A",
+          "legendFormat": "{{profile}} {{status}}"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Payment attempts by status",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "max by (status,profile) (university_payment_attempts_total)",
+          "refId": "A",
+          "legendFormat": "{{profile}} {{status}}"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Circuit open",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "max by (profile) (university_circuit_open)",
+          "refId": "A",
+          "legendFormat": "{{profile}} {{status}}"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Database up",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "min by (profile) (university_database_up)",
+          "refId": "A",
+          "legendFormat": "{{profile}} {{status}}"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Application logs (VictoriaLogs)",
+      "type": "logs",
+      "datasource": {
+        "type": "victoriametrics-logs-datasource",
+        "uid": "victorialogs"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 24,
+        "w": 24,
+        "h": 10
+      },
+      "targets": [
+        {
+          "expr": "kubernetes.pod_namespace:midterm",
+          "queryType": "logs",
+          "refId": "A",
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "victorialogs"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: setup-{{ .Values.image | sha256sum | trunc 10 }}
+spec:
+  backoffLimit: 10
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: setup
+          image: {{ .Values.image }}
+          imagePullPolicy: IfNotPresent
+          command: [/bin/sh, -ec]
+          args:
+            - php bin/console doctrine:migrations:migrate --no-interaction; php bin/console app:seed-demo; php bin/console app:storage-init
+          envFrom:
+            - configMapRef: {name: university-config}
+            - secretRef: {name: {{ .Values.secretName }}}
+          volumeMounts: [{name: jwt, mountPath: /app/config/jwt, readOnly: true}]
+      volumes:
+        - name: jwt
+          secret:
+            secretName: {{ .Values.secretName }}
+            items:
+              - {key: private.pem, path: private.pem}
+              - {key: public.pem, path: public.pem}

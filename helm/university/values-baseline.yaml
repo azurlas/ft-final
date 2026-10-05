@@ -1,0 +1,7 @@
+profile: baseline
+hostname: baseline.midterm.k8s.orb.local
+apiReplicas: 1
+workerReplicas: 1
+gatewayReplicas: 1
+gatewayPort: 8080
+backupEnabled: false

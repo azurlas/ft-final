@@ -1,0 +1,154 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  serviceName: mysql
+  replicas: 1
+  selector:
+    matchLabels: {app: university, component: mysql}
+  template:
+    metadata:
+      labels: {app: university, component: mysql}
+    spec:
+      terminationGracePeriodSeconds: 40
+      containers:
+        - name: mysql
+          image: mysql:8.4.8
+          args: []
+          env:
+            - {name: MYSQL_DATABASE, value: university}
+            - {name: MYSQL_USER, value: university}
+            - name: MYSQL_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ .Values.secretName }}, key: MYSQL_PASSWORD}}
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ .Values.secretName }}, key: MYSQL_ROOT_PASSWORD}}
+          ports: [{name: data, containerPort: 3306}]
+          resources:
+            requests: {cpu: 50m, memory: 128Mi}
+            limits: {cpu: "2", memory: 1Gi}
+          readinessProbe:
+            tcpSocket: {port: 3306}
+            periodSeconds: 3
+          startupProbe:
+            tcpSocket: {port: 3306}
+            periodSeconds: 3
+            failureThreshold: 60
+          volumeMounts: [{name: data, mountPath: /var/lib/mysql}]
+  volumeClaimTemplates:
+    - metadata: {name: data}
+      spec:
+        accessModes: [ReadWriteOnce]
+        storageClassName: {{ .Values.storageClass }}
+        resources:
+          requests: {storage: 5Gi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  selector: {app: university, component: mysql}
+  ports: [{name: data, port: 3306, targetPort: data}]
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-queue
+spec:
+  serviceName: redis-queue
+  replicas: 1
+  selector:
+    matchLabels: {app: university, component: redis-queue}
+  template:
+    metadata:
+      labels: {app: university, component: redis-queue}
+    spec:
+      terminationGracePeriodSeconds: 40
+      containers:
+        - name: redis-queue
+          image: redis:7.4.8-alpine
+          args: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec", "--maxmemory", "128mb", "--maxmemory-policy", "noeviction"]
+          env:
+            []
+          ports: [{name: data, containerPort: 6379}]
+          resources:
+            requests: {cpu: 50m, memory: 128Mi}
+            limits: {cpu: "2", memory: 1Gi}
+          readinessProbe:
+            exec: {command: [redis-cli, ping]}
+            periodSeconds: 3
+          startupProbe:
+            exec: {command: [redis-cli, ping]}
+            periodSeconds: 3
+            failureThreshold: 60
+          volumeMounts: [{name: data, mountPath: /data}]
+  volumeClaimTemplates:
+    - metadata: {name: data}
+      spec:
+        accessModes: [ReadWriteOnce]
+        storageClassName: {{ .Values.storageClass }}
+        resources:
+          requests: {storage: 1Gi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-queue
+spec:
+  selector: {app: university, component: redis-queue}
+  ports: [{name: data, port: 6379, targetPort: data}]
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rustfs
+spec:
+  serviceName: rustfs
+  replicas: 1
+  selector:
+    matchLabels: {app: university, component: rustfs}
+  template:
+    metadata:
+      labels: {app: university, component: rustfs}
+    spec:
+      terminationGracePeriodSeconds: 40
+      containers:
+        - name: rustfs
+          image: rustfs/rustfs:1.0.0-alpha.69@sha256:bac03a101856a921c798965d7677ab2167edad3656017d66c5e0c3bcc96996b0
+          args: ["/data"]
+          env:
+            - name: RUSTFS_ACCESS_KEY
+              valueFrom: {secretKeyRef: {name: {{ .Values.secretName }}, key: S3_ACCESS_KEY}}
+            - name: RUSTFS_SECRET_KEY
+              valueFrom: {secretKeyRef: {name: {{ .Values.secretName }}, key: S3_SECRET_KEY}}
+            - {name: RUSTFS_CONSOLE_ENABLE, value: "false"}
+          ports: [{name: data, containerPort: 9000}]
+          resources:
+            requests: {cpu: 50m, memory: 128Mi}
+            limits: {cpu: "2", memory: 1Gi}
+          readinessProbe:
+            tcpSocket: {port: 9000}
+            periodSeconds: 3
+          startupProbe:
+            tcpSocket: {port: 9000}
+            periodSeconds: 3
+            failureThreshold: 60
+          volumeMounts: [{name: data, mountPath: /data}]
+  volumeClaimTemplates:
+    - metadata: {name: data}
+      spec:
+        accessModes: [ReadWriteOnce]
+        storageClassName: {{ .Values.storageClass }}
+        resources:
+          requests: {storage: 5Gi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rustfs
+spec:
+  selector: {app: university, component: rustfs}
+  ports: [{name: data, port: 9000, targetPort: data}]

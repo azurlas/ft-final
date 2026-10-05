@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: university-config
+data:
+  APP_ENV: prod
+  APP_DEBUG: "0"
+  APP_PROFILE: {{ .Values.profile | quote }}
+  APP_CURRENCY: USD
+  JWT_SECRET_KEY: /app/config/jwt/private.pem
+  JWT_PUBLIC_KEY: /app/config/jwt/public.pem
+  JWT_PASSPHRASE: ""
+  REDIS_QUEUE_DSN: redis://redis-queue:6379/payments
+  REDIS_CACHE_URL: redis://redis-cache:6379
+  S3_ENDPOINT: http://rustfs:9000
+  S3_BUCKET: submissions
+  S3_BACKUP_BUCKET: backups
+  MOCK_PAYMENT_URL: http://mock:8080/internal/payment
+  RR_HTTP_PORT: "8080"
+  RR_RPC_PORT: "6001"
+  EXPERIMENT_HOOK: ""

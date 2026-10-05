@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata: {name: prometheus}
+---
+{{- range $ns := list "midterm" "midterm-baseline" "midterm-gateway" }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata: {name: midterm-metrics, namespace: {{ $ns }}}
+rules:
+  - apiGroups: [""]
+    resources: [pods]
+    verbs: [get, list, watch]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: {name: midterm-metrics, namespace: {{ $ns }}}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: Role, name: midterm-metrics}
+subjects:
+  - {kind: ServiceAccount, name: prometheus, namespace: {{ $.Release.Namespace }}}
+---
+{{- end }}

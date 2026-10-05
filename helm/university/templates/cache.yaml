@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: redis-cache}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: university, component: redis-cache}
+  template:
+    metadata:
+      labels: {app: university, component: redis-cache}
+    spec:
+      containers:
+        - name: redis
+          image: redis:7.4.8-alpine
+          args: [redis-server, --maxmemory, 64mb, --maxmemory-policy, allkeys-lru]
+          ports: [{name: data, containerPort: 6379}]
+          resources:
+            requests: {cpu: 20m, memory: 32Mi}
+            limits: {cpu: 200m, memory: 128Mi}
+          readinessProbe:
+            exec: {command: [redis-cli, ping]}
+            periodSeconds: 3
+---
+apiVersion: v1
+kind: Service
+metadata: {name: redis-cache}
+spec:
+  selector: {app: university, component: redis-cache}
+  ports: [{name: data, port: 6379, targetPort: data}]

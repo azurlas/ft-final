@@ -1,0 +1,8 @@
+server:
+  retentionPeriod: 7d
+  persistentVolume:
+    storageClassName: local-path
+    size: 2Gi
+  resources:
+    requests: {cpu: 50m, memory: 128Mi}
+    limits: {cpu: "1", memory: 512Mi}

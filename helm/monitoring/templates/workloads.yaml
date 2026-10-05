@@ -1,0 +1,99 @@
+{{- range $component := list "prometheus" "grafana" }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: {name: {{ $component }}-data}
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: {{ $.Values.storageClass }}
+  resources:
+    requests: {storage: 2Gi}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: {{ $component }}}
+spec:
+  replicas: 1
+  strategy: {type: Recreate}
+  selector:
+    matchLabels: {app: university-monitoring, component: {{ $component }}}
+  template:
+    metadata:
+      labels: {app: university-monitoring, component: {{ $component }}}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") $ | sha256sum }}
+    spec:
+      {{- if eq $component "prometheus" }}
+      serviceAccountName: prometheus
+      securityContext: {fsGroup: 65534}
+      {{- else }}
+      securityContext: {fsGroup: 472}
+      {{- end }}
+      containers:
+        - name: {{ $component }}
+          image: {{ if eq $component "prometheus" }}{{ $.Values.prometheusImage }}{{ else }}{{ $.Values.grafanaImage }}{{ end }}
+          {{- if eq $component "prometheus" }}
+          args: [--config.file=/etc/prometheus/prometheus.yml, --storage.tsdb.path=/prometheus, --storage.tsdb.retention.time=7d, --storage.tsdb.retention.size=1GB]
+          {{- else }}
+          env:
+            - {name: GF_PLUGINS_PREINSTALL_SYNC, value: victoriametrics-logs-datasource@0.32.0}
+            - {name: GF_PLUGINS_PREINSTALL_DISABLED, value: "true"}
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              valueFrom: {secretKeyRef: {name: grafana-secret, key: password}}
+            - {name: GF_USERS_ALLOW_SIGN_UP, value: "false"}
+            - {name: GF_AUTH_ANONYMOUS_ENABLED, value: "false"}
+          {{- end }}
+          ports: [{name: http, containerPort: {{ if eq $component "prometheus" }}9090{{ else }}3000{{ end }}}]
+          readinessProbe:
+            httpGet: {path: {{ if eq $component "prometheus" }}/-/ready{{ else }}/api/health{{ end }}, port: http}
+            periodSeconds: 5
+          resources:
+            requests: {cpu: 50m, memory: 128Mi}
+            limits: {cpu: "1", memory: 512Mi}
+          volumeMounts:
+            {{- if eq $component "prometheus" }}
+            - {name: data, mountPath: /prometheus}
+            - {name: config, mountPath: /etc/prometheus}
+            {{- else }}
+            - {name: data, mountPath: /var/lib/grafana}
+            - {name: config, mountPath: /etc/grafana/provisioning/datasources/datasources.yaml, subPath: datasources.yaml}
+            - {name: config, mountPath: /etc/grafana/provisioning/dashboards/dashboards.yaml, subPath: dashboards.yaml}
+            - {name: dashboards, mountPath: /var/lib/grafana/dashboards}
+            {{- end }}
+      volumes:
+        - name: data
+          persistentVolumeClaim: {claimName: {{ $component }}-data}
+        - name: config
+          configMap: {name: {{ if eq $component "prometheus" }}prometheus-config{{ else }}grafana-provisioning{{ end }}}
+        {{- if eq $component "grafana" }}
+        - name: dashboards
+          configMap: {name: grafana-dashboards}
+        {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: {{ $component }}}
+spec:
+  selector: {app: university-monitoring, component: {{ $component }}}
+  ports: [{name: http, port: {{ if eq $component "prometheus" }}9090{{ else }}3000{{ end }}, targetPort: http}]
+---
+{{- end }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata: {name: monitoring}
+spec:
+  gatewayClassName: midterm-envoy
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 3000
+      allowedRoutes:
+        namespaces: {from: Same}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata: {name: grafana}
+spec:
+  parentRefs: [{name: monitoring}]
+  hostnames: [{{ .Values.hostname }}]
+  rules:
+    - backendRefs: [{name: grafana, port: 3000}]

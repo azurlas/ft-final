@@ -1,0 +1,3 @@
+baldinof_road_runner:
+  kernel_reboot:
+    strategy: always

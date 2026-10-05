@@ -1,0 +1,33 @@
+security:
+  password_hashers:
+    Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: auto
+  providers:
+    users:
+      entity:
+        class: App\Entity\User
+        property: login
+  firewalls:
+    internal:
+      pattern: ^/internal/
+      security: false
+    login:
+      pattern: ^/api/login$
+      stateless: true
+      json_login:
+        check_path: /api/login
+        username_path: login
+        password_path: password
+        success_handler: lexik_jwt_authentication.handler.authentication_success
+        failure_handler: lexik_jwt_authentication.handler.authentication_failure
+    main:
+      stateless: true
+      provider: users
+      jwt: ~
+  access_control:
+    - { path: ^/api/login$, roles: PUBLIC_ACCESS }
+    - { path: ^/api/register$, roles: PUBLIC_ACCESS }
+    - { path: ^/api/docs, roles: PUBLIC_ACCESS }
+    - { path: ^/health/, roles: PUBLIC_ACCESS }
+    - { path: ^/internal/, roles: PUBLIC_ACCESS }
+    - { path: ^/api/courses, roles: PUBLIC_ACCESS, methods: [GET] }
+    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

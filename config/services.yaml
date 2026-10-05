@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+  App\:
+    resource: '../src/'
+    exclude: '../src/{Entity,Kernel.php,Payment/Dto,Api/Resource}/'
+  App\Payment\PaymentServiceInterface: '@App\Payment\HttpPaymentService'

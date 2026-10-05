@@ -1,0 +1,20 @@
+framework:
+  secret: '%env(APP_SECRET)%'
+  handle_all_throwables: true
+  http_method_override: false
+  property_info:
+    with_constructor_extractor: true
+  serializer:
+    default_context:
+      allow_extra_attributes: false
+  validation:
+    email_validation_mode: html5
+  http_client:
+    default_options:
+      timeout: 2
+      max_duration: 2
+  php_errors:
+    log: true
+when@test:
+  framework:
+    test: true

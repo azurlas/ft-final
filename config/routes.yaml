@@ -1,0 +1,9 @@
+api_platform:
+  resource: .
+  type: api_platform
+  prefix: /api
+controllers:
+  resource:
+    path: ../src/Api/Controller/
+    namespace: App\Api\Controller
+  type: attribute

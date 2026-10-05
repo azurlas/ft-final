@@ -1,0 +1,21 @@
+framework:
+  messenger:
+    failure_transport: failed
+    transports:
+      payments:
+        dsn: '%env(REDIS_QUEUE_DSN)%'
+        options:
+          consumer: '%env(default::HOSTNAME)%'
+          redeliver_timeout: 120
+          delete_after_ack: true
+        retry_strategy:
+          max_retries: 2
+          delay: 1000
+          multiplier: 2
+      failed:
+        dsn: '%env(REDIS_QUEUE_DSN)%'
+        options:
+          stream: payments_failed
+          group: failed
+    routing:
+      App\Payment\Message\ProcessPurchase: payments

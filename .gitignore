@@ -1,0 +1,13 @@
+/vendor/
+/var/
+/.env.local
+/.env.*.local
+/config/jwt/
+/.phpunit.cache/
+/helm/*/charts/
+/output/secrets/
+/output/tmp/
+/rr
+/.DS_Store
+
+/public/bundles/

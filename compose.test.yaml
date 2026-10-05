@@ -1,0 +1,43 @@
+name: midterm-tests
+services:
+  mysql:
+    image: mysql:8.4.8
+    environment:
+      MYSQL_DATABASE: university
+      MYSQL_USER: university
+      MYSQL_PASSWORD: university
+      MYSQL_ROOT_PASSWORD: local-root
+    ports: ['127.0.0.1:33071:3306']
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', '127.0.0.1', '-ulocal', '--silent']
+      interval: 3s
+      timeout: 2s
+      retries: 30
+  redis-queue:
+    image: redis:7.4.8-alpine
+    command: ['redis-server', '--appendonly', 'yes', '--maxmemory-policy', 'noeviction']
+    ports: ['127.0.0.1:63791:6379']
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 2s
+      retries: 10
+  redis-cache:
+    image: redis:7.4.8-alpine
+    command: ['redis-server', '--maxmemory', '64mb', '--maxmemory-policy', 'allkeys-lru']
+    ports: ['127.0.0.1:63792:6379']
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 2s
+      retries: 10
+  rustfs:
+    image: rustfs/rustfs:1.0.0-alpha.69@sha256:bac03a101856a921c798965d7677ab2167edad3656017d66c5e0c3bcc96996b0
+    environment:
+      RUSTFS_ACCESS_KEY: midterm-local
+      RUSTFS_SECRET_KEY: midterm-local-secret
+      RUSTFS_VOLUMES: /data
+      RUSTFS_ADDRESS: ':9000'
+      RUSTFS_CONSOLE_ENABLE: 'false'
+    ports: ['127.0.0.1:9011:9000']
+    volumes: [rustfs-data:/data]
+volumes:
+  rustfs-data:

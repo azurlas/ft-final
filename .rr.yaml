@@ -1,0 +1,31 @@
+version: '3'
+rpc:
+  listen: tcp://127.0.0.1:${RR_RPC_PORT}
+server:
+  command: php public/index.php
+  env:
+    APP_RUNTIME: Baldinof\RoadRunnerBundle\Runtime\Runtime
+  relay: pipes
+http:
+  address: 0.0.0.0:${RR_HTTP_PORT}
+  middleware: [http_metrics, static]
+  static:
+    dir: public
+    forbid: [".php", ".htaccess"]
+  max_request_size: 12
+  uploads:
+    forbid: []
+  pool:
+    num_workers: 2
+    max_jobs: 500
+    allocate_timeout: 5s
+    supervisor:
+      max_worker_memory: 128
+metrics:
+  address: 0.0.0.0:2112
+logs:
+  mode: production
+  level: info
+  encoding: json
+  output: [stderr]
+  err_output: [stderr]

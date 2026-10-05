@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-05T14:11:53.214167+00:00",
+  "checkedAt": "2026-10-05T14:53:28.971903+00:00",
   "url": "https://midterm.k8s.orb.local",
   "gatewayAddress": "192.168.139.2",
   "httpsListener": {
@@ -54,7 +54,10 @@
     "sha256": "4736030540a8359f52e8a1d74537886de34b33fdd71c64b4fe4ef07cd2dcc3e5"
   },
   "checks": {
-    "/ui/index.html": 200,
+    "/ui/courses.html": 200,
+    "/ui/submit.html": 200,
+    "/ui/assignments.html": 200,
+    "/ui/main.js": 200,
     "/ui/app.js": 200,
     "/ui/api.js": 200,
     "/ui/format.js": 200,

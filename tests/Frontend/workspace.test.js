@@ -2,36 +2,78 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { JSDOM } from "jsdom";
+import { pageHref, returnTarget } from "../../public/ui/navigation.js";
 
-test("workspace handles student and admin forms, pending checkout replay, uploads and safe rendering", async (t) => {
-  const dom = new JSDOM(
-    await fs.readFile(
-      new URL("../../public/ui/index.html", import.meta.url),
-      "utf8",
-    ),
-    { url: "http://campus.test/ui/index.html", pretendToBeVisual: true },
+test("navigation uses physical HTML pages and rejects unsafe return destinations", () => {
+  assert.equal(
+    pageHref("submit", { assignment: 7 }),
+    "/ui/submit.html?assignment=7",
   );
-  const { window } = dom;
-  global.document = window.document;
-  global.sessionStorage = window.sessionStorage;
-  global.FormData = window.FormData;
-  const modal = document.querySelector("#modal");
-  modal.showModal = () => {
-    modal.open = true;
-  };
-  modal.close = () => {
-    modal.open = false;
-    modal.dispatchEvent(new window.Event("close"));
-  };
-  let poll;
-  const originalInterval = global.setInterval;
-  global.setInterval = (callback) => {
-    poll = callback;
-    return 0;
+  for (const next of [
+    "https://evil.test/ui/courses.html",
+    "//evil.test",
+    "javascript:alert(1)",
+    "/api/me",
+    "/ui/login.html",
+    "http://[",
+  ]) {
+    assert.equal(
+      returnTarget("?next=" + encodeURIComponent(next), "http://campus.test"),
+      "/ui/courses.html",
+    );
+  }
+  assert.equal(
+    returnTarget(
+      "?next=%2Fui%2Fsubmit.html%3Fassignment%3D7",
+      "http://campus.test",
+    ),
+    "/ui/submit.html?assignment=7",
+  );
+});
+
+test("separate pages handle uploads, admin forms and checkout replay despite a shadowed form.id", async (t) => {
+  let dom, instance, nextHref, poll;
+  const load = async (href) => {
+    const saved = dom ? Object.entries(dom.window.sessionStorage) : [];
+    instance?.destroy();
+    dom?.window.close();
+    const url = new URL(href, "http://campus.test");
+    dom = new JSDOM(
+      await fs.readFile(
+        new URL("../../public" + url.pathname, import.meta.url),
+        "utf8",
+      ),
+      { url: url.href, pretendToBeVisual: true },
+    );
+    global.document = dom.window.document;
+    global.sessionStorage = dom.window.sessionStorage;
+    global.FormData = dom.window.FormData;
+    for (const [key, value] of saved) sessionStorage.setItem(key, value);
+    const modal = document.querySelector("#modal");
+    modal.showModal = () => {
+      modal.open = true;
+    };
+    modal.close = () => {
+      modal.open = false;
+      modal.dispatchEvent(new dom.window.Event("close"));
+    };
+    nextHref = null;
+    const { mount } = await import("../../public/ui/app.js");
+    instance = mount({
+      document,
+      navigate: (href) => {
+        nextHref = href;
+      },
+      schedule: (callback) => {
+        poll = callback;
+        return 0;
+      },
+    });
+    await instance.ready;
   };
   t.after(() => {
-    global.setInterval = originalInterval;
-    dom.window.close();
+    instance?.destroy();
+    dom?.window.close();
   });
   const records = {
     courses: [
@@ -156,7 +198,7 @@ test("workspace handles student and admin forms, pending checkout replay, upload
       await new Promise((resolve) => setTimeout(resolve, 5));
     }
     assert.fail(
-      "Workspace did not reach expected state: " +
+      "Page did not reach expected state: " +
         document.querySelector("#main").textContent,
     );
   };
@@ -168,73 +210,115 @@ test("workspace handles student and admin forms, pending checkout replay, upload
     node.click();
   };
   const fill = (name, value) => {
-    modal.querySelector(`[name="${name}"]`).value = value;
+    document.querySelector(`[name="${name}"]`).value = value;
   };
   const submit = async (formId) => {
     const f = document.getElementById(formId);
     assert.ok(f.reportValidity(), `Invalid ${formId}`);
     f.dispatchEvent(
-      new window.Event("submit", { bubbles: true, cancelable: true }),
+      new dom.window.Event("submit", { bubbles: true, cancelable: true }),
     );
     await new Promise((resolve) => setTimeout(resolve, 0));
   };
-  await import("../../public/ui/app.js");
-  await wait(() => document.querySelectorAll(".course-card").length === 2);
+  const shadowId = (form) => {
+    assert.equal(
+      form.querySelector('[name="id"]'),
+      null,
+      "Entity fields must not collide with form.id",
+    );
+    // Model browsers' LegacyOverrideBuiltIns behavior, which jsdom doesn't implement.
+    Object.defineProperty(form, "id", {
+      value: form.querySelector('[name="entityId"]'),
+    });
+    assert.equal(typeof form.id, "object");
+  };
+  await load("/ui/courses.html");
+  assert.equal(document.querySelectorAll(".course-card").length, 2);
   assert.equal(document.querySelector(".course-card img"), null);
-  click("login");
-  assert.equal(document.querySelector('#login-form [data-action="close"]').type, 'button');
-  assert.equal(document.querySelectorAll('#login-form button[type="submit"]').length, 1);
+  assert.equal(
+    document.querySelector('[data-page-link="assignments"]').tagName,
+    "A",
+  );
+  assert.equal(document.querySelector("[data-view]"), null);
+  await load("/ui/submit.html?assignment=1");
+  assert.match(nextHref, /^\/ui\/login.html\?next=/);
+  await load(nextHref);
   fill("login", "student");
   fill("password", "StudentPass123!");
   await submit("login-form");
-  await wait(() => document.querySelector('[data-action="logout"]'));
+  await wait(() => nextHref);
+  assert.equal(nextHref, "/ui/submit.html?assignment=1");
+  await load("/ui/courses.html");
   click("enroll", 1);
   await wait(() =>
-    document.querySelector('[data-action="course"][data-id="1"]'),
+    document.querySelector('a[href="/ui/assignments.html?course=1"]'),
   );
-  click("course", 1);
+  await load("/ui/assignments.html?course=1");
   assert.equal(document.querySelector(".description script"), null);
-  click("upload", 1);
-  const input = modal.querySelector('[name="file"]');
-  const file = new window.File(["work"], "work.any");
-  Object.defineProperty(input, "files", { value: [file] });
-  // jsdom does not implement file picker population in FormData; preserve actual form fields and inject its selected File.
-  const BrowserFormData = window.FormData;
-  global.FormData = class extends BrowserFormData {
-    constructor(form) {
-      super(form);
-      if (form?.id === "upload-form") this.set("file", file);
-    }
-  };
-  document.getElementById("upload-form").reportValidity = () => true;
+  assert.ok(document.querySelector('a[href="/ui/submit.html?assignment=1"]'));
+  await load("/ui/submit.html?assignment=1");
+  let f = document.getElementById("upload-form");
+  shadowId(f);
+  const input = f.querySelector('[name="file"]');
+  // jsdom cannot populate a file picker; inject selected File and browser validity.
+  Object.defineProperty(input, "files", {
+    configurable: true,
+    value: [new dom.window.File([new Uint8Array(10000001)], "too-big.any")],
+  });
+  f.reportValidity = () => true;
   await submit("upload-form");
-  await wait(() => document.querySelector('[data-action="download"]'));
-  document.querySelector('[data-view="courses"]').click();
-  click("purchase", 2);
+  await wait(() => !f.querySelector(".form-error").hidden);
+  assert.match(f.querySelector(".form-error").textContent, /10,000,000/);
+  assert.equal(calls.filter((c) => c.path.endsWith("/submit")).length, 0);
+  Object.defineProperty(input, "files", { configurable: true, value: [] });
+  await submit("upload-form");
+  await wait(() =>
+    /exactly one/.test(f.querySelector(".form-error").textContent),
+  );
+  Object.defineProperty(input, "files", {
+    configurable: true,
+    value: [new dom.window.File(["work"], "work.any")],
+  });
+  await submit("upload-form");
+  await wait(() => nextHref);
+  assert.equal(nextHref, "/ui/submissions.html");
+  const upload = calls.find((c) => c.path.endsWith("/submit"));
+  assert.equal(upload.body.get("file").name, "work.any");
+  assert.equal(upload.body.get("file").size, 4);
+  assert.equal(
+    upload.headers["Content-Type"],
+    undefined,
+    "Browser must generate multipart boundary",
+  );
+  await load(nextHref);
+  assert.match(document.querySelector("#main").textContent, /work.any/);
+  await load("/ui/submit.html?assignment=1");
+  assert.equal(document.getElementById("upload-form"), null);
+  assert.match(
+    document.querySelector("#main").textContent,
+    /Already submitted/,
+  );
+  await load("/ui/checkout.html?course=2");
   document.getElementById("payment-scenario").value = "9900000000000036";
   document
     .getElementById("payment-scenario")
-    .dispatchEvent(new window.Event("change", { bubbles: true }));
+    .dispatchEvent(new dom.window.Event("change", { bubbles: true }));
   await submit("purchase-form");
-  assert.equal(modal.open, true);
   assert.match(
-    modal.querySelector(".form-error").textContent,
+    document.querySelector(".form-error").textContent,
     /Cannot connect/,
   );
-  await submit("purchase-form");
-  await wait(
-    () => document.querySelector(".panel .badge")?.textContent === "pending",
-  );
-  assert.equal(sessionStorage.length, 1);
-  assert.equal(sessionStorage.getItem("campus.token"), "test-jwt");
-  document.querySelector('[data-view="courses"]').click();
-  const search = document.getElementById("course-search");
-  search.focus();
-  search.value = "img";
-  search.dispatchEvent(new window.Event("input", { bubbles: true }));
+  assert.equal(nextHref, null);
   await poll();
-  assert.equal(document.activeElement, search);
-  assert.equal(document.querySelectorAll(".course-card").length, 1);
+  assert.ok(
+    document.getElementById("purchase-form"),
+    "Poll must preserve checkout input",
+  );
+  await submit("purchase-form");
+  await wait(() => nextHref);
+  assert.equal(nextHref, "/ui/purchases.html");
+  await load(nextHref);
+  assert.equal(document.querySelector(".panel .badge").textContent, "pending");
   records.purchases[0].status = "succeeded";
   records.purchases[0].attempts = [
     { attempt_number: 1, status: "transient" },
@@ -243,38 +327,53 @@ test("workspace handles student and admin forms, pending checkout replay, upload
   ];
   records.enrollments.push({ id: 2, userId: 2, courseId: 2 });
   await poll();
-  assert.equal(document.activeElement, search);
-  search.value = "";
-  search.dispatchEvent(new window.Event("input", { bubbles: true }));
-  document.querySelector('[data-view="purchases"]').click();
   assert.equal(
     document.querySelector(".panel .badge").textContent,
     "succeeded",
   );
+  await load("/ui/courses.html");
+  const search = document.getElementById("course-search");
+  search.focus();
+  search.value = "img";
+  search.dispatchEvent(new dom.window.Event("input", { bubbles: true }));
+  await poll();
+  assert.equal(document.activeElement, search);
+  assert.equal(document.querySelectorAll(".course-card").length, 1);
   click("logout");
-  assert.equal(sessionStorage.length, 0);
-  click("login");
+  assert.equal(sessionStorage.getItem("campus.token"), null);
+  await load("/ui/login.html");
   fill("login", "admin");
   fill("password", "AdminPass123!");
   await submit("login-form");
-  await wait(() => document.querySelector('[data-action="new-course"]'));
+  await wait(() => nextHref);
+  await load(nextHref);
   click("new-course");
   fill("name", "New course");
   fill("price", "12.50");
+  shadowId(document.getElementById("course-form"));
   await submit("course-form");
-  await wait(() => records.courses.length === 3 && !modal.open);
+  await wait(
+    () =>
+      records.courses.length === 3 && !document.querySelector("#modal").open,
+  );
   assert.equal(records.courses[2].price, 1250);
-  click("course", 3);
+  await load("/ui/assignments.html?course=3");
   click("new-assignment", 3);
   fill("name", "New assignment");
   fill("description", "Instructions");
+  shadowId(document.getElementById("assignment-form"));
   await submit("assignment-form");
-  await wait(() => records.assignments.length === 2 && !modal.open);
+  await wait(
+    () =>
+      records.assignments.length === 2 &&
+      !document.querySelector("#modal").open,
+  );
   assert.match(records.assignments[1].deadline, /Z$/);
-  document.querySelector('[data-view="grades"]').click();
+  await load("/ui/submissions.html");
   click("grade", 1);
   fill("grade", "91");
   fill("comment", "<strong>Good work</strong>");
+  shadowId(document.getElementById("grade-form"));
   await submit("grade-form");
   await wait(
     () => document.querySelector(".grade-number")?.textContent === "91",
@@ -282,21 +381,28 @@ test("workspace handles student and admin forms, pending checkout replay, upload
   assert.equal(document.querySelector("td strong"), null);
   click("grade", 1);
   fill("grade", "95");
+  shadowId(document.getElementById("grade-form"));
   await submit("grade-form");
   await wait(
     () => document.querySelector(".grade-number")?.textContent === "95",
   );
+  await load("/ui/grades.html");
+  assert.equal(document.querySelector(".grade-number").textContent, "95");
+  await load("/ui/submissions.html");
   click("delete-grade", 1);
   click("confirm-grade", 1);
-  await wait(() => records.grades.length === 0 && !modal.open);
+  await wait(
+    () => records.grades.length === 0 && !document.querySelector("#modal").open,
+  );
   click("logout");
-  click("login");
-  click("register");
+  await load("/ui/register.html");
   fill("login", "new-student");
   fill("username", "New Student");
   fill("password", "StudentPass123!");
   await submit("register-form");
-  await wait(() => document.querySelector('[data-action="logout"]'));
+  await wait(() => nextHref);
+  await load(nextHref);
+  assert.ok(document.querySelector('[data-action="logout"]'));
   assert.ok(
     calls.some(
       (c) => c.path === "/api/register" && c.body.username === "New Student",

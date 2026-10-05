@@ -1,22 +1,22 @@
 {
-  "checkedAt": "2026-10-05T13:51:18.464335+00:00",
+  "checkedAt": "2026-10-05T14:53:54.072353+00:00",
   "context": "orbstack",
   "preservedDefaultContext": "stage-nbg3",
-  "image": "midterm/university:frontend-20261005b",
-  "imageId": "sha256:7d72924fc9f9e734f8426df6ba62c34602ce9a9c3c6f40dfa458e8d27ca04b56",
+  "image": "midterm/university:pages-20261005a",
+  "imageId": "sha256:0a9f6d56213566d8376ae38c848d27aa4bbb585b3b5a40475c4cc1e1917ed07c",
   "profiles": {
     "midterm": {
       "podsReady": 9,
       "apiImages": [
-        "midterm/university:frontend-20261005b"
+        "midterm/university:pages-20261005a"
       ]
     },
     "midterm-baseline": {
       "podsReady": 7,
       "apiImages": [
-        "midterm/university:frontend-20261005b"
+        "midterm/university:pages-20261005a"
       ]
     }
   },
-  "frontendBytes": 52191
+  "frontendBytes": 88945
 }

@@ -714,14 +714,14 @@ select:focus {
   margin-bottom: 22px;
   border-bottom: 1px solid var(--line);
 }
-.auth-tabs button {
+.auth-tabs a {
   border: 0;
   background: transparent;
   padding: 0 0 12px;
   color: var(--muted);
   font-size: 13px;
 }
-.auth-tabs button.active {
+.auth-tabs a.active {
   color: var(--primary);
   border-bottom: 2px solid var(--primary);
 }
@@ -897,4 +897,11 @@ select:focus {
   button {
     transition: none;
   }
+}
+
+.page-form {
+  max-width: 600px;
+}
+.auth-tabs a {
+  text-decoration: none;
 }

@@ -12,6 +12,6 @@ final class FrontendController
     #[Route('/', methods: ['GET'])]
     public function __invoke(): RedirectResponse
     {
-        return new RedirectResponse('/ui/index.html', 302, ['Cache-Control' => 'no-store']);
+        return new RedirectResponse('/ui/courses.html', 302, ['Cache-Control' => 'no-store']);
     }
 }

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'self'"
+    />
+    <title>Purchases · Campus</title>
+    <link rel="icon" href="/ui/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/ui/styles.css?v=2" />
+    <script type="module" src="/ui/main.js?v=2"></script>
+  </head>
+  <body data-page="purchases">
+    <div class="shell">
+      <aside class="sidebar">
+        <a class="brand" href="/" aria-label="Campus home"
+          ><span class="brand-mark">c.</span> campus<span class="brand-dot"
+            >●</span
+          ></a
+        >
+        <p class="sidebar-label">YOUR LEARNING SPACE</p>
+        <nav aria-label="Main navigation" id="navigation">
+          <a href="/ui/courses.html" data-page-link="courses" class="nav-item"
+            ><span aria-hidden="true">▦</span> Courses</a
+          >
+          <a
+            href="/ui/assignments.html"
+            data-page-link="assignments"
+            class="nav-item"
+            data-auth
+            hidden
+            ><span aria-hidden="true">▤</span> Assignments</a
+          >
+          <a
+            href="/ui/submissions.html"
+            data-page-link="submissions"
+            class="nav-item"
+            data-auth
+            hidden
+            ><span aria-hidden="true">↥</span> Submissions</a
+          >
+          <a
+            href="/ui/grades.html"
+            data-page-link="grades"
+            class="nav-item"
+            data-auth
+            hidden
+            ><span aria-hidden="true">✓</span> Grades</a
+          >
+          <a
+            href="/ui/purchases.html"
+            data-page-link="purchases"
+            class="nav-item"
+            data-auth
+            hidden
+            ><span aria-hidden="true">↗</span> Purchases</a
+          >
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="side-note">
+            <span class="tiny-label">KEEP MOVING FORWARD</span>
+            <p>A little progress,<br />every day.</p>
+            <span aria-hidden="true">↗</span>
+          </div>
+          <a
+            href="/api/docs.html"
+            target="_blank"
+            rel="noopener"
+            class="docs-link"
+            >API documentation <span aria-hidden="true">↗</span></a
+          >
+          <div id="account" class="account"></div>
+        </div>
+      </aside>
+      <div class="workspace">
+        <header class="topbar">
+          <span id="breadcrumb">Workspace / Purchases</span>
+          <div id="session-actions">
+            <a class="button small" href="/ui/login.html">Sign in</a>
+          </div>
+        </header>
+        <main id="main" tabindex="-1" aria-busy="true">
+          <div class="empty-state">Loading your workspace…</div>
+        </main>
+        <footer>Campus <span>Learn at your own pace.</span></footer>
+      </div>
+    </div>
+    <div id="notice" role="status" aria-live="polite" hidden></div>
+    <dialog id="modal" aria-labelledby="modal-title">
+      <div id="modal-content"></div>
+    </dialog>
+    <noscript
+      ><p class="noscript">
+        Enable JavaScript to use Campus. The
+        <a href="/api/docs.html">API documentation</a> is also available.
+      </p></noscript
+    >
+  </body>
+</html>

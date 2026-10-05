@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-10-05T14:53:31.957Z",
+  "base": "https://midterm.k8s.orb.local",
+  "deployedSourcesMatched": [
+    "submit.html",
+    "main.js",
+    "app.js",
+    "api.js",
+    "format.js",
+    "navigation.js",
+    "submission.js"
+  ],
+  "domHandler": "passed",
+  "browserRenderingVerified": false,
+  "namedFormIdShadowRegression": true,
+  "oversizedFileBlockedBeforeRequest": true,
+  "uploadedBytes": 10000000,
+  "multipartFileParts": 1,
+  "filename": "ui-limit.arbitrary",
+  "submissionId": 10,
+  "sha256": "779983c4855d23a130ff79fb15a273247ad4beaaf6d43debf662df9dfa88a5a3",
+  "privateDownloadChecksumVerified": true,
+  "successNavigation": "/ui/submissions.html",
+  "duplicateFormHiddenAfterReload": true
+}

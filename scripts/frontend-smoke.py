@@ -19,11 +19,11 @@ def main():
     root = pathlib.Path('output/evaluation')
     root.mkdir(parents=True, exist_ok=True)
     with urllib.request.urlopen(args.base + '/', timeout=20) as response:
-        assert response.url.endswith('/ui/index.html')
+        assert response.url.endswith('/ui/courses.html')
         html = response.read().decode()
     assert 'Campus' in html and 'Content-Security-Policy' in html
     assets = set(re.findall(r'(?:src|href)="(/ui/[^"?]+)', html))
-    assets.update(['/ui/api.js', '/ui/format.js'])
+    assets.update('/ui/' + name for name in ['index.html', 'courses.html', 'assignments.html', 'submissions.html', 'grades.html', 'purchases.html', 'login.html', 'register.html', 'submit.html', 'checkout.html', 'app.js', 'api.js', 'format.js', 'navigation.js', 'submission.js'])
     asset_report = []
     for path in sorted(assets):
         with urllib.request.urlopen(args.base + path, timeout=20) as response:
@@ -89,7 +89,7 @@ def main():
     api.ok('DELETE', f"/api/assignments/{assignment['id']}", status=204)
     api.ok('DELETE', f"/api/courses/{free['id']}", status=204)
     api.ok('DELETE', f"/api/courses/{paid['id']}", status=204)
-    report = {'base': args.base, 'utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), 'assets': asset_report, 'rootRedirect': '/ui/index.html', 'etagConditionalRequests': '304', 'phpSourceBlocked': True, 'missingAssetNotRewritten': True, 'studentAndAdminContracts': 'passed', 'checkoutIdempotency': True, 'twoPaymentRetries': True, 'purchaseId': purchase['id'], 'fileChecksumVerified': True, 'pdfBytes': len(pdf), 'interactiveBrowserVerified': False}
+    report = {'base': args.base, 'utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), 'assets': asset_report, 'rootRedirect': '/ui/courses.html', 'etagConditionalRequests': '304', 'phpSourceBlocked': True, 'missingAssetNotRewritten': True, 'studentAndAdminContracts': 'passed', 'checkoutIdempotency': True, 'twoPaymentRetries': True, 'purchaseId': purchase['id'], 'fileChecksumVerified': True, 'pdfBytes': len(pdf), 'interactiveBrowserVerified': False}
     (root / 'frontend.json').write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report, indent=2))
 

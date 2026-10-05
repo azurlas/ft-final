@@ -1,6 +1,6 @@
 {
   "base": "https://midterm.k8s.orb.local",
-  "utc": "2026-10-05T14:08:45Z",
+  "utc": "2026-10-05T14:53:40Z",
   "assets": [
     {
       "path": "/ui/api.js",
@@ -10,9 +10,27 @@
     },
     {
       "path": "/ui/app.js",
-      "bytes": 30102,
-      "etag": "\"30102-3348186816\"",
+      "bytes": 36131,
+      "etag": "\"36131-2759725455\"",
       "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/ui/assignments.html",
+      "bytes": 3557,
+      "etag": "\"3557-4250287679\"",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/ui/checkout.html",
+      "bytes": 3562,
+      "etag": "\"3562-2389478795\"",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/ui/courses.html",
+      "bytes": 3545,
+      "etag": "\"3545-3273240100\"",
+      "contentType": "text/html; charset=utf-8"
     },
     {
       "path": "/ui/favicon.svg",
@@ -27,21 +45,81 @@
       "contentType": "text/javascript; charset=utf-8"
     },
     {
+      "path": "/ui/grades.html",
+      "bytes": 3542,
+      "etag": "\"3542-3079454406\"",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/ui/index.html",
+      "bytes": 338,
+      "etag": "\"338-3225311197\"",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/ui/login.html",
+      "bytes": 3543,
+      "etag": "\"3543-3407017596\"",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/ui/main.js",
+      "bytes": 44,
+      "etag": "\"44-3702259489\"",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/ui/navigation.js",
+      "bytes": 955,
+      "etag": "\"955-2229138767\"",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/ui/purchases.html",
+      "bytes": 3551,
+      "etag": "\"3551-2601069772\"",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/ui/register.html",
+      "bytes": 3560,
+      "etag": "\"3560-3160326578\"",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
       "path": "/ui/styles.css",
-      "bytes": 14785,
-      "etag": "\"14785-3284385856\"",
+      "bytes": 14853,
+      "etag": "\"14853-2184646753\"",
       "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/ui/submission.js",
+      "bytes": 403,
+      "etag": "\"403-2529870457\"",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/ui/submissions.html",
+      "bytes": 3557,
+      "etag": "\"3557-3764173025\"",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/ui/submit.html",
+      "bytes": 3564,
+      "etag": "\"3564-2613018560\"",
+      "contentType": "text/html; charset=utf-8"
     }
   ],
-  "rootRedirect": "/ui/index.html",
+  "rootRedirect": "/ui/courses.html",
   "etagConditionalRequests": "304",
   "phpSourceBlocked": true,
   "missingAssetNotRewritten": true,
   "studentAndAdminContracts": "passed",
   "checkoutIdempotency": true,
   "twoPaymentRetries": true,
-  "purchaseId": 51,
+  "purchaseId": 52,
   "fileChecksumVerified": true,
-  "pdfBytes": 21062,
+  "pdfBytes": 20833,
   "interactiveBrowserVerified": false
 }

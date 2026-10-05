@@ -1,4 +1,4 @@
-.PHONY: install build test-deps-up test-deps-down test-unit test-integration test-functional lint check frontend-check frontend-smoke helm-check setup-local setup-local-tls tls-check smoke experiments
+.PHONY: install build test-deps-up test-deps-down test-unit test-integration test-functional lint check frontend-check frontend-smoke frontend-upload-check helm-check setup-local setup-local-tls tls-check smoke experiments
 install:
 	composer install --no-interaction
 build:
@@ -23,6 +23,8 @@ frontend-check:
 	npm run check
 frontend-smoke:
 	python3 scripts/frontend-smoke.py
+frontend-upload-check: tls-check
+	NODE_EXTRA_CA_CERTS=output/secrets/tls/verification-ca.pem node scripts/frontend-upload-check.mjs
 helm-check:
 	bash scripts/helm-check.sh
 setup-local:

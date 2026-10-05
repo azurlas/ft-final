@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test tests/Frontend/*.test.js",
-    "check": "node --check public/ui/app.js && node --check public/ui/api.js && node --check public/ui/format.js && npm test"
+    "check": "node --check public/ui/app.js && node --check public/ui/api.js && node --check public/ui/format.js && node --check public/ui/main.js && node --check public/ui/navigation.js && node --check public/ui/submission.js && npm test"
   },
   "devDependencies": {
     "jsdom": "26.1.0"

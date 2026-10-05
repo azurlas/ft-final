@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-10-05T13:51:18.464335+00:00",
+  "context": "orbstack",
+  "preservedDefaultContext": "stage-nbg3",
+  "image": "midterm/university:frontend-20261005b",
+  "imageId": "sha256:7d72924fc9f9e734f8426df6ba62c34602ce9a9c3c6f40dfa458e8d27ca04b56",
+  "profiles": {
+    "midterm": {
+      "podsReady": 9,
+      "apiImages": [
+        "midterm/university:frontend-20261005b"
+      ]
+    },
+    "midterm-baseline": {
+      "podsReady": 7,
+      "apiImages": [
+        "midterm/university:frontend-20261005b"
+      ]
+    }
+  },
+  "frontendBytes": 52191
+}

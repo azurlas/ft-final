@@ -43,6 +43,8 @@ spec:
   hostnames: [{{ .Values.hostname | quote }}]
   rules:
     - matches:
+        - path: {type: Exact, value: /}
+        - path: {type: PathPrefix, value: /ui}
         - path: {type: PathPrefix, value: /api}
         - path: {type: PathPrefix, value: /health}
         - path: {type: PathPrefix, value: /bundles}

@@ -12,6 +12,12 @@ http:
   static:
     dir: public
     forbid: [".php", ".htaccess"]
+    allow: [".html", ".css", ".js", ".json", ".svg", ".png", ".jpg", ".jpeg", ".ico", ".woff", ".woff2", ".ttf", ".map"]
+    calculate_etag: true
+    response:
+      X-Static-Server: RoadRunner
+      X-Content-Type-Options: nosniff
+      Cache-Control: no-cache
   max_request_size: 12
   uploads:
     forbid: []

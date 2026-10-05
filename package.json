@@ -1,0 +1,12 @@
+{
+  "name": "campus-frontend-checks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/Frontend/*.test.js",
+    "check": "node --check public/ui/app.js && node --check public/ui/api.js && node --check public/ui/format.js && npm test"
+  },
+  "devDependencies": {
+    "jsdom": "26.1.0"
+  }
+}

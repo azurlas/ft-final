@@ -1,0 +1,47 @@
+{
+  "base": "http://midterm.k8s.orb.local",
+  "utc": "2026-10-05T13:50:31Z",
+  "assets": [
+    {
+      "path": "/ui/api.js",
+      "bytes": 2768,
+      "etag": "\"2768-4200901232\"",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/ui/app.js",
+      "bytes": 30102,
+      "etag": "\"30102-3348186816\"",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/ui/favicon.svg",
+      "bytes": 226,
+      "etag": "\"226-3435190497\"",
+      "contentType": "image/svg+xml"
+    },
+    {
+      "path": "/ui/format.js",
+      "bytes": 1246,
+      "etag": "\"1246-3637925870\"",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/ui/styles.css",
+      "bytes": 14785,
+      "etag": "\"14785-3284385856\"",
+      "contentType": "text/css; charset=utf-8"
+    }
+  ],
+  "rootRedirect": "/ui/index.html",
+  "etagConditionalRequests": "304",
+  "phpSourceBlocked": true,
+  "missingAssetNotRewritten": true,
+  "studentAndAdminContracts": "passed",
+  "checkoutIdempotency": true,
+  "twoPaymentRetries": true,
+  "purchaseId": 50,
+  "fileChecksumVerified": true,
+  "pdfBytes": 21104,
+  "interactiveBrowserVerified": false
+}

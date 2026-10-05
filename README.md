@@ -18,12 +18,17 @@ Requires Docker/OrbStack, its Kubernetes cluster, PHP 8.3 with the extensions in
 
 | Endpoint | URL |
 | --- | --- |
+| Campus frontend | http://midterm.k8s.orb.local/ |
 | API / Swagger | http://midterm.k8s.orb.local/api/docs.html |
 | OpenAPI JSON | http://midterm.k8s.orb.local/api/docs.jsonopenapi |
 | Baseline API | http://baseline.midterm.k8s.orb.local:8080/api/docs.html |
 | Grafana | http://grafana.midterm.k8s.orb.local:3000 |
 
 OrbStack uses separate listener ports for these local load balancers. Grafana login is `admin`; read its generated password with `cat output/secrets/grafana.env`. Application demo logins are `admin` / `AdminPass123!`, and `student` or `other` / `StudentPass123!`. These are deliberately local demo accounts.
+
+Campus is a responsive HTML/CSS/JavaScript frontend served directly by RoadRunner from `public/ui/`, with no runtime library or build step. Students can register, enroll, purchase, submit/download files, and view grades. Administrators can manage courses/assignments, grade submissions, and download PDF reports. The mock checkout offers all six synthetic scenarios and polls pending purchases every three seconds. Login is kept in the current tab's `sessionStorage`; sign-out clears it. All API requests use the same origin.
+
+Frontend validation uses Node.js 22+ only for development: `npm ci && make frontend-check`. Run `make frontend-smoke` to verify the deployed static assets, ETags, source protection, and the live API contracts used by student/admin forms. `make setup-local` deploys the frontend together with the API.
 
 Authenticate with `POST /api/login`, JSON `{ "login": "student", "password": "StudentPass123!" }`, then use `Authorization: Bearer <token>`. In Swagger, paste the token into Authorize. Prices are integer USD cents; null or zero is free. Paid checkout requires an `Idempotency-Key` header. [Synthetic payment payloads](docs/examples) cover success, one/two transient retries, exhausted retries, decline, and timeout. These fixtures use expiry `12/2035` and CVV `123`; the payment DTO accepts only four fields.
 

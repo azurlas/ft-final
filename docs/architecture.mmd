@@ -1,9 +1,9 @@
 flowchart TB
-    CLIENT[Student / administrator / Swagger client]
+    CLIENT[Campus HTML/CSS/JS frontend / Swagger client]
     subgraph LOCAL[OrbStack Kubernetes: one local node]
         EG[Envoy Gateway controller]
         GATEWAY[Envoy data plane: 2 replicas]
-        API[PHP 8.3 / RoadRunner API: 2 replicas]
+        API[PHP 8.3 / RoadRunner API + static frontend: 2 replicas]
         WORKER[Supervisor / Messenger workers: 2 replicas]
         MOCK[Mock payment HTTP endpoint]
         MYSQL[(MySQL: business records, outbox, payment receipts)]

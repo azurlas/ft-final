@@ -1,4 +1,5 @@
 /vendor/
+/node_modules/
 /var/
 /.env.local
 /.env.*.local
@@ -10,7 +11,7 @@
 /output/reports/course-report.pdf
 /output/reports/rendered/
 /rr
-/.DS_Store
+.DS_Store
 
 /public/bundles/
 

@@ -1,6 +1,6 @@
 {
-  "base": "http://midterm.k8s.orb.local",
-  "utc": "2026-10-05T13:50:31Z",
+  "base": "https://midterm.k8s.orb.local",
+  "utc": "2026-10-05T14:08:45Z",
   "assets": [
     {
       "path": "/ui/api.js",
@@ -40,8 +40,8 @@
   "studentAndAdminContracts": "passed",
   "checkoutIdempotency": true,
   "twoPaymentRetries": true,
-  "purchaseId": 50,
+  "purchaseId": 51,
   "fileChecksumVerified": true,
-  "pdfBytes": 21104,
+  "pdfBytes": 21062,
   "interactiveBrowserVerified": false
 }

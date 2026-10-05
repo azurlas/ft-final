@@ -17,6 +17,7 @@ fi
 for ns in midterm midterm-baseline midterm-monitoring midterm-gateway; do
   "$KUBECTL_BIN" --context orbstack create namespace "$ns" --dry-run=client -o yaml | "$KUBECTL_BIN" --context orbstack apply -f - >/dev/null
 done
+bash scripts/setup-local-tls.sh
 IMAGE_TAG="${IMAGE_TAG:-midterm/university:local-$(date +%Y%m%d%H%M%S)}"
 docker build -f docker/Dockerfile -t "$IMAGE_TAG" .
 mkdir -p output/secrets

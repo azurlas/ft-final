@@ -14,17 +14,19 @@ make setup-local
 make smoke
 ```
 
-Requires Docker/OrbStack, its Kubernetes cluster, PHP 8.3 with the extensions in `composer.json`, Composer, Helm, and Python 3. Setup starts OrbStack Kubernetes if needed and always selects `orbstack` explicitly. It restores the original global kubectl context if OrbStack startup changes it. Generated secrets live in ignored `output/secrets/` files and are reused on upgrades. Set `KUBECTL_BIN` to override the local CLI path.
+Requires Docker/OrbStack, its Kubernetes cluster, PHP 8.3 with the extensions in `composer.json`, Composer, Helm, Python 3, and `mkcert` (`brew install mkcert`). Setup starts OrbStack Kubernetes if needed and always selects `orbstack` explicitly. It restores the original global kubectl context if OrbStack startup changes it. Generated application secrets live in ignored `output/secrets/` files and are reused on upgrades. Set `KUBECTL_BIN` to override the local CLI path.
 
 | Endpoint | URL |
 | --- | --- |
-| Campus frontend | http://midterm.k8s.orb.local/ |
-| API / Swagger | http://midterm.k8s.orb.local/api/docs.html |
-| OpenAPI JSON | http://midterm.k8s.orb.local/api/docs.jsonopenapi |
+| Campus frontend | https://midterm.k8s.orb.local/ |
+| API / Swagger | https://midterm.k8s.orb.local/api/docs.html |
+| OpenAPI JSON | https://midterm.k8s.orb.local/api/docs.jsonopenapi |
 | Baseline API | http://baseline.midterm.k8s.orb.local:8080/api/docs.html |
 | Grafana | http://grafana.midterm.k8s.orb.local:3000 |
 
 OrbStack uses separate listener ports for these local load balancers. Grafana login is `admin`; read its generated password with `cat output/secrets/grafana.env`. Application demo logins are `admin` / `AdminPass123!`, and `student` or `other` / `StudentPass123!`. These are deliberately local demo accounts.
+
+The main Envoy gateway serves HTTP on 80 and HTTPS on 443. Setup runs `mkcert -install`, issues a certificate for `midterm.k8s.orb.local`, and installs its leaf certificate/key as the `midterm/university-tls` Secret. TLS files stay in ignored `output/secrets/tls/`; the mkcert CA key stays on your Mac. `make setup-local-tls` renews the leaf certificate and updates the existing Secret. OrbStack's domain proxy also presents its own trusted certificate at `.orb.local`, while direct gateway connections use mkcert. `make tls-check` verifies both paths without disabling certificate verification.
 
 Campus is a responsive HTML/CSS/JavaScript frontend served directly by RoadRunner from `public/ui/`, with no runtime library or build step. Students can register, enroll, purchase, submit/download files, and view grades. Administrators can manage courses/assignments, grade submissions, and download PDF reports. The mock checkout offers all six synthetic scenarios and polls pending purchases every three seconds. Login is kept in the current tab's `sessionStorage`; sign-out clears it. All API requests use the same origin.
 

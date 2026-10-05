@@ -5,6 +5,10 @@ apiReplicas: 2
 workerReplicas: 2
 gatewayReplicas: 2
 gatewayPort: 80
+tls:
+  enabled: false
+  port: 443
+  secretName: university-tls
 secretName: university-secrets
 storageClass: local-path
 backupEnabled: true

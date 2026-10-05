@@ -1,4 +1,4 @@
-.PHONY: install build test-deps-up test-deps-down test-unit test-integration test-functional lint check frontend-check frontend-smoke helm-check setup-local smoke experiments
+.PHONY: install build test-deps-up test-deps-down test-unit test-integration test-functional lint check frontend-check frontend-smoke helm-check setup-local setup-local-tls tls-check smoke experiments
 install:
 	composer install --no-interaction
 build:
@@ -27,6 +27,10 @@ helm-check:
 	bash scripts/helm-check.sh
 setup-local:
 	bash scripts/setup-local.sh
+setup-local-tls:
+	bash scripts/setup-local-tls.sh
+tls-check:
+	python3 scripts/check-local-tls.py
 smoke:
 	python3 scripts/smoke.py
 experiments:

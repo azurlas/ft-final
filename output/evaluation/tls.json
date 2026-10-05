@@ -1,0 +1,65 @@
+{
+  "checkedAt": "2026-10-05T14:11:53.214167+00:00",
+  "url": "https://midterm.k8s.orb.local",
+  "gatewayAddress": "192.168.139.2",
+  "httpsListener": {
+    "attachedRoutes": 1,
+    "conditions": [
+      {
+        "lastTransitionTime": "2026-10-05T14:07:13Z",
+        "message": "Sending translated listener configuration to the data plane",
+        "observedGeneration": 2,
+        "reason": "Programmed",
+        "status": "True",
+        "type": "Programmed"
+      },
+      {
+        "lastTransitionTime": "2026-10-05T14:07:13Z",
+        "message": "Listener has been successfully translated",
+        "observedGeneration": 2,
+        "reason": "Accepted",
+        "status": "True",
+        "type": "Accepted"
+      },
+      {
+        "lastTransitionTime": "2026-10-05T14:07:13Z",
+        "message": "Listener references have been resolved",
+        "observedGeneration": 2,
+        "reason": "ResolvedRefs",
+        "status": "True",
+        "type": "ResolvedRefs"
+      }
+    ],
+    "name": "https",
+    "supportedKinds": [
+      {
+        "group": "gateway.networking.k8s.io",
+        "kind": "HTTPRoute"
+      },
+      {
+        "group": "gateway.networking.k8s.io",
+        "kind": "GRPCRoute"
+      }
+    ]
+  },
+  "certificateVerificationEnabled": true,
+  "macOSNativeTrustVerified": true,
+  "directEnvoy": {
+    "matchesIssuedMkcertCertificate": true,
+    "tlsVersion": "TLSv1.3",
+    "sha256": "a0ef1a0e419f430957a1b082f9af123768364a714a08c29d4e327e2daa34fdcb"
+  },
+  "publicOrbStackProxy": {
+    "tlsVersion": "TLSv1.3",
+    "sha256": "4736030540a8359f52e8a1d74537886de34b33fdd71c64b4fe4ef07cd2dcc3e5"
+  },
+  "checks": {
+    "/ui/index.html": 200,
+    "/ui/app.js": 200,
+    "/ui/api.js": 200,
+    "/ui/format.js": 200,
+    "/ui/styles.css": 200,
+    "/api/courses": 200,
+    "/health/ready": 200
+  }
+}

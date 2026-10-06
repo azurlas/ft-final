@@ -19,3 +19,7 @@
 /scripts/__pycache__/
 
 /.php-cs-fixer.cache
+
+/output/deployment-state.json
+/output/deployment-state.tmp
+/output/.deployment.lock

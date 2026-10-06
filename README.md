@@ -16,6 +16,13 @@ make smoke
 
 Requires Docker/OrbStack, its Kubernetes cluster, PHP 8.3 with the extensions in `composer.json`, Composer, Helm, Python 3, and `mkcert` (`brew install mkcert`). Setup starts OrbStack Kubernetes if needed and always selects `orbstack` explicitly. It restores the original global kubectl context if OrbStack startup changes it. Generated application secrets live in ignored `output/secrets/` files and are reused on upgrades. Set `KUBECTL_BIN` to override the local CLI path.
 
+```sh
+make start  # Initial setup, or resume the existing deployment without rebuilding
+make stop   # Stop project workloads; preserve databases, files, metrics and secrets
+```
+
+These commands affect only `midterm`, `midterm-baseline`, `midterm-monitoring` and `midterm-gateway` in the `orbstack` context. Stop saves replica counts and scheduling settings in ignored `output/deployment-state.json`, scales Deployments/StatefulSets to zero, pauses backup jobs and the log collector, and waits for graceful shutdown. Start restores those settings and waits for readiness. Keep the state file until resuming; repeated stop preserves the original settings. The OrbStack cluster itself and unrelated namespaces remain running. Use `make setup-local` to rebuild/redeploy changes while the deployment is running.
+
 | Endpoint | URL |
 | --- | --- |
 | Campus frontend | https://midterm.k8s.orb.local/ |

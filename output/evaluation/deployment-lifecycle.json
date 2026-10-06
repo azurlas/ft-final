@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-10-06T00:57:05.380446+00:00",
+  "context": "orbstack",
+  "stopAndResume": "passed",
+  "repeatedStop": "passed",
+  "mainApiReplicas": 2,
+  "baselineApiReplicas": 1,
+  "pvcAndSecretIdentitiesPreserved": true,
+  "unrelatedWorkloadSettingsPreserved": true,
+  "defaultContextPreserved": "stage-nbg3",
+  "backupScheduleResumed": true,
+  "logCollectorSelectorRestored": true,
+  "resumeStateRemoved": true,
+  "checks": {
+    "https://midterm.k8s.orb.local/ui/courses.html": 200,
+    "https://midterm.k8s.orb.local/health/ready": 200,
+    "http://grafana.midterm.k8s.orb.local:3000/api/health": 200
+  }
+}

@@ -72,9 +72,9 @@ final class ApiTest extends WebTestCase
         $client->request('DELETE', '/api/grades/'.$grade['id']);
         self::assertResponseStatusCodeSame(204);
         $client->setServerParameter('HTTP_AUTHORIZATION', 'Bearer '.$token);
-        $client->jsonRequest('POST','/api/courses/2/enroll');
+        $client->jsonRequest('POST', '/api/courses/2/enroll');
         self::assertResponseStatusCodeSame(409);
-        $client->jsonRequest('POST','/api/courses/2/purchase',['beneficiaryName' => 'Demo','cardNumber' => '9900000000000010','expiryDate' => '12/2035','cvv' => '123'],['HTTP_IDEMPOTENCY_KEY' => 'functional-'.bin2hex(random_bytes(6))]);
+        $client->jsonRequest('POST', '/api/courses/2/purchase', ['beneficiaryName' => 'Demo','cardNumber' => '9900000000000010','expiryDate' => '12/2035','cvv' => '123'], ['HTTP_IDEMPOTENCY_KEY' => 'functional-'.bin2hex(random_bytes(6))]);
         self::assertResponseIsSuccessful();
     }
 }

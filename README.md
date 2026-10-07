@@ -1,6 +1,6 @@
 # University backend
 
-PHP 8.3, RoadRunner, Symfony/API Platform, Doctrine/MySQL, Redis Messenger queues, Supervisor, RustFS S3, Envoy Gateway and Helm. Grafana includes the official RoadRunner HTTP dashboard, application metrics, and VictoriaLogs.
+PHP 8.3, RoadRunner, Symfony/API Platform, Doctrine ORM/MySQL, Redis Messenger queues, Supervisor, RustFS S3, Envoy Gateway and Helm. Grafana includes the official RoadRunner HTTP dashboard, application metrics, and VictoriaLogs.
 
 ```sh
 composer install
@@ -38,6 +38,8 @@ The main Envoy gateway serves HTTP on 80 and HTTPS on 443. Setup runs `mkcert -i
 Campus uses separate HTML pages served directly by RoadRunner from `public/ui/`, with shared CSS/JavaScript and no runtime library or build step. Navigation uses ordinary links and full page loads. The root opens `/ui/courses.html`; `/ui/index.html` redirects to that page. Courses, assignments, submissions, grades, purchases, sign-in, registration, checkout and assignment upload each have their own URL. Students can register, enroll, purchase, submit/download files, and view grades. Administrators can manage courses/assignments, grade submissions, and download PDF reports. The mock checkout offers all six synthetic scenarios and polls pending purchases every three seconds. Login is kept in the current tab's `sessionStorage`; sign-out clears it. All API requests use the same origin.
 
 Frontend validation uses Node.js 22+ only for development: `npm ci && make frontend-check`. Run `make frontend-smoke` to verify the deployed static assets, ETags, source protection, and the live API contracts used by student/admin forms. `make frontend-upload-check` verifies the actual page submit handler against the live HTTPS API, including a 10,000,000-byte upload and private download checksum (jsdom, not a rendered browser). `make setup-local` deploys the frontend together with the API.
+
+Application reads and writes use Doctrine entities through repository classes in `src/Repository/`. Repository `save()` stages `persist()` without flushing. `src/Persistence/Transaction.php` flushes once at the end of a request, command batch or transactional handler and commits atomically. Payment claim and settlement are separate handlers so the attempt is durable before the provider call. Service classes are `readonly`; command dependencies are readonly properties. Mutable entities and serializer-populated DTOs remain writable. Run `php bin/console doctrine:migrations:migrate --no-interaction` before using the updated code; the new migration adds the outbox-to-purchase foreign key.
 
 Authenticate with `POST /api/login`, JSON `{ "login": "student", "password": "StudentPass123!" }`, then use `Authorization: Bearer <token>`. In Swagger, paste the token into Authorize. Prices are integer USD cents; null or zero is free. Paid checkout requires an `Idempotency-Key` header. [Synthetic payment payloads](docs/examples) cover success, one/two transient retries, exhausted retries, decline, and timeout. These fixtures use expiry `12/2035` and CVV `123`; the payment DTO accepts only four fields.
 

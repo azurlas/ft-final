@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Api\Resource;
 
-use ApiPlatform\Metadata\{ApiResource, ApiProperty, Get, GetCollection, Post, Patch, Delete, Link};
+use ApiPlatform\Metadata\{ApiResource, ApiProperty, Get, Post};
 use App\Api\State\{ReadProvider, WriteProcessor};
 
 #[ApiResource(shortName: 'User', operations: [

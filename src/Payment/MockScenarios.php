@@ -7,7 +7,7 @@ namespace App\Payment;
 use App\Payment\Dto\PaymentDetailsDto;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-final class MockScenarios
+final readonly class MockScenarios
 {
     public const CARDS = MockPaymentService::CARDS;
     public function resolve(PaymentDetailsDto $dto): string

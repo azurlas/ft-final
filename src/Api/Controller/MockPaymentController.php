@@ -7,15 +7,16 @@ namespace App\Api\Controller;
 use App\Payment\{MockPaymentService,PaymentContext};
 use App\Payment\Dto\PaymentDetailsDto;
 use App\RuntimeProfile;
-use Doctrine\DBAL\Connection;
+use App\Repository\CoursePurchaseRepository;
+use App\Persistence\Transaction;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\{Request,JsonResponse};
 use Symfony\Component\HttpKernel\Exception\{AccessDeniedHttpException,BadRequestHttpException};
 use Symfony\Component\Routing\Attribute\Route;
 
-final class MockPaymentController
+final readonly class MockPaymentController
 {
-    public function __construct(private MockPaymentService $mock, private RuntimeProfile $profile, private Connection $db, #[Autowire('%env(MOCK_PAYMENT_TOKEN)%')] private string $token)
+    public function __construct(private MockPaymentService $mock, private RuntimeProfile $profile, private CoursePurchaseRepository $purchases, private Transaction $transaction, #[Autowire('%env(MOCK_PAYMENT_TOKEN)%')] private string $token)
     {
     }
     #[Route('/internal/payment', methods:['POST'])]
@@ -26,8 +27,8 @@ final class MockPaymentController
         }
         $body = $request->toArray();
         $ctx = $body['context'] ?? [];
-        $p = $this->db->fetchAssociative('SELECT amount,currency FROM purchases WHERE id=?', [$ctx['purchaseId'] ?? 0]);
-        if (!$p || (int)($ctx['amount'] ?? 0) !== (int)$p['amount'] || ($ctx['currency'] ?? '') !== $p['currency'] || !is_int($ctx['attemptNumber'] ?? null) || $ctx['attemptNumber'] < 1 || $ctx['attemptNumber'] > 3) {
+        $p = $this->purchases->find((int)($ctx['purchaseId'] ?? 0));
+        if (!$p || (int)($ctx['amount'] ?? 0) !== (int)$p->amount || ($ctx['currency'] ?? '') !== $p->currency || !is_int($ctx['attemptNumber'] ?? null) || $ctx['attemptNumber'] < 1 || $ctx['attemptNumber'] > 3) {
             throw new BadRequestHttpException('Invalid payment context');
         }
         $d = new PaymentDetailsDto();
@@ -36,6 +37,6 @@ final class MockPaymentController
                 throw new BadRequestHttpException();
             } $d->$f = $body['details'][$f];
         }
-        return new JsonResponse($this->mock->pay($d, new PaymentContext((int)$ctx['purchaseId'], $ctx['attemptNumber'], (int)$p['amount'], $p['currency'])));
+        return new JsonResponse($this->transaction->run(fn () => $this->mock->pay($d, new PaymentContext((int)$ctx['purchaseId'], $ctx['attemptNumber'], $p->amount, $p->currency))));
     }
 }

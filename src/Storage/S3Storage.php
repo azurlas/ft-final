@@ -7,7 +7,7 @@ namespace App\Storage;
 use Aws\S3\S3Client;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-final class S3Storage
+final readonly class S3Storage
 {
     private S3Client $client;
     public function __construct(#[Autowire('%env(S3_ENDPOINT)%')] string $endpoint, #[Autowire('%env(S3_ACCESS_KEY)%')] string $key, #[Autowire('%env(S3_SECRET_KEY)%')] string $secret, #[Autowire('%env(S3_BUCKET)%')] public readonly string $bucket, #[Autowire('%env(S3_BACKUP_BUCKET)%')] public readonly string $backupBucket)

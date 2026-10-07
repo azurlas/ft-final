@@ -14,8 +14,9 @@ class OutboxMessage extends Record
 {
     #[ORM\Column(length: 32)]
     public string $type = 'payment';
-    #[ORM\Column(name: 'aggregate_id')]
-    public int $aggregateId = 0;
+    #[ORM\ManyToOne(targetEntity: CoursePurchase::class)]
+    #[ORM\JoinColumn(name: 'aggregate_id', nullable: false, onDelete: 'RESTRICT')]
+    public CoursePurchase $purchase;
     #[ORM\Column(type: 'json')]
     public array $payload = [];
     #[ORM\Column(name: 'available_at', type: 'datetime_immutable')]

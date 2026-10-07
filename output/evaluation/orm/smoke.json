@@ -1,0 +1,51 @@
+{
+  "base": "http://127.0.0.1:32771",
+  "utc": "2026-10-07T22:48:44Z",
+  "payments": [
+    {
+      "fixture": "success",
+      "purchaseId": 185,
+      "status": "succeeded",
+      "attempts": 1,
+      "elapsedSeconds": 1.04
+    },
+    {
+      "fixture": "retry_once",
+      "purchaseId": 186,
+      "status": "succeeded",
+      "attempts": 2,
+      "elapsedSeconds": 4.188
+    },
+    {
+      "fixture": "retry_twice",
+      "purchaseId": 187,
+      "status": "succeeded",
+      "attempts": 3,
+      "elapsedSeconds": 9.418
+    },
+    {
+      "fixture": "failure",
+      "purchaseId": 188,
+      "status": "failed",
+      "attempts": 3,
+      "elapsedSeconds": 9.954
+    },
+    {
+      "fixture": "decline",
+      "purchaseId": 189,
+      "status": "declined",
+      "attempts": 1,
+      "elapsedSeconds": 2.102
+    },
+    {
+      "fixture": "timeout",
+      "purchaseId": 190,
+      "status": "failed",
+      "attempts": 3,
+      "elapsedSeconds": 18.893
+    }
+  ],
+  "fileChecksumVerified": true,
+  "ownershipVerified": true,
+  "pdfBytes": 29191
+}

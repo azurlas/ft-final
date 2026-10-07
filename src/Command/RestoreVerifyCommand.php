@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Storage\S3Storage;
-use Doctrine\DBAL\{Connection,DriverManager,Tools\DsnParser};
+use Doctrine\DBAL\{DriverManager,Tools\DsnParser};
+use Doctrine\ORM\{EntityManager,EntityManagerInterface};
+use App\Repository\DatabaseSnapshotRepository;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -15,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name:'app:restore-verify', description:'Restore backup into a new isolated database, never overwrite the application database')]
 final class RestoreVerifyCommand extends Command
 {
-    public function __construct(private S3Storage $storage, private Connection $db, #[Autowire('%env(DATABASE_URL)%')] private string $dsn, #[Autowire('%env(MYSQL_ROOT_PASSWORD)%')] private string $rootPassword)
+    public function __construct(private readonly S3Storage $storage, private readonly EntityManagerInterface $em, private readonly DatabaseSnapshotRepository $snapshots, #[Autowire('%env(DATABASE_URL)%')] private readonly string $dsn, #[Autowire('%env(MYSQL_ROOT_PASSWORD)%')] private readonly string $rootPassword)
     {
         parent::__construct();
     }
@@ -38,7 +40,8 @@ final class RestoreVerifyCommand extends Command
         $params['password'] = $this->rootPassword;
         unset($params['dbname']);
         $root = DriverManager::getConnection($params);
-        $root->executeStatement('CREATE DATABASE `'.$name.'`');
+        $root->createSchemaManager()->createDatabase($name);
+        $root->close();
         $tmp = tempnam(sys_get_temp_dir(), 'restore-');
         file_put_contents($tmp, gzdecode($bytes));
         $env = getenv();
@@ -52,20 +55,17 @@ final class RestoreVerifyCommand extends Command
         if (proc_close($proc) !== 0) {
             throw new \RuntimeException('Restore failed');
         }
-        $root->executeStatement('USE `'.$name.'`');
-        $tables = ['users','courses','assignments','enrollments','purchases','payment_attempts','submissions','grades','mock_receipts'];
-        $counts = [];
-        foreach ($tables as $table) {
-            $counts[$table] = (int)$root->fetchOne('SELECT COUNT(*) FROM '.$table);
+        $params['dbname'] = $name;
+        $restoredManager = new EntityManager(DriverManager::getConnection($params), $this->em->getConfiguration());
+        try {
+            $repository = new DatabaseSnapshotRepository($restoredManager);
+            $restored = $repository->snapshot();
+            $source = $this->snapshots->snapshot();
+            $violations = $repository->violations();
+        } finally {
+            $restoredManager->getConnection()->close();
         }
-        $hashes = [];
-        $sourceHashes = [];
-        foreach ($tables as $table) {
-            $hashes[$table] = hash('sha256', json_encode($root->fetchAllAssociative('SELECT * FROM '.$table.' ORDER BY id'), JSON_THROW_ON_ERROR));
-            $sourceHashes[$table] = hash('sha256', json_encode($this->db->fetchAllAssociative('SELECT * FROM '.$table.' ORDER BY id'), JSON_THROW_ON_ERROR));
-        }
-        $violations = (int)$root->fetchOne("SELECT COUNT(*) FROM purchases p LEFT JOIN enrollments e ON e.purchase_id=p.id WHERE p.status='succeeded' AND e.id IS NULL") + (int)$root->fetchOne('SELECT COUNT(*) FROM grades WHERE grade<0 OR grade>100') + (int)$root->fetchOne('SELECT COUNT(*) FROM submissions WHERE size_bytes>10000000');
-        $output->writeln(json_encode(['database' => $name,'checksumVerified' => true,'rowHashes' => $hashes,'matchesCurrentSource' => $hashes === $sourceHashes,'counts' => $counts,'violations' => $violations,'sourceCounts' => array_combine($tables, array_map(fn ($t) => (int)$this->db->fetchOne('SELECT COUNT(*) FROM '.$t), $tables))], JSON_THROW_ON_ERROR));
+        $output->writeln(json_encode(['database' => $name, 'checksumVerified' => true, 'rowHashes' => $restored['hashes'], 'matchesCurrentSource' => $restored['hashes'] === $source['hashes'], 'counts' => $restored['counts'], 'violations' => $violations, 'sourceCounts' => $source['counts']], JSON_THROW_ON_ERROR));
         return $violations ? 1 : 0;
     }
 }

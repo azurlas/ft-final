@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name:'app:storage-init')]
 final class StorageInitCommand extends Command
 {
-    public function __construct(private S3Storage $storage)
+    public function __construct(private readonly S3Storage $storage)
     {
         parent::__construct();
     }

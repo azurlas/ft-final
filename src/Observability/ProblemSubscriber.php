@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Exception\{AccessDeniedException,Authenticat
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Psr\Log\LoggerInterface;
 
-final class ProblemSubscriber implements EventSubscriberInterface
+final readonly class ProblemSubscriber implements EventSubscriberInterface
 {
     public function __construct(private LoggerInterface $logger, private \Symfony\Bundle\SecurityBundle\Security $security)
     {

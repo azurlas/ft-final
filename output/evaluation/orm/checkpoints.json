@@ -1,0 +1,38 @@
+{
+  "base": "http://127.0.0.1:32771",
+  "scope": "isolated Docker runtime; Kubernetes stopped",
+  "checks": [
+    {
+      "checkpoint": "after_provider_success",
+      "purchaseId": 192,
+      "beforeKill": {
+        "attempts": 1,
+        "receipts": 1,
+        "enrollments": 0
+      },
+      "afterRecovery": {
+        "attempts": 1,
+        "receipts": 1,
+        "enrollments": 1
+      },
+      "status": "succeeded",
+      "recoverySeconds": 17.001
+    },
+    {
+      "checkpoint": "after_outbox_publish",
+      "purchaseId": 193,
+      "beforeKill": {
+        "attempts": 0,
+        "receipts": 0,
+        "enrollments": 0
+      },
+      "afterRecovery": {
+        "attempts": 1,
+        "receipts": 1,
+        "enrollments": 1
+      },
+      "status": "succeeded",
+      "recoverySeconds": 1.751
+    }
+  ]
+}

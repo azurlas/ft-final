@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name:'app:backup', description:'Consistent MySQL dump, gzip, checksum manifest, private S3 upload')]
 final class BackupCommand extends Command
 {
-    public function __construct(private S3Storage $storage, #[Autowire('%env(DATABASE_URL)%')] private string $dsn)
+    public function __construct(private readonly S3Storage $storage, #[Autowire('%env(DATABASE_URL)%')] private readonly string $dsn)
     {
         parent::__construct();
     }

@@ -1,0 +1,13 @@
+university_database_up 1
+university_purchases{status="succeeded"} 28
+university_purchases{status="failed"} 2
+university_purchases{status="declined"} 1
+university_outbox_pending 0
+university_purchase_oldest_pending_seconds 0
+university_payment_attempts_total{status="succeeded"} 28
+university_payment_duration_seconds_sum{status="succeeded"} 0.5
+university_payment_attempts_total{status="transient"} 11
+university_payment_duration_seconds_sum{status="transient"} 6.161
+university_payment_attempts_total{status="declined"} 1
+university_payment_duration_seconds_sum{status="declined"} 0.007
+university_circuit_open 0

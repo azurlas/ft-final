@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Api\State;
 
 use App\Entity\User;
-use Doctrine\DBAL\Connection;
+use App\Repository\CourseEnrollmentRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\{AccessDeniedHttpException, NotFoundHttpException};
 
-final class Access
+final readonly class Access
 {
-    public function __construct(private Security $security, private Connection $db)
+    public function __construct(private Security $security, private CourseEnrollmentRepository $enrollments)
     {
     }
     public function user(): User
@@ -37,7 +37,7 @@ final class Access
     public function enrolled(int $courseId, bool $allowAdmin = true): void
     {
         $u = $this->user();
-        if ((!$allowAdmin || !$u->isAdmin) && !$this->db->fetchOne('SELECT id FROM enrollments WHERE user_id=? AND course_id=?', [$u->id, $courseId])) {
+        if ((!$allowAdmin || !$u->isAdmin) && !$this->enrollments->findOneBy(['user' => $u, 'course' => $courseId])) {
             throw new AccessDeniedHttpException('Course enrollment required');
         }
     }

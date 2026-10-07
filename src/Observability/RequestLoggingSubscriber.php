@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\{RequestEvent,ResponseEvent};
 
-final class RequestLoggingSubscriber implements EventSubscriberInterface
+final readonly class RequestLoggingSubscriber implements EventSubscriberInterface
 {
     public function __construct(private LoggerInterface $logger)
     {

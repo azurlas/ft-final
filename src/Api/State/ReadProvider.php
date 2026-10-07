@@ -6,62 +6,45 @@ namespace App\Api\State;
 
 use ApiPlatform\Metadata\{Operation,GetCollection};
 use ApiPlatform\State\ProviderInterface;
-use Doctrine\DBAL\Connection;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Repository\Repositories;
 use App\Course\CatalogueCache;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /** @implements ProviderInterface<object> */
-final class ReadProvider implements ProviderInterface
+final readonly class ReadProvider implements ProviderInterface
 {
-    public function __construct(private Connection $db, private Access $access, private Mapper $mapper, private CatalogueCache $cache)
+    public function __construct(private Repositories $repositories, private Access $access, private Mapper $mapper, private CatalogueCache $cache)
     {
     }
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array
     {
         $kind = $operation->getExtraProperties()['kind'];
         if (($operation->getExtraProperties()['action'] ?? '') === 'me') {
-            $u = $this->access->user();
-            return $this->mapper->map('users', ['id' => $u->id,'login' => $u->login,'username' => $u->username,'is_admin' => $u->isAdmin]);
+            return $this->mapper->map('users', $this->access->user());
         }
-        $where = [];
-        $params = [];
-        if (in_array($kind, ['courses','assignments'])) {
-            $where[] = 'deleted_at IS NULL';
+        $courseId = isset($uriVariables['courseId']) ? (int)$uriVariables['courseId'] : null;
+        if ($kind === 'assignments' && $courseId !== null) {
+            $this->access->enrolled($courseId);
         }
-        if ($kind === 'assignments') {
-            if (isset($uriVariables['courseId'])) {
-                $this->access->enrolled((int)$uriVariables['courseId']);
-                $where[] = 'course_id=?';
-                $params[] = (int)$uriVariables['courseId'];
+        $userId = null;
+        if (in_array($kind, ['enrollments','grades','purchases','submissions'], true)) {
+            $user = $this->access->user();
+            $userId = $user->isAdmin ? null : $user->id;
+        }
+        $collection = $operation instanceof GetCollection;
+        $id = $collection ? null : (int)($uriVariables['id'] ?? 0);
+        $page = max(1, (int)($context['filters']['page'] ?? 1));
+        $load = fn () => $this->repositories->for($kind)->visible($id, $userId, $courseId, $page);
+        if ($kind === 'courses') {
+            $rows = $this->cache->read('orm-v1:' . json_encode([$id, $page]), fn () => array_map(fn ($e) => get_object_vars($this->mapper->map($kind, $e)), $load()));
+            $resources = array_map($this->mapper->cachedCourse(...), $rows);
+        } else {
+            $rows = $load();
+            if (!$collection && $kind === 'assignments' && $rows) {
+                $this->access->enrolled($rows[0]->course->id);
             }
-            $where[] = 'course_id IN (SELECT id FROM courses WHERE deleted_at IS NULL)';
+            $resources = array_map(fn ($e) => $this->mapper->map($kind, $e), $rows);
         }
-        if (in_array($kind, ['enrollments','grades','purchases','submissions'])) {
-            $u = $this->access->user();
-            if (!$u->isAdmin) {
-                $where[] = 'user_id=?';
-                $params[] = $u->id;
-            }
-        }
-        if (!($operation instanceof GetCollection)) {
-            $where[] = 'id=?';
-            $params[] = (int)($uriVariables['id'] ?? 0);
-        }
-        $sql = 'SELECT * FROM '.$kind.($where ? ' WHERE '.implode(' AND ', $where) : '').' ORDER BY id';
-        if ($operation instanceof GetCollection) {
-            $page = max(1, (int)($context['filters']['page'] ?? 1));
-            $sql .= ' LIMIT 20 OFFSET '.(($page - 1) * 20);
-        }
-        $rows = $kind === 'courses' ? $this->cache->read($sql, $params) : $this->db->fetchAllAssociative($sql, $params);
-        if (!($operation instanceof GetCollection)) {
-            if (!$rows) {
-                throw new NotFoundHttpException();
-            }
-            if ($kind === 'assignments') {
-                $this->access->enrolled((int)$rows[0]['course_id']);
-            }
-            return $this->mapper->map($kind, $rows[0]);
-        }
-        return array_map(fn (array $r) => $this->mapper->map($kind, $r), $rows);
+        return $collection ? $resources : ($resources[0] ?? throw new NotFoundHttpException());
     }
 }

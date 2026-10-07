@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use Doctrine\DBAL\Connection;
+use App\Repository\UserRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name:'app:wait-schema')]
 final class WaitSchemaCommand extends Command
 {
-    public function __construct(private Connection $db)
+    public function __construct(private readonly UserRepository $users, private readonly ManagerRegistry $doctrine)
     {
         parent::__construct();
     }
@@ -21,11 +22,11 @@ final class WaitSchemaCommand extends Command
     {
         for ($n = 0;$n < 120;$n++) {
             try {
-                if ($this->db->fetchOne("SELECT id FROM users WHERE login='admin'")) {
+                if ($this->users->findOneBy(['login' => 'admin'])) {
                     return 0;
                 }
             } catch (\Throwable) {
-                $this->db->close();
+                $this->doctrine->resetManager();
             } sleep(2);
         } return 1;
     }

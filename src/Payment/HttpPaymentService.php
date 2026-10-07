@@ -8,7 +8,7 @@ use App\Payment\Dto\PaymentDetailsDto;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-final class HttpPaymentService implements PaymentServiceInterface
+final readonly class HttpPaymentService implements PaymentServiceInterface
 {
     public function __construct(private HttpClientInterface $http, #[Autowire('%env(MOCK_PAYMENT_URL)%')] private string $url, #[Autowire('%env(MOCK_PAYMENT_TOKEN)%')] private string $token)
     {

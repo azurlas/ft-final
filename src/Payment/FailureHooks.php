@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Psr\Log\LoggerInterface;
 
 /** Explicit local experiment checkpoints; empty by default in all Helm profiles. */
-final class FailureHooks
+final readonly class FailureHooks
 {
     public function __construct(#[Autowire('%env(EXPERIMENT_HOOK)%')] private string $hook, private LoggerInterface $logger)
     {

@@ -53,9 +53,9 @@ final class AdminCrudTest extends WebTestCase
         self::assertResponseStatusCodeSame(204);
         $client->request('GET', '/api/assignments/'.$assignment['id']);
         self::assertResponseStatusCodeSame(404);
-        $client->request('DELETE','/api/courses/'.$course['id']);
+        $client->request('DELETE', '/api/courses/'.$course['id']);
         self::assertResponseStatusCodeSame(204);
-        $client->request('GET','/api/courses/'.$course['id']);
+        $client->request('GET', '/api/courses/'.$course['id']);
         self::assertResponseStatusCodeSame(404);
     }
 }

@@ -5,45 +5,47 @@ declare(strict_types=1);
 namespace App\Api\State;
 
 use App\Api\Resource\{CourseResource,AssignmentResource,GradeResource,EnrollmentResource,PurchaseResource,SubmissionResource,UserResource};
-use Doctrine\DBAL\Connection;
+use App\Entity\CoursePurchase;
+use App\Repository\PaymentAttemptRepository;
 
-final class Mapper
+final readonly class Mapper
 {
     private const CLASSES = ['courses' => CourseResource::class,'assignments' => AssignmentResource::class,'grades' => GradeResource::class,'enrollments' => EnrollmentResource::class,'purchases' => PurchaseResource::class,'submissions' => SubmissionResource::class,'users' => UserResource::class];
-    public function __construct(private Connection $db)
+    public function __construct(private PaymentAttemptRepository $attempts)
     {
     }
-    public function map(string $kind, array $row): object
+    public function map(string $kind, object $entity): object
     {
         $out = new (self::CLASSES[$kind])();
-        foreach (get_object_vars($out) as $field => $value) {
-            $column = strtolower((string)preg_replace('/(?<!^)[A-Z]/', '_$0', $field));
-            if (!array_key_exists($column, $row)) {
+        foreach (get_object_vars($out) as $field => $unused) {
+            if ($field === 'attempts') {
                 continue;
             }
-            $v = $row[$column];
-            if ($v !== null && is_int($value)) {
-                $v = (int)$v;
+            if (str_ends_with($field, 'Id')) {
+                $relation = substr($field, 0, -2);
+                $value = $entity->$relation?->id;
+            } elseif (property_exists($entity, $field)) {
+                $value = $entity->$field;
+            } else {
+                continue;
             }
-            if (is_bool($value)) {
-                $v = (bool)$v;
-            }
-            if ($field === 'id') {
-                $v = (int)$v;
-            }
-            if ($field === 'price' || $field === 'purchaseId') {
-                $v = $v === null ? null : (int)$v;
-            }
-            if ($field === 'metadata') {
-                $v = json_decode($v, true, 512, JSON_THROW_ON_ERROR);
-            }
-            if ($v !== null && (str_ends_with($field, 'At') || $field === 'deadline')) {
-                $v = (new \DateTimeImmutable($v, new \DateTimeZone('UTC')))->format(DATE_ATOM);
-            }
-            $out->$field = $v;
+            $out->$field = $value instanceof \DateTimeInterface ? $value->format(DATE_ATOM) : $value;
         }
-        if ($kind === 'purchases') {
-            $out->attempts = $this->db->fetchAllAssociative('SELECT attempt_number,status,error_code,provider_reference,started_at,finished_at,duration_ms FROM payment_attempts WHERE purchase_id=? ORDER BY attempt_number', [$row['id']]);
+        if ($entity instanceof CoursePurchase) {
+            $out->attempts = array_map(static fn ($a) => [
+                'attempt_number' => $a->attemptNumber, 'status' => $a->status,
+                'error_code' => $a->errorCode, 'provider_reference' => $a->providerReference,
+                'started_at' => $a->startedAt->format('Y-m-d H:i:s'),
+                'finished_at' => $a->finishedAt?->format('Y-m-d H:i:s'), 'duration_ms' => $a->durationMs,
+            ], $this->attempts->findBy(['purchase' => $entity], ['attemptNumber' => 'ASC']));
+        }
+        return $out;
+    }
+    public function cachedCourse(array $values): CourseResource
+    {
+        $out = new CourseResource();
+        foreach ($values as $field => $value) {
+            $out->$field = $value;
         }
         return $out;
     }

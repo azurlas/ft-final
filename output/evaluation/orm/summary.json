@@ -1,0 +1,46 @@
+{
+  "checkedAt": "2026-10-07T22:51:17.371127+00:00",
+  "scope": "temporary Docker runtime on the midterm-tests network; no Kubernetes deployment changes",
+  "image": "midterm/university:orm-20261008b",
+  "imageId": "sha256:812fa97c69929c89577d71c832b840bfc6546f04226e9a8d2e3e104898454d8e",
+  "phpVersion": "8.3.35 (Docker); 8.3.27 (local checks)",
+  "checks": {
+    "makeCheck": "passed",
+    "tests": 10,
+    "assertions": 111,
+    "phpstanLevel": 5,
+    "mappingAndSchema": "in sync after migration Version20261007223818",
+    "helmCheck": "passed",
+    "paymentScenarios": 6,
+    "frontendContracts": "passed; direct index.php redirects to UI without PHP source",
+    "exactUploadBytes": 10000000,
+    "privateDownloadChecksum": "verified",
+    "ormMetrics": "passed",
+    "crashCheckpoints": [
+      "after_provider_success",
+      "after_outbox_publish"
+    ],
+    "restore": "checksum, nine table hashes/counts match; zero violations"
+  },
+  "persistenceAudit": {
+    "applicationPersistSites": [
+      "src/Repository/Repository.php::save"
+    ],
+    "applicationFlushSites": [
+      "src/Persistence/Transaction.php::run"
+    ],
+    "repositoryFlushSites": [],
+    "rawBusinessQuerySites": []
+  },
+  "kubernetes": {
+    "context": "orbstack",
+    "deploymentState": "stopped, preserved",
+    "defaultContext": "stage-nbg3",
+    "updatedImageDeployed": false
+  },
+  "limitations": [
+    "Envoy and HTTPS not part of isolated runtime",
+    "DOM and live HTTP/storage checks; rendered browser not verified",
+    "Earlier cluster measurements remain historical evidence"
+  ]
+}

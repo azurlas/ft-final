@@ -5,18 +5,17 @@ declare(strict_types=1);
 namespace App\Course;
 
 use App\RuntimeProfile;
-use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-final class CatalogueCache
+final readonly class CatalogueCache
 {
-    public function __construct(private Connection $db, private RuntimeProfile $profile, private LoggerInterface $logger, #[Autowire('%env(REDIS_CACHE_URL)%')] private string $url)
+    public function __construct(private RuntimeProfile $profile, private LoggerInterface $logger, #[Autowire('%env(REDIS_CACHE_URL)%')] private string $url)
     {
     }
-    public function read(string $sql, array $params): array
+    public function read(string $identity, callable $load): array
     {
-        $key = 'catalogue:'.hash('sha256', $sql.json_encode($params));
+        $key = 'catalogue:'.hash('sha256', $identity);
         try {
             $redis = new \Redis();
             $p = parse_url($this->url);
@@ -32,7 +31,7 @@ final class CatalogueCache
             } $this->logger->warning('cache.fallback');
             $redis = null;
         }
-        $rows = $this->db->fetchAllAssociative($sql, $params);
+        $rows = $load();
         if ($redis) {
             try {
                 $redis->setex($key, 30, json_encode($rows, JSON_THROW_ON_ERROR));

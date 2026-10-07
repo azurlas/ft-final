@@ -4,78 +4,73 @@ declare(strict_types=1);
 
 namespace App\Storage;
 
-use App\Api\State\{Access,Mapper};
+use App\Api\State\Access;
 use App\Entity\{Assignment,Submission};
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\DBAL\Connection;
+use App\Repository\{AssignmentRepository, CourseRepository, UserRepository, SubmissionRepository};
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\{BadRequestHttpException,ConflictHttpException,NotFoundHttpException,ServiceUnavailableHttpException};
 use Psr\Log\LoggerInterface;
 
-final class SubmissionService
+final readonly class SubmissionService
 {
     public const MAX_BYTES = 10000000;
-    public function __construct(private S3Storage $storage, private Connection $db, private EntityManagerInterface $em, private Access $access, private Mapper $mapper, private LoggerInterface $logger)
+    public function __construct(private S3Storage $storage, private AssignmentRepository $assignments, private CourseRepository $courses, private UserRepository $users, private SubmissionRepository $submissions, private Access $access, private LoggerInterface $logger)
     {
     }
-    public function submit(int $assignmentId, UploadedFile $file): object
+    public function upload(int $assignmentId, UploadedFile $file): Submission
     {
-        $u = $this->access->user();
-        $a = $this->check($assignmentId);
-        $this->access->enrolled((int)$a['course_id'], false);
+        $user = $this->access->user();
+        $assignment = $this->check($assignmentId);
+        $this->access->enrolled($assignment->course->id, false);
         clearstatcache(true, $file->getPathname());
         if (!$file->isValid() || $file->getSize() > self::MAX_BYTES) {
             throw new BadRequestHttpException('Valid single file at most 10,000,000 bytes required');
         }
-        $key = 'submissions/'.bin2hex(random_bytes(24));
-        $body = fopen($file->getPathname(), 'rb');
+        $submission = new Submission();
+        $submission->assignment = $assignment;
+        $submission->user = $user;
+        $submission->objectKey = 'submissions/'.bin2hex(random_bytes(24));
         $name = mb_substr(basename(str_replace('\\', '/', $file->getClientOriginalName())), 0, 255);
-        $name = preg_replace('/[\x00-\x1f\x7f]/', '_', $name) ?: 'submission';
+        $submission->originalFilename = preg_replace('/[\x00-\x1f\x7f]/', '_', $name) ?: 'submission';
+        $submission->contentType = 'application/octet-stream';
+        $submission->sizeBytes = $file->getSize();
+        $submission->sha256 = hash_file('sha256', $file->getPathname());
+        $body = fopen($file->getPathname(), 'rb');
         try {
-            $this->storage->put($key, $body, 'application/octet-stream');
+            $this->storage->put($submission->objectKey, $body, $submission->contentType);
         } catch (\Throwable) {
             throw new ServiceUnavailableHttpException(2, 'Submission storage unavailable');
         } finally {
             fclose($body);
         }
+        return $submission;
+    }
+    public function save(Submission $submission): void
+    {
+        $this->users->lock($submission->user->id);
+        $this->courses->lock($submission->assignment->course->id);
+        $this->assignments->lock($submission->assignment->id);
+        $this->check($submission->assignment->id);
+        $this->access->enrolled($submission->assignment->course->id, false);
+        if ($this->submissions->findOneBy(['assignment' => $submission->assignment, 'user' => $submission->user])) {
+            throw new ConflictHttpException('Only one submission permitted');
+        }
+        $this->submissions->save($submission);
+    }
+    public function discard(Submission $submission): void
+    {
         try {
-            return $this->db->transactional(function () use ($assignmentId, $u, $file, $key, $name, $a) {
-                $this->db->fetchOne('SELECT id FROM users WHERE id=? FOR UPDATE', [$u->id]);
-                $this->db->fetchOne('SELECT id FROM courses WHERE id=? FOR UPDATE', [$a['course_id']]);
-                $this->db->fetchOne('SELECT id FROM assignments WHERE id=? FOR UPDATE', [$assignmentId]);
-                $this->check($assignmentId);
-                $this->access->enrolled((int)$a['course_id'], false);
-                if ($this->db->fetchOne('SELECT id FROM submissions WHERE assignment_id=? AND user_id=?', [$assignmentId,$u->id])) {
-                    throw new ConflictHttpException('Only one submission permitted');
-                }
-                $s = new Submission();
-                $s->assignment = $this->em->getReference(Assignment::class, $assignmentId);
-                $s->user = $u;
-                $s->objectKey = $key;
-                $s->originalFilename = $name;
-                $s->contentType = 'application/octet-stream';
-                $s->sizeBytes = $file->getSize();
-                $s->sha256 = hash_file('sha256', $file->getPathname());
-                $this->em->persist($s);
-                $this->em->flush();
-                return $this->mapper->map('submissions', $this->db->fetchAssociative('SELECT * FROM submissions WHERE id=?', [$s->id]));
-            });
-        } catch (\Throwable $e) {
-            try {
-                $this->storage->delete($key);
-            } catch (\Throwable) {
-                $this->logger->warning('submission.orphan', ['object_key' => $key]);
-            } throw $e;
+            $this->storage->delete($submission->objectKey);
+        } catch (\Throwable) {
+            $this->logger->warning('submission.orphan', ['object_key' => $submission->objectKey]);
         }
     }
-    private function check(int $id): array
+    private function check(int $id): Assignment
     {
-        $a = $this->db->fetchAssociative('SELECT a.* FROM assignments a JOIN courses c ON c.id=a.course_id WHERE a.id=? AND a.deleted_at IS NULL AND c.deleted_at IS NULL', [$id]);
-        if (!$a) {
-            throw new NotFoundHttpException();
-        }
-        if (strtotime($a['deadline'].' UTC') <= time()) {
+        $assignment = $this->assignments->active($id) ?? throw new NotFoundHttpException();
+        if ($assignment->deadline <= new \DateTimeImmutable()) {
             throw new ConflictHttpException('Assignment deadline passed');
-        } return $a;
+        }
+        return $assignment;
     }
 }

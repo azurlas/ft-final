@@ -53,3 +53,33 @@ kubectl --context orbstack -n midterm-monitoring port-forward svc/grafana 3001:3
 ```
 
 Swagger becomes `http://localhost:8081/api/docs.html`; Grafana becomes `http://localhost:3001`. These forwards bypass Envoy, so use the public gateway URLs for gateway/fault experiments. `make test-deps-down` stops only this project's Docker test dependencies. Helm uninstall removes workloads; StatefulSet PVCs remain for deliberate recovery. Do not delete PVCs to upgrade or restart.
+
+## Contabo deployment (Argo CD)
+
+The public deployment runs on the single-node RKE2 cluster `contabo-6` (169.58.83.121) and is driven by Argo CD from `main` of this repository.
+
+| Endpoint | URL |
+| --- | --- |
+| Campus frontend / API | https://midterm.sailaubek.dev/ (Swagger: `/api/docs.html`) |
+| Baseline profile | https://baseline.sailaubek.dev/ |
+| Grafana | https://grafana.sailaubek.dev/ |
+| Argo CD | https://argocd.sailaubek.dev/ |
+
+`deploy/argocd/root.yaml` is an app of apps over `deploy/argocd/apps/`, ordered by sync wave: Sealed Secrets, local-path storage (`Retain`), Envoy Gateway with the Gateway API CRDs, then `deploy/platform/` (namespaces, edge Gateway, Argo CD route, SealedSecrets), both university profiles, and monitoring. Argo CD also manages itself with `deploy/argocd/values.yaml`. RKE2 runs with `ingress-controller: none` and `enable-servicelb: true` (`/etc/rancher/rke2/config.yaml`). The Envoy edge Gateway owns ports 80/443, redirects HTTP to HTTPS, and terminates TLS with a Let's Encrypt `*.sailaubek.dev` certificate. The charts' `externalGateway` value attaches their HTTPRoutes to that shared Gateway instead of creating per-release gateways, so rate limits and request buffering still apply per route.
+
+Each push to `main` that changes application code runs `.github/workflows/image.yaml`. It publishes `ghcr.io/fugikzl/ft-midterm:<sha>` and commits that tag to `deploy/image.yaml`, which Argo CD then rolls out. Helm, deploy and docs changes sync without a rebuild.
+
+Secrets in git are SealedSecrets encrypted with `deploy/sealed-secrets.pem`; only the in-cluster controller can decrypt them. `python3 deploy/seal-secrets.py` generates any missing plaintext values into ignored `output/secrets/contabo/` and seals them. Pass a name (`university-midterm`, `university-midterm-baseline`, `grafana`, `wildcard-tls`) to reseal it. The controller's private key is backed up to `output/secrets/contabo/sealed-secrets-key.yaml`; without it, a rebuilt cluster cannot decrypt the committed secrets.
+
+Local cluster access goes through an SSH tunnel:
+
+```sh
+ssh -fN -L 16443:127.0.0.1:6443 contabo-6
+export KUBECONFIG=output/secrets/contabo/kubeconfig   # copy of /etc/rancher/rke2/rke2.yaml pointed at 127.0.0.1:16443
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d   # Argo CD admin password
+cat output/secrets/contabo/grafana.env                                                                # Grafana admin password
+```
+
+To rebuild from an empty cluster, apply the RKE2 config above, run `bash deploy/bootstrap.sh`, then restore the Sealed Secrets key with `kubectl apply -f output/secrets/contabo/sealed-secrets-key.yaml` and restart the controller.
+
+The wildcard certificate (expires 2027-01-05) is issued manually because DNS is edited by hand in Cloudflare. To renew it, run `certbot certonly --manual --preferred-challenges dns -d '*.sailaubek.dev'` on `contabo-6` and publish the shown `_acme-challenge` TXT record. Then run `python3 deploy/seal-secrets.py wildcard-tls` and commit the result.

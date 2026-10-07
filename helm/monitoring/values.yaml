@@ -2,3 +2,5 @@ grafanaImage: grafana/grafana:12.3.1
 prometheusImage: prom/prometheus:v3.5.0
 storageClass: local-path
 hostname: grafana.midterm.k8s.orb.local
+# Attach the Grafana HTTPRoute to a shared Gateway parentRef instead of creating the monitoring Gateway.
+externalGateway: {}

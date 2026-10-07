@@ -1,3 +1,4 @@
+{{- if not .Values.externalGateway }}
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata: {name: university-proxy}
@@ -49,11 +50,12 @@ spec:
         namespaces: {from: Same}
     {{- end }}
 ---
+{{- end }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata: {name: university}
 spec:
-  parentRefs: [{name: university}]
+  parentRefs: [{{ if .Values.externalGateway }}{{ toJson .Values.externalGateway }}{{ else }}{name: university}{{ end }}]
   hostnames: [{{ .Values.hostname | quote }}]
   rules:
     - matches:

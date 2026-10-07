@@ -1,0 +1,2 @@
+hostname: grafana.sailaubek.dev
+externalGateway: {name: edge, namespace: midterm-gateway, sectionName: https}

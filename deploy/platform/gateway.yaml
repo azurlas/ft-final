@@ -1,0 +1,72 @@
+# One Envoy fleet terminates TLS for every *.sailaubek.dev route. RKE2 ServiceLB
+# publishes its LoadBalancer Service on node ports 80/443.
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata: {name: midterm-envoy}
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata: {name: edge, namespace: midterm-gateway}
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDeployment:
+        replicas: 2
+        pod:
+          labels: {component: gateway, profile: edge}
+          annotations:
+            prometheus.io/scrape: "true"
+            prometheus.io/port: "19001"
+            prometheus.io/path: /stats/prometheus
+        container:
+          resources:
+            requests: {cpu: 50m, memory: 64Mi}
+            limits: {cpu: "1", memory: 256Mi}
+      envoyService:
+        type: LoadBalancer
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata: {name: edge, namespace: midterm-gateway}
+spec:
+  gatewayClassName: midterm-envoy
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: edge
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces: {from: Same}
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "*.sailaubek.dev"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - {group: "", kind: Secret, name: wildcard-sailaubek-dev}
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchExpressions:
+              - key: kubernetes.io/metadata.name
+                operator: In
+                values: [midterm, midterm-baseline, midterm-monitoring, argocd]
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata: {name: https-redirect, namespace: midterm-gateway}
+spec:
+  parentRefs: [{name: edge, sectionName: http}]
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect: {scheme: https, statusCode: 301}

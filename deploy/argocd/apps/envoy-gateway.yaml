@@ -1,0 +1,27 @@
+# Installs Envoy Gateway together with the Gateway API CRDs.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: envoy-gateway
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+spec:
+  project: default
+  source:
+    repoURL: docker.io/envoyproxy
+    chart: gateway-helm
+    targetRevision: v1.9.2
+    helm:
+      releaseName: midterm-envoy
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: midterm-gateway
+  syncPolicy:
+    automated: {prune: true, selfHeal: true}
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    retry:
+      limit: -1
+      backoff: {duration: 10s, factor: 2, maxDuration: 5m}

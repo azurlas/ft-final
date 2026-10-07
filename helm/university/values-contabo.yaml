@@ -1,0 +1,3 @@
+# Contabo RKE2 deployment managed by Argo CD; the image comes from deploy/image.yaml.
+hostname: midterm.sailaubek.dev
+externalGateway: {name: edge, namespace: midterm-gateway, sectionName: https}

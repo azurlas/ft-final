@@ -1,0 +1,31 @@
+# Argo CD manages itself after deploy/bootstrap.sh installs it once.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+spec:
+  project: default
+  sources:
+    - repoURL: https://argoproj.github.io/argo-helm
+      chart: argo-cd
+      targetRevision: 10.10.0
+      helm:
+        releaseName: argocd
+        valueFiles:
+          - $values/deploy/argocd/values.yaml
+    - repoURL: https://github.com/fugikzl/ft-midterm.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated: {prune: true, selfHeal: true}
+    syncOptions:
+      - ServerSideApply=true
+    retry:
+      limit: -1
+      backoff: {duration: 10s, factor: 2, maxDuration: 5m}

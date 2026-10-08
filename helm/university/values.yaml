@@ -5,6 +5,8 @@ apiReplicas: 2
 workerReplicas: 2
 gatewayReplicas: 2
 gatewayPort: 80
+# Attach the HTTPRoute to a shared Gateway parentRef instead of creating this release's EnvoyProxy/Gateway.
+externalGateway: {}
 tls:
   enabled: false
   port: 443

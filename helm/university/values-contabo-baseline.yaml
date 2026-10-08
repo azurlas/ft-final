@@ -1,0 +1,3 @@
+# Applied after values-baseline.yaml for the Contabo baseline profile.
+hostname: baseline.sailaubek.dev
+externalGateway: {name: edge, namespace: midterm-gateway, sectionName: https}

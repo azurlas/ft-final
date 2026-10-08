@@ -1,0 +1,25 @@
+# Namespaces, edge Gateway, Argo CD route and SealedSecrets.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: platform
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/fugikzl/ft-midterm.git
+    targetRevision: main
+    path: deploy/platform
+    directory: {recurse: true}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: midterm-gateway
+  syncPolicy:
+    automated: {prune: true, selfHeal: true}
+    syncOptions:
+      - SkipDryRunOnMissingResource=true
+    retry:
+      limit: -1
+      backoff: {duration: 10s, factor: 2, maxDuration: 5m}

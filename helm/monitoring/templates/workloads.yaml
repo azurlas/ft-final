@@ -77,6 +77,7 @@ spec:
   ports: [{name: http, port: {{ if eq $component "prometheus" }}9090{{ else }}3000{{ end }}, targetPort: http}]
 ---
 {{- end }}
+{{- if not .Values.externalGateway }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata: {name: monitoring}
@@ -89,11 +90,12 @@ spec:
       allowedRoutes:
         namespaces: {from: Same}
 ---
+{{- end }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata: {name: grafana}
 spec:
-  parentRefs: [{name: monitoring}]
+  parentRefs: [{{ if .Values.externalGateway }}{{ toJson .Values.externalGateway }}{{ else }}{name: monitoring}{{ end }}]
   hostnames: [{{ .Values.hostname }}]
   rules:
     - backendRefs: [{name: grafana, port: 3000}]

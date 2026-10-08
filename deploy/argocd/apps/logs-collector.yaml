@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: logs-collector
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: default
+  sources:
+    - repoURL: https://victoriametrics.github.io/helm-charts
+      chart: victoria-logs-collector
+      targetRevision: 0.3.8
+      helm:
+        releaseName: logs-collector
+        valueFiles:
+          - $values/helm/monitoring/collector.yaml
+    - repoURL: https://github.com/fugikzl/ft-midterm.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: midterm-monitoring
+  syncPolicy:
+    automated: {prune: true, selfHeal: true}
+    retry:
+      limit: -1
+      backoff: {duration: 10s, factor: 2, maxDuration: 5m}

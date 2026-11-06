@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Namespace-scoped fault experiments on Contabo. Restores replica counts in finally blocks and pauses Argo CD self-heal while faults are injected."""
+"""Namespace-scoped fault experiments on the local OrbStack cluster. Restores replica counts in finally blocks."""
 import json,time,uuid,pathlib,subprocess,threading,urllib.request,urllib.error,hashlib,statistics,os,argparse,concurrent.futures
 from smoke import Api
-from env import kubectl,OUT,BASE,RESILIENT,BASELINE,ENVIRONMENT,argocd_paused
+from env import kubectl,OUT,BASE,RESILIENT,BASELINE,ENVIRONMENT
 def scale(ns,kind,name,n):return kubectl(ns,'scale',kind+'/'+name,'--replicas='+str(n))
 def ready(ns,kind,name):kubectl(ns,'rollout','status',kind+'/'+name,'--timeout=90s')
 def sql(ns,query):
@@ -123,5 +123,4 @@ def main():
     for name in NEW:
         if args.only in (name,'all'):results+=scenarios.run(name,args.repetitions)
     (OUT/f'summary-{args.only}.json').write_text(json.dumps([{k:v for k,v in x.items() if k!='samples'} for x in results],indent=2)+'\n')
-if __name__=='__main__':
-    with argocd_paused():main()
+if __name__=='__main__':main()

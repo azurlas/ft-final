@@ -1,27 +1,64 @@
 # University backend
 
-PHP 8.3, RoadRunner, Symfony/API Platform, Doctrine ORM/MySQL, Redis Messenger queues, Supervisor, RustFS S3, Envoy Gateway and Helm. Grafana includes the official RoadRunner HTTP dashboard, application metrics, and VictoriaLogs.
+PHP 8.3, RoadRunner, Symfony/API Platform, Doctrine ORM/MySQL, Redis Messenger queues, Supervisor, RustFS S3, Envoy Gateway and Helm. Grafana includes the official RoadRunner HTTP dashboard, application metrics, alert rules, and VictoriaLogs.
 
-The system runs on Contabo, deployed by Argo CD (see below). The final-project plan is in [docs/plans](docs/plans/2026-11-06-final-project-plan.md). The midterm state, including its report and raw evaluation data, is preserved under the git tag `midterm`.
+The final project runs on a local single-node OrbStack Kubernetes cluster. Plans: [final project](docs/plans/2026-11-06-final-project-plan.md), [local cluster](docs/plans/2026-11-06-local-cluster-plan.md). The midterm state, including its report and raw evaluation data, is preserved under the git tag `midterm`.
 
-## Local development and tests
+## Deploy locally
 
-Requires Docker, PHP 8.3 with the extensions in `composer.json`, Composer, Helm and Python 3. Node.js 22+ is needed only for the frontend tests.
+Requires OrbStack (Docker + Kubernetes), Helm (`brew install helm`), Python 3 and `kubectl`. No PHP is needed on the host.
 
 ```sh
-composer install
-make test-deps-up
-php bin/console lexik:jwt:generate-keypair
-php bin/console doctrine:migrations:migrate --no-interaction
-php bin/console app:seed-demo
-php bin/console app:storage-init
-make check          # Composer, lint, PHPUnit, PHPStan, schema, OpenAPI export
-make helm-check     # lint and render both charts with the Contabo value files
+make setup-local
+```
+
+The script starts OrbStack Kubernetes if needed, builds the image `midterm/university:local-<timestamp>` (recorded in `output/image-tag.txt`), generates ignored secrets in `output/secrets/`, and installs Envoy Gateway, both application profiles and monitoring. Every command names the `orbstack` context explicitly. Re-run it to deploy code changes.
+
+| Namespace | Profile | URL |
+| --- | --- | --- |
+| `midterm` | Resilient: 2 API, 2 workers, 2 Envoy, backups | http://midterm.k8s.orb.local/ (Swagger: `/api/docs.html`) |
+| `midterm-baseline` | Baseline: 1 API, 1 worker, 1 Envoy, no backups | http://baseline.midterm.k8s.orb.local:8080/ |
+| `midterm-monitoring` | Prometheus, Grafana, VictoriaLogs | http://grafana.midterm.k8s.orb.local:3000/ |
+| `midterm-gateway` | Envoy Gateway controller | — |
+
+Grafana login is `admin`; the password is in `output/secrets/grafana.env`. Prometheus alerts: Grafana → Explore, or `kubectl --context orbstack -n midterm-monitoring port-forward svc/prometheus 9090` and open http://localhost:9090/alerts. Application demo logins are `admin` / `AdminPass123!`, and `student` or `other` / `StudentPass123!`.
+
+`orb stop k8s` pauses the whole cluster and keeps all volumes; `orb start k8s` resumes it. Traffic is plain HTTP locally.
+
+## Experiments
+
+```sh
+python3 scripts/smoke.py                                    # payment fixtures, files, grades, PDF
+python3 scripts/experiments.py --only availability          # API crash, cache and MySQL outage (B vs FT)
+python3 scripts/experiments.py --only queue                 # lost queue message (B vs FT)
+python3 scripts/experiments.py --only checkpoints           # worker crash at payment checkpoints (FT)
+python3 scripts/broker-recovery.py                          # queue Redis outage during checkout (FT)
+python3 scripts/experiments.py --only timeout               # slow provider vs 2 s deadline (B vs FT)
+python3 scripts/experiments.py --only circuit               # circuit breaker opens and defers calls (FT)
+python3 scripts/experiments.py --only spike                 # load spike (B vs FT)
+python3 scripts/experiments.py --only security              # misuse cases denied and audited (FT)
+python3 scripts/experiments.py --only alerts --repetitions 1  # alert detection and log correlation (FT)
+python3 scripts/observability-check.py
+python3 scripts/summarize.py
+```
+
+Results go to `output/final/`. The scripts only touch the four project namespaces and restore changed replica counts in `finally` blocks. Backup and isolated restore verification:
+
+```sh
+kubectl --context orbstack -n midterm exec deploy/api -- php bin/console app:backup
+kubectl --context orbstack -n midterm exec deploy/api -- php bin/console app:restore-verify mysql/<returned-key>.sql.gz
+```
+
+## Tests
+
+```sh
+make check-docker   # Composer, lint, PHPUnit, PHPStan, schema, OpenAPI export, inside the app image
+make helm-check     # lint and render both charts (local and Contabo value files)
 npm ci && make frontend-check
 make test-deps-down
 ```
 
-Application demo logins are `admin` / `AdminPass123!`, and `student` or `other` / `StudentPass123!`. These are deliberately public demo accounts for the course demo only.
+`make check-docker` starts the `compose.test.yaml` dependencies (MySQL, two Redis, RustFS) and runs `scripts/check.sh` in the PHP 8.3 image, so only Docker is needed. With PHP 8.3 and Composer on the host, `make test-deps-up && make check` does the same.
 
 ## API
 
@@ -31,7 +68,9 @@ Authenticate with `POST /api/login`, JSON `{ "login": "student", "password": "St
 
 Students enroll using `POST /api/courses/{id}/enroll`, purchase using `/purchase`, list their `/api/purchases`, and submit one multipart field named `file` to `POST /api/assignments/{id}/submit`. Files may have any format, up to exactly 10,000,000 bytes; submissions cannot be replaced. Downloads require owner/admin authentication. Administrators manage `/api/courses`, `/api/assignments`, `/api/grades` and download `/api/courses/{id}/report`.
 
-## Contabo deployment (Argo CD)
+## Optional: public deployment on Contabo (Argo CD)
+
+Not used for the final-project experiments. It shows the production-like setup: GitOps rebuild from git, SealedSecrets, and TLS at a shared edge gateway.
 
 The public deployment runs on the single-node RKE2 cluster `contabo-6` (169.58.83.121) and is driven by Argo CD from `main` of this repository.
 

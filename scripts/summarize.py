@@ -3,7 +3,7 @@ import json,csv,pathlib,statistics,collections
 from env import OUT as root
 groups=collections.defaultdict(list);requests=[]
 for path in sorted(root.glob('*.json')):
-    if path.name.startswith(('summary','inventory','argocd')):continue
+    if path.name.startswith(('summary','inventory')):continue
     j=json.loads(path.read_text())
     if not isinstance(j,dict) or j.get('type')!='availability':continue
     groups[j['namespace'],j['scenario']].append(j)

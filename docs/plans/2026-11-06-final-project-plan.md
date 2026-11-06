@@ -4,7 +4,7 @@ Branch: `feat/final`. Source: `FINAL PROJECT FTR.docx.pdf` (Integrated Dependabi
 
 Decisions so far:
 
-- **Environment:** run all experiments and the live demo on Contabo (`contabo-6`, Argo CD, `*.sailaubek.dev`). Remove the OrbStack-only tooling.
+- **Environment (changed 2026-11-06):** run all experiments and the live demo on a local OrbStack Kubernetes cluster. The VPS is not needed. See [the local cluster plan](2026-11-06-local-cluster-plan.md); it overrides the Contabo-specific parts below. The Contabo/Argo CD files stay as an optional deployment.
 - **Report:** a Word / Google Doc written outside the repo. The repo holds the README, the code, the scripts, the raw data and one Markdown results table that we copy into the report.
 - **Team contributions:** still open. The team will provide the split (see the last section).
 

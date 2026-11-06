@@ -1,6 +1,6 @@
 image: midterm/university:dev
 profile: resilient
-hostname: midterm.sailaubek.dev
+hostname: midterm.k8s.orb.local
 apiReplicas: 2
 workerReplicas: 2
 gatewayReplicas: 2

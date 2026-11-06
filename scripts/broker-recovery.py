@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import json,time,pathlib
 from experiments import kubectl,scale,ready,create_user,purchase
-from env import OUT,BASE,RESILIENT,argocd_paused
+from env import OUT,BASE,RESILIENT
 results=[]
 def main():
     for repetition in range(1,4):
@@ -20,4 +20,4 @@ def main():
             results.append(result);print(result,flush=True)
         finally:scale(ns,'statefulset','redis-queue',1);ready(ns,'statefulset','redis-queue')
     (OUT/'broker-recovery.json').write_text(json.dumps(results,indent=2)+'\n')
-with argocd_paused():main()
+main()

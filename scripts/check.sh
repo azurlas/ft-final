@@ -4,7 +4,7 @@ cd "$(dirname "$0")/.."
 composer validate --strict
 composer check-platform-reqs
 php bin/console lint:container
-php bin/console lint:yaml config helm/university/values.yaml helm/university/values-contabo.yaml helm/university/values-contabo-baseline.yaml helm/university/values-baseline.yaml
+php bin/console lint:yaml config helm/university/values.yaml helm/university/values-local.yaml helm/university/values-contabo.yaml helm/university/values-contabo-baseline.yaml helm/university/values-baseline.yaml
 php bin/console lint:twig templates
 php bin/console app:seed-demo >/dev/null
 php -d upload_max_filesize=12M -d post_max_size=12M vendor/bin/phpunit

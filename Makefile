@@ -1,4 +1,4 @@
-.PHONY: install build test-deps-up test-deps-down test-unit test-integration test-functional lint check frontend-check helm-check smoke experiments
+.PHONY: install build test-deps-up test-deps-down test-unit test-integration test-functional lint check check-docker frontend-check helm-check setup-local smoke experiments
 install:
 	composer install --no-interaction
 build:
@@ -19,10 +19,14 @@ lint:
 	vendor/bin/phpstan analyse --memory-limit=512M --no-progress
 check:
 	bash scripts/check.sh
+check-docker:
+	bash scripts/check-docker.sh
 frontend-check:
 	npm run check
 helm-check:
 	bash scripts/helm-check.sh
+setup-local:
+	bash scripts/setup-local.sh
 smoke:
 	python3 scripts/smoke.py
 experiments:

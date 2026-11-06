@@ -1,0 +1,3 @@
+# OrbStack Kubernetes: the image comes from OrbStack's Docker (setup-local.sh passes --set-string image=...).
+image: midterm/university:dev
+storageClass: local-path

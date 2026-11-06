@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json,urllib.request,urllib.error,time,uuid,pathlib,hashlib,argparse
+from env import BASE,RESILIENT,OUT
 class Api:
     def __init__(self,base): self.base=base;self.token=None
     def request(self,method,path,body=None,headers=None,raw=False):
@@ -23,7 +24,7 @@ def multipart(data,name='demo.any'):
     boundary='midterm'+uuid.uuid4().hex
     return (f'--{boundary}\r\nContent-Disposition: form-data; name="file"; filename="{name}"\r\nContent-Type: application/octet-stream\r\n\r\n'.encode()+data+f'\r\n--{boundary}--\r\n'.encode(),{'Content-Type':'multipart/form-data; boundary='+boundary})
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--base',default='http://midterm.k8s.orb.local');args=p.parse_args();api=Api(args.base);run=uuid.uuid4().hex[:12]
+    p=argparse.ArgumentParser();p.add_argument('--base',default=BASE[RESILIENT]);args=p.parse_args();api=Api(args.base);run=uuid.uuid4().hex[:12]
     api.ok('GET','/health/live');api.ok('GET','/health/ready');contract=api.ok('GET','/api/docs.jsonopenapi',headers={'Accept':'application/vnd.openapi+json'});assert '/api/assignments/{id}/submit' in contract['paths']
     courses={c['name']:c['id'] for c in api.ok('GET','/api/courses')}
     login='smoke-'+run;api.ok('POST','/api/register',{'login':login,'username':'Smoke Student','password':'StudentPass123!'});api.login(login,'StudentPass123!');student=api.ok('GET','/api/me');assert not student['isAdmin']
@@ -50,6 +51,6 @@ def main():
     api.login('admin','AdminPass123!');grade=api.ok('POST','/api/grades',{'assignmentId':assign['id'],'userId':student['id'],'grade':90,'comment':'Verified local demo'})
     api.ok('PATCH',f"/api/grades/{grade['id']}",{'grade':93},{'Content-Type':'application/merge-patch+json'})
     report=api.ok('GET',f'/api/courses/{cid}/report',raw=True);assert report.startswith(b'%PDF-')
-    pathlib.Path('output/reports').mkdir(parents=True,exist_ok=True);pathlib.Path('output/reports/deployed-course-report.pdf').write_bytes(report)
-    path=pathlib.Path('output/evaluation/smoke.json');path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps({'base':args.base,'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'payments':results,'fileChecksumVerified':True,'ownershipVerified':True,'pdfBytes':len(report)},indent=2)+'\n');print(path.read_text())
+    (OUT/'deployed-course-report.pdf').write_bytes(report)
+    path=OUT/'smoke.json';path.write_text(json.dumps({'base':args.base,'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'payments':results,'fileChecksumVerified':True,'ownershipVerified':True,'pdfBytes':len(report)},indent=2)+'\n');print(path.read_text())
 if __name__=='__main__':main()

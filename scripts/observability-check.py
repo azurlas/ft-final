@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 import json,urllib.request,urllib.parse,pathlib,base64,os
-from experiments import kubectl
-root=pathlib.Path('output/evaluation')
+from env import OUT as root,GRAFANA_URL,grafana_password
 def json_get(url,headers=None):return json.load(urllib.request.urlopen(urllib.request.Request(url,headers=headers or {}),timeout=15))
-password=pathlib.Path('output/secrets/grafana.env').read_text().strip().split('=',1)[1];headers={'Authorization':'Basic '+base64.b64encode(('admin:'+password).encode()).decode()};base='http://grafana.midterm.k8s.orb.local:3000'
+password=grafana_password();headers={'Authorization':'Basic '+base64.b64encode(('admin:'+password).encode()).decode()};base=GRAFANA_URL
 ds=json_get(base+'/api/datasources',headers);assert {'prometheus','victorialogs'}<={d['uid'] for d in ds}
 rr=json_get(base+'/api/dashboards/uid/roadrunner-http',headers);app=json_get(base+'/api/dashboards/uid/university-reliability',headers);assert len(rr['dashboard']['panels'])==9
 for uid in ['prometheus','victorialogs']:

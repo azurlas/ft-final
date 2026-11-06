@@ -1,15 +1,8 @@
 #!/usr/bin/env python3
-"""Namespace-scoped fault experiments. Always restores replica counts in finally blocks."""
+"""Namespace-scoped fault experiments on Contabo. Restores replica counts in finally blocks and pauses Argo CD self-heal while faults are injected."""
 import json,time,uuid,pathlib,subprocess,threading,urllib.request,urllib.error,hashlib,statistics,os,argparse,concurrent.futures
 from smoke import Api
-KUBECTL=os.environ.get('KUBECTL_BIN','/Users/nariman/.orbstack/bin/kubectl')
-if not pathlib.Path(KUBECTL).exists():KUBECTL='kubectl'
-OUT=pathlib.Path('output/evaluation');OUT.mkdir(parents=True,exist_ok=True)
-def kubectl(ns,*args,input=None):
-    assert ns in ('midterm','midterm-baseline','midterm-monitoring','midterm-gateway')
-    r=subprocess.run([KUBECTL,'--context','orbstack','-n',ns,*args],input=input,text=True,capture_output=True,timeout=100)
-    if r.returncode:raise RuntimeError(r.stderr[-1000:])
-    return r.stdout
+from env import kubectl,OUT,BASE,RESILIENT,BASELINE,ENVIRONMENT,argocd_paused
 def scale(ns,kind,name,n):return kubectl(ns,'scale',kind+'/'+name,'--replicas='+str(n))
 def ready(ns,kind,name):kubectl(ns,'rollout','status',kind+'/'+name,'--timeout=90s')
 def sql(ns,query):
@@ -123,10 +116,11 @@ def load(ns,base):
     result={'type':'load','namespace':ns,'concurrency':20,'requests':300,'elapsedSeconds':time.monotonic()-started,'statusCounts':{str(s):sum(x['status']==s for x in samples) for s in set(x['status'] for x in samples)},'p95LatencyMs':sorted(x['latencyMs'] for x in samples)[284],'samples':samples};(OUT/f'{ns}-load.json').write_text(json.dumps(result,indent=2)+'\n');print(ns,'load',result['statusCounts'],flush=True);return result
 def main():
     p=argparse.ArgumentParser();p.add_argument('--repetitions',type=int,default=3);p.add_argument('--only',choices=['availability','queue','checkpoints','load','all'],default='all');args=p.parse_args();results=[]
-    inventory={'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'context':'orbstack','repetitions':args.repetitions,'deployments':{ns:json.loads(kubectl(ns,'get','deployments','-o','json')) for ns in ('midterm','midterm-baseline')},'pods':{ns:json.loads(kubectl(ns,'get','pods','-o','json')) for ns in ('midterm','midterm-baseline')},'configHashes':{ns:hashlib.sha256(kubectl(ns,'get','configmap','university-config','-o','json').encode()).hexdigest() for ns in ('midterm','midterm-baseline')}}
+    inventory={'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'environment':ENVIRONMENT,'repetitions':args.repetitions,'deployments':{ns:json.loads(kubectl(ns,'get','deployments','-o','json')) for ns in ('midterm','midterm-baseline')},'pods':{ns:json.loads(kubectl(ns,'get','pods','-o','json')) for ns in ('midterm','midterm-baseline')},'configHashes':{ns:hashlib.sha256(kubectl(ns,'get','configmap','university-config','-o','json').encode()).hexdigest() for ns in ('midterm','midterm-baseline')}}
     # Deployment env contains only secret references, never generated values.
     (OUT/'inventory.json').write_text(json.dumps(inventory,indent=2)+'\n')
-    for ns,base in [('midterm-baseline','http://baseline.midterm.k8s.orb.local:8080'),('midterm','http://midterm.k8s.orb.local')]:
+    for ns in (BASELINE,RESILIENT):
+        base=BASE[ns]
         for rep in range(1,args.repetitions+1):
             if args.only in ('availability','all'):
                 for scenario in ('api_crash','cache_outage','mysql_outage'):results.append(availability(ns,base,scenario,rep))
@@ -134,6 +128,7 @@ def main():
         if args.only in ('load','all'):results.append(load(ns,base))
     if args.only in ('checkpoints','all'):
         for rep in range(1,args.repetitions+1):
-            for hook in ('after_provider_success','after_outbox_publish'):results.append(checkpoint_recovery('midterm','http://midterm.k8s.orb.local',hook,rep))
+            for hook in ('after_provider_success','after_outbox_publish'):results.append(checkpoint_recovery(RESILIENT,BASE[RESILIENT],hook,rep))
     (OUT/f'summary-{args.only}.json').write_text(json.dumps([{k:v for k,v in x.items() if k!='samples'} for x in results],indent=2)+'\n')
-if __name__=='__main__':main()
+if __name__=='__main__':
+    with argocd_paused():main()

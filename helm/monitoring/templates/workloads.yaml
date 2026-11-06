@@ -35,8 +35,9 @@ spec:
           args: [--config.file=/etc/prometheus/prometheus.yml, --storage.tsdb.path=/prometheus, --storage.tsdb.retention.time=7d, --storage.tsdb.retention.size=1GB]
           {{- else }}
           env:
+            # Installed synchronously at startup. Do not set GF_PLUGINS_PREINSTALL_DISABLED: it also skips this list.
             - {name: GF_PLUGINS_PREINSTALL_SYNC, value: victoriametrics-logs-datasource@0.32.0}
-            - {name: GF_PLUGINS_PREINSTALL_DISABLED, value: "true"}
+            - {name: GF_PLUGINS_PREINSTALL_AUTO_UPDATE, value: "false"}
             - name: GF_SECURITY_ADMIN_PASSWORD
               valueFrom: {secretKeyRef: {name: grafana-secret, key: password}}
             - {name: GF_USERS_ALLOW_SIGN_UP, value: "false"}

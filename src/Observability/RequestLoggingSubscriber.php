@@ -7,10 +7,11 @@ namespace App\Observability;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\{RequestEvent,ResponseEvent};
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final readonly class RequestLoggingSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private LoggerInterface $logger)
+    public function __construct(private LoggerInterface $logger, private TokenStorageInterface $tokens)
     {
     }
     public static function getSubscribedEvents(): array
@@ -35,6 +36,11 @@ final readonly class RequestLoggingSubscriber implements EventSubscriberInterfac
         } $r = $event->getRequest();
         $id = $r->attributes->get('_request_id');
         $event->getResponse()->headers->set('X-Request-ID', $id);
-        $this->logger->info('http.completed', ['request_id' => $id,'method' => $r->getMethod(),'route' => $r->attributes->get('_route'),'status' => $event->getResponse()->getStatusCode(),'duration_ms' => round((microtime(true) - $r->attributes->get('_started', microtime(true))) * 1000, 2)]);
+        $status = $event->getResponse()->getStatusCode();
+        $this->logger->info('http.completed', ['request_id' => $id,'method' => $r->getMethod(),'route' => $r->attributes->get('_route'),'status' => $status,'duration_ms' => round((microtime(true) - $r->attributes->get('_started', microtime(true))) * 1000, 2)]);
+        if (in_array($status, [401, 403, 429], true)) {
+            // Security audit event: who was denied what. No body, token or password.
+            $this->logger->warning('security.denied', ['request_id' => $id,'method' => $r->getMethod(),'path' => mb_substr($r->getPathInfo(), 0, 200),'status' => $status,'user' => $this->tokens->getToken()?->getUserIdentifier(),'client_ip' => $r->getClientIp()]);
+        }
     }
 }

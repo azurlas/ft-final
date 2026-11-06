@@ -6,3 +6,10 @@ monolog:
       level: info
       formatter: monolog.formatter.json
       channels: ['!event', '!doctrine']
+when@test:
+  monolog:
+    handlers:
+      # Captures records so functional tests can assert on security audit events.
+      test:
+        type: test
+        level: info

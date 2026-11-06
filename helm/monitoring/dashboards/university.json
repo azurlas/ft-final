@@ -142,6 +142,55 @@
       ]
     },
     {
+      "id": 8,
+      "title": "Firing alerts",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "count by (alertname, profile) (ALERTS{alertstate=\"firing\"})",
+          "refId": "A",
+          "legendFormat": "{{alertname}} {{profile}}"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Denied requests (401/403/429) per second",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "sum by (envoy_response_code) (rate(envoy_cluster_upstream_rq{envoy_response_code=~\"401|403|429\"}[1m]))",
+          "refId": "A",
+          "legendFormat": "{{envoy_response_code}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps"
+        }
+      }
+    },
+    {
       "id": 7,
       "title": "Application logs (VictoriaLogs)",
       "type": "logs",
@@ -151,7 +200,7 @@
       },
       "gridPos": {
         "x": 0,
-        "y": 24,
+        "y": 32,
         "w": 24,
         "h": 10
       },

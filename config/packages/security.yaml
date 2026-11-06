@@ -18,7 +18,9 @@ security:
         username_path: login
         password_path: password
         success_handler: lexik_jwt_authentication.handler.authentication_success
-        failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        failure_handler: App\Security\LoginFailureHandler
+      login_throttling:
+        limiter: app.login_rate_limiter
     main:
       stateless: true
       provider: users

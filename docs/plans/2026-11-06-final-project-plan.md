@@ -45,14 +45,14 @@ Keep all application features (UI, PDF reports, payments) and the baseline profi
 
 ### 3.1 Make the scripts target Contabo (prerequisite for everything else)
 
-- Add `scripts/env.py` with one config: `KUBECONFIG=output/secrets/contabo/kubeconfig` (SSH tunnel), no hard-coded `--context orbstack`, and no hard-coded `/Users/nariman/...` kubectl path. Base URLs: `https://midterm.sailaubek.dev`, `https://baseline.sailaubek.dev`, `https://grafana.sailaubek.dev`. Keep the namespace allowlist.
+- Done: `scripts/env.py` holds one config: `KUBECONFIG=output/secrets/contabo/kubeconfig` (SSH tunnel), no hard-coded `--context orbstack`, and no hard-coded `/Users/nariman/...` kubectl path. Base URLs: `https://midterm.sailaubek.dev`, `https://baseline.sailaubek.dev`, `https://grafana.sailaubek.dev`. Keep the namespace allowlist.
 - **Argo CD self-heal will undo the fault injection.** `kubectl scale` and `kubectl set env` drift from git, and `selfHeal: true` reverts them within seconds. That would corrupt the measurements. Add `pause_argocd()` / `resume_argocd()` as a context manager that patches `syncPolicy.automated` off on `root`, `university` and `university-baseline` (root first, because it would restore the child Applications), and restores it in `finally`.
 - Update `experiments.py`, `smoke.py`, `broker-recovery.py`, `observability-check.py` and `summarize.py` to use `env.py`, and write to `output/final/`.
 - Note in the report: on Contabo both profiles share the 2-replica edge Envoy gateway. That differs from the midterm, where the baseline had 1 gateway.
 
 ### 3.2 Monitoring: alert rules (F)
 
-Add a Prometheus `rule_files` entry with a `rules.yaml` ConfigMap in `helm/monitoring/templates/config.yaml`. We skip Alertmanager: alerts are visible in Prometheus `/alerts` and in a Grafana alert-list panel, which is enough evidence. Five small rules:
+Done: `rules.yml` in the `prometheus-config` ConfigMap (`helm/monitoring/templates/config.yaml`), checked with `promtool`. We skip Alertmanager: alerts are visible in Prometheus `/alerts` and in a Grafana alert-list panel, which is enough evidence. Five small rules:
 
 | Alert | Expression (sketch) | Incident it indicates |
 | --- | --- | --- |
@@ -66,9 +66,9 @@ Check the exact label names against the live series before finalizing. Add an "A
 
 ### 3.3 Security (G)
 
-- **Audit logging:** in `RequestLoggingSubscriber`, log `security.denied` at `warning` level for 401/403/429 responses (request_id, route, method, user login if any, client IP, status). Add a Symfony `LoginFailureEvent` listener that logs `security.login_failed`. Never log the password, the token or the body.
-- **Login throttling:** `login_throttling: {max_attempts: 5, interval: '1 minute'}` on the `login` firewall. It needs `symfony/rate-limiter`, with the limiter storage on the existing cache Redis so all API pods share one counter.
-- **Tests:** a PHPUnit case for throttling (6th bad login → 429) and for denial logging.
+- **Audit logging (done):** `RequestLoggingSubscriber` logs `security.denied` at `warning` level for 401/403/429 responses (request_id, method, path, status, user if any, client IP). `src/Security/LoginFailureLogger.php` logs `security.authentication_failed` for failed logins and invalid bearer tokens (login, reason, client IP). Passwords, tokens and bodies are never logged.
+- **Login throttling (done):** `login_throttling` on the `login` firewall: 5 attempts per minute per login + IP, 60 per minute per IP. Throttled logins return 429 with `Retry-After` (`src/Security/LoginFailureHandler.php`). The limiter state is stored in MySQL (`cache_items`, migration `Version20261106060117`), not the cache Redis, so a cache outage cannot break login and all API pods share one counter. `trusted_proxies: private_ranges` makes Symfony read the client IP from Envoy's `X-Forwarded-For`. **To verify on Contabo:** RKE2 ServiceLB may hide the real client IP (SNAT). If every request shows the same IP, the per-IP limit becomes global.
+- **Tests (done):** `tests/Functional/SecurityTest.php` covers brute force (5 × 401, then 429 even with the correct password; other users unaffected), no token, a forged JWT, and a student calling an admin endpoint. Each case asserts the status code and its audit record.
 - **Threat model (goes in the report):** a small STRIDE table covering about 8 threats → control → evidence. Examples: stolen/forged JWT, IDOR on purchases/files, privilege escalation via registration, brute-force login, oversized-upload DoS, request flooding, secrets in git, card-data leakage.
 
 ### 3.4 Experiments (H): the 8-scenario matrix

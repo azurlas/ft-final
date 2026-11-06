@@ -8,3 +8,9 @@ services:
     resource: '../src/'
     exclude: '../src/{Entity,Kernel.php,Payment/Dto,Api/Resource}/'
   App\Payment\PaymentServiceInterface: '@App\Payment\HttpPaymentService'
+  app.login_rate_limiter:
+    class: Symfony\Component\Security\Http\RateLimiter\DefaultLoginRateLimiter
+    arguments:
+      $globalFactory: '@limiter.login_global'
+      $localFactory: '@limiter.login_local'
+      $secret: '%kernel.secret%'

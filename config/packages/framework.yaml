@@ -15,6 +15,30 @@ framework:
       max_duration: 2
   php_errors:
     log: true
+  # Envoy is the only route into the API pods; trust its X-Forwarded-For so audit
+  # logs and per-IP login throttling see the client address, not the proxy pod.
+  trusted_proxies: 'private_ranges'
+  trusted_headers: ['x-forwarded-for', 'x-forwarded-proto']
+  # Login throttling state lives in MySQL, which login already depends on, so it is
+  # shared by all API pods and adds no new failure dependency (unlike the cache Redis).
+  cache:
+    pools:
+      cache.login_throttling:
+        adapter: cache.adapter.doctrine_dbal
+        provider: doctrine.dbal.default_connection
+  rate_limiter:
+    # Per login + client IP: 5 attempts per minute (brute force on one account).
+    login_local:
+      policy: fixed_window
+      limit: 5
+      interval: '1 minute'
+      cache_pool: cache.login_throttling
+    # Per client IP across all logins (password spraying).
+    login_global:
+      policy: fixed_window
+      limit: 60
+      interval: '1 minute'
+      cache_pool: cache.login_throttling
 when@test:
   framework:
     test: true

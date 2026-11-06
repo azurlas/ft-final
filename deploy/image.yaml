@@ -1,2 +1,2 @@
 # Updated by .github/workflows/image.yaml after each published build.
-image: ghcr.io/fugikzl/ft-midterm:5c783bb1513209631e6732ed58d7fae7d833b346
+image: ghcr.io/azurlas/ft-final:722b4639db06a33d0f4259e81f6bdad5bb20ccf1

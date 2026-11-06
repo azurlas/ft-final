@@ -50,7 +50,20 @@ kubectl --context orbstack -n midterm exec deploy/api -c api -- php bin/console 
 kubectl --context orbstack -n midterm exec deploy/api -c api -- php bin/console app:restore-verify mysql/<returned-key>.sql.gz
 ```
 
-## Tests
+## Final results, report and slides
+
+The final run (2026-11-06, image `midterm/university:local-20261106120520`) is in `output/final/`: raw per-run JSON, `results.md` (consolidated baseline-vs-FT table), `reliability.csv`, `requests.csv`, inventories, figures and the run log. The test plan with the pre-registered acceptance criteria is [docs/experiments.md](docs/experiments.md).
+
+The technical report is [docs/report/final-report.docx](docs/report/final-report.docx) ([PDF](docs/report/final-report.pdf)). It is generated from the result files, so every number in it is measured:
+
+```sh
+npm ci
+python3 scripts/summarize.py && python3 scripts/figures.py   # figures need matplotlib
+node docs/report/build-report.mjs
+```
+
+`bash scripts/run-all.sh` repeats the whole experiment block (about 30 minutes) before rebuilding.
+
 
 ```sh
 make check-docker   # Composer, lint, PHPUnit, PHPStan, schema, OpenAPI export, inside the app image

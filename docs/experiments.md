@@ -1,6 +1,6 @@
 # Test plan and acceptance criteria
 
-Written and committed **before** the final runs (2026-11-06). Results are generated into `output/final/results.md` by `scripts/summarize.py`. The trial runs that shaped the scripts are summarized in the [local cluster plan](plans/2026-11-06-local-cluster-plan.md#trial-run-2026-11-06-1-repetition-each-image-local-20261106120520-after-fixes); their numbers are not reported as results.
+Written and committed **before** the final runs (2026-11-06). **Final results:** [output/final/results.md](../output/final/results.md); 9 of 10 objectives met in every run, SLO-1 in 2 of 3 runs (one failed probe while the API pod was being killed). Results are generated into `output/final/results.md` by `scripts/summarize.py`. The trial runs that shaped the scripts are summarized in the [local cluster plan](plans/2026-11-06-local-cluster-plan.md#trial-run-2026-11-06-1-repetition-each-image-local-20261106120520-after-fixes); their numbers are not reported as results.
 
 ## 1. Environment
 

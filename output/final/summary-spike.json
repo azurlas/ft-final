@@ -1,0 +1,118 @@
+[
+  {
+    "type": "spike",
+    "namespace": "midterm-baseline",
+    "utc": "2026-11-06T07:53:38Z",
+    "summary": {
+      "phases": {
+        "warmup": {
+          "seconds": 20,
+          "targetRps": 20,
+          "requests": 400,
+          "offeredRps": 20.0,
+          "goodputRps": 20.0,
+          "ok": 400,
+          "rateLimited429": 0,
+          "serverErrors5xx": 0,
+          "connectionErrors": 0,
+          "p50Ms": 15.308207948692143,
+          "p95Ms": 26.458417007233948,
+          "p99Ms": 34.443666983861476,
+          "meanMs": 15.988269241061062,
+          "maxClientStartDelayMs": 5.3439580369740725
+        },
+        "spike": {
+          "seconds": 30,
+          "targetRps": 300,
+          "requests": 9000,
+          "offeredRps": 300.0,
+          "goodputRps": 207.03333333333333,
+          "ok": 6211,
+          "rateLimited429": 2789,
+          "serverErrors5xx": 0,
+          "connectionErrors": 0,
+          "p50Ms": 5.7855830527842045,
+          "p95Ms": 8.955541998147964,
+          "p99Ms": 55.84629101213068,
+          "meanMs": 21.84381030541433,
+          "maxClientStartDelayMs": 4.724001046270132
+        },
+        "cooldown": {
+          "seconds": 20,
+          "targetRps": 20,
+          "requests": 400,
+          "offeredRps": 20.0,
+          "goodputRps": 19.95,
+          "ok": 399,
+          "rateLimited429": 1,
+          "serverErrors5xx": 0,
+          "connectionErrors": 0,
+          "p50Ms": 14.662083995062858,
+          "p95Ms": 21.937375015113503,
+          "p99Ms": 28.947082988452166,
+          "meanMs": 14.873622785781027,
+          "maxClientStartDelayMs": 5.42258401401341
+        }
+      },
+      "pass": true
+    }
+  },
+  {
+    "type": "spike",
+    "namespace": "midterm",
+    "utc": "2026-11-06T07:54:49Z",
+    "summary": {
+      "phases": {
+        "warmup": {
+          "seconds": 20,
+          "targetRps": 20,
+          "requests": 400,
+          "offeredRps": 20.0,
+          "goodputRps": 20.0,
+          "ok": 400,
+          "rateLimited429": 0,
+          "serverErrors5xx": 0,
+          "connectionErrors": 0,
+          "p50Ms": 15.897750039584935,
+          "p95Ms": 22.662875009700656,
+          "p99Ms": 32.214124978054315,
+          "meanMs": 16.127592822449515,
+          "maxClientStartDelayMs": 5.320540978573263
+        },
+        "spike": {
+          "seconds": 30,
+          "targetRps": 300,
+          "requests": 9000,
+          "offeredRps": 300.0,
+          "goodputRps": 300.0,
+          "ok": 9000,
+          "rateLimited429": 0,
+          "serverErrors5xx": 0,
+          "connectionErrors": 0,
+          "p50Ms": 5.946333985775709,
+          "p95Ms": 149.67241702834144,
+          "p99Ms": 1086.2659579725005,
+          "meanMs": 54.21671680976093,
+          "maxClientStartDelayMs": 5.08012535283342
+        },
+        "cooldown": {
+          "seconds": 20,
+          "targetRps": 20,
+          "requests": 400,
+          "offeredRps": 20.0,
+          "goodputRps": 20.0,
+          "ok": 400,
+          "rateLimited429": 0,
+          "serverErrors5xx": 0,
+          "connectionErrors": 0,
+          "p50Ms": 16.285583027638495,
+          "p95Ms": 76.7246670438908,
+          "p99Ms": 1068.142582953442,
+          "meanMs": 52.0217851822963,
+          "maxClientStartDelayMs": 5.386583041399717
+        }
+      },
+      "pass": true
+    }
+  }
+]

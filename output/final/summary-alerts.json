@@ -1,0 +1,204 @@
+[
+  {
+    "type": "alert",
+    "scenario": "database_down",
+    "namespace": "midterm",
+    "repetition": 1,
+    "events": {
+      "start": "2026-11-06T07:55:43Z",
+      "injected": "2026-11-06T07:55:47Z",
+      "fired": "2026-11-06T07:55:56Z",
+      "restored": "2026-11-06T07:56:01Z",
+      "resolved": "2026-11-06T07:56:05Z"
+    },
+    "firingAlert": {
+      "labels": {
+        "alertname": "DatabaseDown",
+        "profile": "resilient",
+        "severity": "critical"
+      },
+      "annotations": {
+        "summary": "MySQL unreachable from the resilient workers"
+      },
+      "state": "firing",
+      "activeAt": "2026-11-06T07:55:45.595739853Z",
+      "value": "0e+00"
+    },
+    "logCorrelation": [
+      {
+        "requestId": "2a9c3e93-eff1-4f1d-b3ec-bb0b9228ae24",
+        "found": true,
+        "records": 2,
+        "messages": [
+          "http.completed",
+          "http.problem"
+        ]
+      }
+    ],
+    "summary": {
+      "alert": "DatabaseDown",
+      "fired": true,
+      "detectionSeconds": 12.983957750024274,
+      "ruleActiveAt": "2026-11-06T07:55:45.595739853Z",
+      "resolved": true,
+      "resolveSecondsAfterRestore": 4.1063988750102,
+      "logsCorrelated": true,
+      "pass": true
+    }
+  },
+  {
+    "type": "alert",
+    "scenario": "payment_backlog",
+    "namespace": "midterm",
+    "repetition": 1,
+    "events": {
+      "start": "2026-11-06T07:56:05Z",
+      "injected": "2026-11-06T07:56:07Z",
+      "fired": "2026-11-06T07:57:21Z",
+      "restored": "2026-11-06T07:57:34Z",
+      "resolved": "2026-11-06T07:57:41Z"
+    },
+    "firingAlert": {
+      "labels": {
+        "alertname": "PaymentBacklogStuck",
+        "profile": "resilient",
+        "severity": "critical"
+      },
+      "annotations": {
+        "summary": "An accepted purchase has been pending for over 60 s in resilient"
+      },
+      "state": "firing",
+      "activeAt": "2026-11-06T07:57:10.595739853Z",
+      "value": "7.3e+01"
+    },
+    "logCorrelation": [],
+    "summary": {
+      "alert": "PaymentBacklogStuck",
+      "fired": true,
+      "detectionSeconds": 75.42395937500987,
+      "ruleActiveAt": "2026-11-06T07:57:10.595739853Z",
+      "resolved": true,
+      "resolveSecondsAfterRestore": 6.173903290997259,
+      "logsCorrelated": null,
+      "purchaseId": 69,
+      "purchaseStatusAfterRecovery": "succeeded",
+      "integrity": {
+        "receipts": 1,
+        "enrollments": 1,
+        "attempts": 1
+      },
+      "pass": true
+    }
+  },
+  {
+    "type": "alert",
+    "scenario": "api_degraded",
+    "namespace": "midterm",
+    "repetition": 1,
+    "events": {
+      "start": "2026-11-06T07:57:41Z",
+      "injected": "2026-11-06T07:57:41Z",
+      "fired": "2026-11-06T07:58:11Z",
+      "restored": "2026-11-06T07:58:17Z",
+      "resolved": "2026-11-06T07:58:27Z"
+    },
+    "firingAlert": {
+      "labels": {
+        "alertname": "ApiReplicasDegraded",
+        "severity": "warning"
+      },
+      "annotations": {
+        "summary": "Fewer than 2 healthy API instances in the resilient profile (redundancy lost)"
+      },
+      "state": "firing",
+      "activeAt": "2026-11-06T07:57:55.595739853Z",
+      "value": "1e+00"
+    },
+    "logCorrelation": [
+      {
+        "requestId": "472a0458-8fdd-4f7e-a765-e593df263c55",
+        "found": true,
+        "records": 1,
+        "messages": [
+          "http.completed"
+        ]
+      }
+    ],
+    "summary": {
+      "alert": "ApiReplicasDegraded",
+      "fired": true,
+      "detectionSeconds": 30.82402112497948,
+      "ruleActiveAt": "2026-11-06T07:57:55.595739853Z",
+      "resolved": true,
+      "resolveSecondsAfterRestore": 10.27469483402092,
+      "logsCorrelated": true,
+      "pass": true
+    }
+  },
+  {
+    "type": "alert",
+    "scenario": "auth_spike",
+    "namespace": "midterm",
+    "repetition": 1,
+    "events": {
+      "start": "2026-11-06T07:58:27Z",
+      "injected": "2026-11-06T07:58:27Z",
+      "fired": "2026-11-06T07:59:01Z",
+      "restored": "2026-11-06T07:59:01Z",
+      "resolved": "2026-11-06T07:59:42Z"
+    },
+    "firingAlert": {
+      "labels": {
+        "alertname": "AuthFailureSpike",
+        "envoy_cluster_name": "httproute/midterm/university/rule/0",
+        "severity": "warning"
+      },
+      "annotations": {
+        "summary": "More than 1 denied request/s (401/403/429) on httproute/midterm/university/rule/0: possible brute force or misuse"
+      },
+      "state": "firing",
+      "activeAt": "2026-11-06T07:58:50.595739853Z",
+      "value": "1.5999709101487218e+00"
+    },
+    "logCorrelation": [
+      {
+        "requestId": "c6bf934e-2269-4fb2-9710-f3c420816cf0",
+        "found": true,
+        "records": 2,
+        "messages": [
+          "http.completed",
+          "security.denied"
+        ]
+      },
+      {
+        "requestId": "38d2d8e1-1a0d-4650-8471-f95fbb5b9330",
+        "found": true,
+        "records": 1,
+        "messages": [
+          "http.completed",
+          "security.denied"
+        ]
+      },
+      {
+        "requestId": "ac167aa6-0470-4f8f-bffb-cbe8506c0856",
+        "found": true,
+        "records": 1,
+        "messages": [
+          "http.completed",
+          "security.denied"
+        ]
+      }
+    ],
+    "summary": {
+      "alert": "AuthFailureSpike",
+      "fired": true,
+      "detectionSeconds": 33.64704225002788,
+      "ruleActiveAt": "2026-11-06T07:58:50.595739853Z",
+      "resolved": true,
+      "resolveSecondsAfterRestore": 41.01764525001636,
+      "logsCorrelated": true,
+      "deniedRequestsSent": 96,
+      "pass": true
+    }
+  }
+]

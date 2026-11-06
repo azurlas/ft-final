@@ -1,0 +1,116 @@
+[
+  {
+    "type": "payment",
+    "scenario": "published_queue_loss",
+    "namespace": "midterm-baseline",
+    "repetition": 1,
+    "purchaseId": 3,
+    "accepted": true,
+    "publishedOutboxRowsBeforeLoss": 0,
+    "status": "pending",
+    "recovered": false,
+    "recoverySeconds": null,
+    "observationSeconds": 29.78011695801979,
+    "rightCensored": true,
+    "counts": {
+      "receipts": 0,
+      "enrollments": 0,
+      "attempts": 0
+    }
+  },
+  {
+    "type": "payment",
+    "scenario": "published_queue_loss",
+    "namespace": "midterm-baseline",
+    "repetition": 2,
+    "purchaseId": 4,
+    "accepted": true,
+    "publishedOutboxRowsBeforeLoss": 0,
+    "status": "pending",
+    "recovered": false,
+    "recoverySeconds": null,
+    "observationSeconds": 29.89568124996731,
+    "rightCensored": true,
+    "counts": {
+      "receipts": 0,
+      "enrollments": 0,
+      "attempts": 0
+    }
+  },
+  {
+    "type": "payment",
+    "scenario": "published_queue_loss",
+    "namespace": "midterm-baseline",
+    "repetition": 3,
+    "purchaseId": 5,
+    "accepted": true,
+    "publishedOutboxRowsBeforeLoss": 0,
+    "status": "pending",
+    "recovered": false,
+    "recoverySeconds": null,
+    "observationSeconds": 29.880452874989714,
+    "rightCensored": true,
+    "counts": {
+      "receipts": 0,
+      "enrollments": 0,
+      "attempts": 0
+    }
+  },
+  {
+    "type": "payment",
+    "scenario": "published_queue_loss",
+    "namespace": "midterm",
+    "repetition": 1,
+    "purchaseId": 39,
+    "accepted": true,
+    "publishedOutboxRowsBeforeLoss": 1,
+    "status": "succeeded",
+    "recovered": true,
+    "recoverySeconds": 11.127353040967137,
+    "observationSeconds": 11.127353415999096,
+    "rightCensored": false,
+    "counts": {
+      "receipts": 1,
+      "enrollments": 1,
+      "attempts": 1
+    }
+  },
+  {
+    "type": "payment",
+    "scenario": "published_queue_loss",
+    "namespace": "midterm",
+    "repetition": 2,
+    "purchaseId": 40,
+    "accepted": true,
+    "publishedOutboxRowsBeforeLoss": 1,
+    "status": "succeeded",
+    "recovered": true,
+    "recoverySeconds": 11.141558667004574,
+    "observationSeconds": 11.141558917006478,
+    "rightCensored": false,
+    "counts": {
+      "receipts": 1,
+      "enrollments": 1,
+      "attempts": 1
+    }
+  },
+  {
+    "type": "payment",
+    "scenario": "published_queue_loss",
+    "namespace": "midterm",
+    "repetition": 3,
+    "purchaseId": 41,
+    "accepted": true,
+    "publishedOutboxRowsBeforeLoss": 1,
+    "status": "succeeded",
+    "recovered": true,
+    "recoverySeconds": 12.133414833981078,
+    "observationSeconds": 12.133415042015258,
+    "rightCensored": false,
+    "counts": {
+      "receipts": 1,
+      "enrollments": 1,
+      "attempts": 1
+    }
+  }
+]

@@ -1,0 +1,34 @@
+{
+  "type": "timeout",
+  "namespace": "midterm-baseline",
+  "repetition": 1,
+  "utc": "2026-11-06T07:48:16Z",
+  "purchaseId": 6,
+  "attempts": [
+    {
+      "attempt_number": 1,
+      "status": "transient",
+      "error_code": "provider_unreachable",
+      "provider_reference": null,
+      "started_at": "2026-11-06 07:48:13",
+      "finished_at": "2026-11-06 07:48:16",
+      "duration_ms": 2008
+    }
+  ],
+  "summary": {
+    "status": "failed",
+    "terminal": true,
+    "secondsToTerminal": 3.778434499981813,
+    "attempts": 1,
+    "maxAttemptMs": 2008,
+    "attemptErrors": [
+      "provider_unreachable"
+    ],
+    "integrity": {
+      "receipts": 0,
+      "enrollments": 0,
+      "attempts": 1
+    },
+    "pass": true
+  }
+}

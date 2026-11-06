@@ -1,0 +1,73 @@
+{
+  "type": "restore",
+  "namespace": "midterm",
+  "repetition": 3,
+  "utc": "2026-11-06T07:59:59Z",
+  "backup": {
+    "key": "mysql/20261106-075958-31a7db88.sql.gz",
+    "createdAt": "2026-11-06T07:59:58+00:00",
+    "sha256": "ae16209e27f0deb563982468b767951c0b30262ac0eb41f4e15bfcd8ef186af1",
+    "bytes": 24686
+  },
+  "restore": {
+    "database": "university_restore_20261106075958_0f2d91",
+    "checksumVerified": true,
+    "rowHashes": {
+      "users": "0fbc3227059bbd539bcd8d337e207ddf240bb99ee6dc358bb773eaa58f2573b0",
+      "courses": "d1f48e7d89e12bf5fbcc01bc350fc6aac576d9f4c31fe3de943c5f2e1e51b9c9",
+      "assignments": "d90af2b4deae624b250df75cb981691eaf2c30d01c65c97a31273297581a4a98",
+      "enrollments": "ae7a4010b6ffdf3c85cfc35b70f5a1b4c198cfa122cf5cd925b6de73741f1798",
+      "purchases": "c85097cff3e9c0763dbc529ba5d858a75c745d6c31e1a59157faecdd0c3fe6bb",
+      "payment_attempts": "edbe1efe5bbfc7145d2b8734f8f3468cb66c7c35c55954890f1f236b7863479c",
+      "submissions": "f47289a8d0151a9af71181d21707f1b268abbfdf52642b583f27e62164b815ae",
+      "grades": "92394ebe3a9b42432a93d703f1676b960b99b47dd29b76e71f35215da3d72061",
+      "mock_receipts": "fe0e79402d2edb0fec9f4197ab6a0e399fac486df4b73dd0c431436a1f274127"
+    },
+    "matchesCurrentSource": true,
+    "counts": {
+      "users": 69,
+      "courses": 8,
+      "assignments": 8,
+      "enrollments": 55,
+      "purchases": 69,
+      "payment_attempts": 118,
+      "submissions": 3,
+      "grades": 3,
+      "mock_receipts": 46
+    },
+    "violations": 0,
+    "sourceCounts": {
+      "users": 69,
+      "courses": 8,
+      "assignments": 8,
+      "enrollments": 55,
+      "purchases": 69,
+      "payment_attempts": 118,
+      "submissions": 3,
+      "grades": 3,
+      "mock_receipts": 46
+    }
+  },
+  "summary": {
+    "backupKey": "mysql/20261106-075958-31a7db88.sql.gz",
+    "backupBytes": 24686,
+    "backupSeconds": 0.22396116598974913,
+    "restoreVerifySeconds": 1.025655083998572,
+    "checksumVerified": true,
+    "matchesCurrentSource": true,
+    "counts": {
+      "users": 69,
+      "courses": 8,
+      "assignments": 8,
+      "enrollments": 55,
+      "purchases": 69,
+      "payment_attempts": 118,
+      "submissions": 3,
+      "grades": 3,
+      "mock_receipts": 46
+    },
+    "violations": 0,
+    "restoreDatabase": "university_restore_20261106075958_0f2d91",
+    "pass": true
+  }
+}

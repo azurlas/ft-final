@@ -1,0 +1,194 @@
+NAME       STATUS   ROLES           AGE   VERSION
+orbstack   Ready    control-plane   67m   v1.36.5+orb1
+=== python3 scripts/smoke.py start 07:35:14
+{
+  "base": "http://midterm.k8s.orb.local",
+  "utc": "2026-11-06T07:35:57Z",
+  "payments": [
+    {
+      "fixture": "success",
+      "purchaseId": 33,
+      "status": "succeeded",
+      "attempts": 1,
+      "elapsedSeconds": 1.079
+    },
+    {
+      "fixture": "retry_once",
+      "purchaseId": 34,
+      "status": "succeeded",
+      "attempts": 2,
+      "elapsedSeconds": 3.757
+    },
+    {
+      "fixture": "retry_twice",
+      "purchaseId": 35,
+      "status": "succeeded",
+      "attempts": 3,
+      "elapsedSeconds": 9.095
+    },
+    {
+      "fixture": "failure",
+      "purchaseId": 36,
+      "status": "failed",
+      "attempts": 3,
+      "elapsedSeconds": 8.979
+    },
+    {
+      "fixture": "decline",
+      "purchaseId": 37,
+      "status": "declined",
+      "attempts": 1,
+      "elapsedSeconds": 1.076
+    },
+    {
+      "fixture": "timeout",
+      "purchaseId": 38,
+      "status": "failed",
+      "attempts": 3,
+      "elapsedSeconds": 16.01
+    }
+  ],
+  "fileChecksumVerified": true,
+  "ownershipVerified": true,
+  "pdfBytes": 22224
+}
+
+=== python3 scripts/smoke.py exit 0 07:35:57
+=== python3 scripts/experiments.py --only availability start 07:36:10
+midterm-baseline api_crash 1 0.8360655737704918
+midterm-baseline cache_outage 1 0.352112676056338
+midterm-baseline mysql_outage 1 0.5517241379310345
+midterm-baseline api_crash 2 0.7540983606557377
+midterm-baseline cache_outage 2 0.28125
+midterm-baseline mysql_outage 2 0.53125
+midterm-baseline api_crash 3 0.7166666666666667
+midterm-baseline cache_outage 3 0.2923076923076923
+midterm-baseline mysql_outage 3 0.8222222222222222
+midterm api_crash 1 0.9833333333333333
+midterm cache_outage 1 1.0
+midterm mysql_outage 1 0.40540540540540543
+midterm api_crash 2 1.0
+midterm cache_outage 2 1.0
+midterm mysql_outage 2 0.47619047619047616
+midterm api_crash 3 1.0
+midterm cache_outage 3 1.0
+midterm mysql_outage 3 0.5116279069767442
+=== python3 scripts/experiments.py --only availability exit 0 07:40:46
+=== python3 scripts/experiments.py --only queue start 07:40:59
+midterm-baseline queue_loss 1 pending
+midterm-baseline queue_loss 2 pending
+midterm-baseline queue_loss 3 pending
+midterm queue_loss 1 succeeded
+midterm queue_loss 2 succeeded
+midterm queue_loss 3 succeeded
+=== python3 scripts/experiments.py --only queue exit 0 07:43:32
+=== python3 scripts/experiments.py --only checkpoints start 07:43:44
+midterm after_provider_success 1 recovered
+midterm after_outbox_publish 1 recovered
+midterm after_provider_success 2 recovered
+midterm after_outbox_publish 2 recovered
+midterm after_provider_success 3 recovered
+midterm after_outbox_publish 3 recovered
+=== python3 scripts/experiments.py --only checkpoints exit 0 07:46:02
+=== python3 scripts/broker-recovery.py start 07:46:14
+{'scenario': 'queue_dependency_outage', 'repetition': 1, 'purchaseId': 48, 'acceptedDuringOutage': True, 'status': 'succeeded', 'attempts': 1, 'secondsAfterRedisReady': 3.276317709009163, 'secondsFromAcceptance': 13.061146916996222}
+{'scenario': 'queue_dependency_outage', 'repetition': 2, 'purchaseId': 49, 'acceptedDuringOutage': True, 'status': 'succeeded', 'attempts': 1, 'secondsAfterRedisReady': 45.1445626670029, 'secondsFromAcceptance': 55.26197320903884}
+{'scenario': 'queue_dependency_outage', 'repetition': 3, 'purchaseId': 50, 'acceptedDuringOutage': True, 'status': 'succeeded', 'attempts': 1, 'secondsAfterRedisReady': 3.747246625018306, 'secondsFromAcceptance': 13.866783583012875}
+=== python3 scripts/broker-recovery.py exit 0 07:47:59
+=== python3 scripts/experiments.py --only timeout start 07:48:11
+midterm-baseline-timeout-1 {"status": "failed", "terminal": true, "secondsToTerminal": 3.778434499981813, "attempts": 1, "maxAttemptMs": 2008, "attemptErrors": ["provider_unreachable"], "integrity": {"receipts": 0, "enrollments": 0, "attempts": 1}, "pass": true}
+midterm-timeout-1 {"status": "failed", "terminal": true, "secondsToTerminal": 16.967317707953043, "attempts": 3, "maxAttemptMs": 2004, "attemptErrors": ["provider_unreachable", "provider_unreachable", "provider_unreachable"], "integrity": {"receipts": 0, "enrollments": 0, "attempts": 3}, "pass": true}
+midterm-baseline-timeout-2 {"status": "failed", "terminal": true, "secondsToTerminal": 3.7803121670149267, "attempts": 1, "maxAttemptMs": 2002, "attemptErrors": ["provider_unreachable"], "integrity": {"receipts": 0, "enrollments": 0, "attempts": 1}, "pass": true}
+midterm-timeout-2 {"status": "failed", "terminal": true, "secondsToTerminal": 29.240416417014785, "attempts": 3, "maxAttemptMs": 2002, "attemptErrors": ["provider_unreachable", "provider_unreachable", "provider_unreachable"], "integrity": {"receipts": 0, "enrollments": 0, "attempts": 3}, "pass": true}
+midterm-baseline-timeout-3 {"status": "failed", "terminal": true, "secondsToTerminal": 3.7374131249962375, "attempts": 1, "maxAttemptMs": 2001, "attemptErrors": ["provider_unreachable"], "integrity": {"receipts": 0, "enrollments": 0, "attempts": 1}, "pass": true}
+midterm-timeout-3 {"status": "failed", "terminal": true, "secondsToTerminal": 58.97053483396303, "attempts": 3, "maxAttemptMs": 2004, "attemptErrors": ["provider_unreachable", "provider_unreachable", "provider_unreachable"], "integrity": {"receipts": 0, "enrollments": 0, "attempts": 3}, "pass": true}
+=== python3 scripts/experiments.py --only timeout exit 0 07:50:14
+=== python3 scripts/experiments.py --only circuit start 07:50:27
+midterm-circuit-1 {"initialConsecutiveFailures": 0, "circuitOpened": true, "circuitOpenings": 1, "secondsToOpen": 9.481088208034635, "failedPurchaseAttempts": [3, 3], "goodPurchaseStatus": "succeeded", "goodPurchaseAttempts": 1, "goodPurchaseFirstAttemptUtc": "2026-11-06 07:51:05", "goodPurchaseSecondsToTerminal": 22
+midterm-circuit-2 {"initialConsecutiveFailures": 0, "circuitOpened": true, "circuitOpenings": 1, "secondsToOpen": 7.102126749989111, "failedPurchaseAttempts": [3, 3], "goodPurchaseStatus": "succeeded", "goodPurchaseAttempts": 1, "goodPurchaseFirstAttemptUtc": "2026-11-06 07:51:39", "goodPurchaseSecondsToTerminal": 21
+midterm-circuit-3 {"initialConsecutiveFailures": 0, "circuitOpened": true, "circuitOpenings": 1, "secondsToOpen": 8.187165917013772, "failedPurchaseAttempts": [3, 3], "goodPurchaseStatus": "succeeded", "goodPurchaseAttempts": 1, "goodPurchaseFirstAttemptUtc": "2026-11-06 07:52:14", "goodPurchaseSecondsToTerminal": 22
+=== python3 scripts/experiments.py --only circuit exit 0 07:52:16
+=== python3 scripts/experiments.py --only spike --repetitions 1 start 07:52:28
+midterm-baseline-spike {"phases": {"warmup": {"seconds": 20, "targetRps": 20, "requests": 400, "offeredRps": 20.0, "goodputRps": 20.0, "ok": 400, "rateLimited429": 0, "serverErrors5xx": 0, "connectionErrors": 0, "p50Ms": 15.308207948692143, "p95Ms": 26.458417007233948, "p99Ms": 34.443666983861476, "meanMs": 15.98826924106
+midterm-spike {"phases": {"warmup": {"seconds": 20, "targetRps": 20, "requests": 400, "offeredRps": 20.0, "goodputRps": 20.0, "ok": 400, "rateLimited429": 0, "serverErrors5xx": 0, "connectionErrors": 0, "p50Ms": 15.897750039584935, "p95Ms": 22.662875009700656, "p99Ms": 32.214124978054315, "meanMs": 16.12759282244
+=== python3 scripts/experiments.py --only spike --repetitions 1 exit 0 07:54:49
+=== python3 scripts/experiments.py --only security start 07:55:01
+midterm-security-1 {"cases": 10, "passed": 10, "audited": 10, "pass": true}
+midterm-security-2 {"cases": 10, "passed": 10, "audited": 10, "pass": true}
+midterm-security-3 {"cases": 10, "passed": 10, "audited": 10, "pass": true}
+=== python3 scripts/experiments.py --only security exit 0 07:55:30
+=== python3 scripts/experiments.py --only alerts --repetitions 1 start 07:55:42
+midterm-alert-database_down-1 {"alert": "DatabaseDown", "fired": true, "detectionSeconds": 12.983957750024274, "ruleActiveAt": "2026-11-06T07:55:45.595739853Z", "resolved": true, "resolveSecondsAfterRestore": 4.1063988750102, "logsCorrelated": true, "pass": true}
+midterm-alert-payment_backlog-1 {"alert": "PaymentBacklogStuck", "fired": true, "detectionSeconds": 75.42395937500987, "ruleActiveAt": "2026-11-06T07:57:10.595739853Z", "resolved": true, "resolveSecondsAfterRestore": 6.173903290997259, "logsCorrelated": null, "purchaseId": 69, "purchaseStatusAfterRecovery": "succeeded", "integrity
+midterm-alert-api_degraded-1 {"alert": "ApiReplicasDegraded", "fired": true, "detectionSeconds": 30.82402112497948, "ruleActiveAt": "2026-11-06T07:57:55.595739853Z", "resolved": true, "resolveSecondsAfterRestore": 10.27469483402092, "logsCorrelated": true, "pass": true}
+midterm-alert-auth_spike-1 {"alert": "AuthFailureSpike", "fired": true, "detectionSeconds": 33.64704225002788, "ruleActiveAt": "2026-11-06T07:58:50.595739853Z", "resolved": true, "resolveSecondsAfterRestore": 41.01764525001636, "logsCorrelated": true, "deniedRequestsSent": 96, "pass": true}
+=== python3 scripts/experiments.py --only alerts --repetitions 1 exit 0 07:59:42
+=== python3 scripts/experiments.py --only restore start 07:59:55
+midterm-restore-1 {"backupKey": "mysql/20261106-075955-bca6dc7d.sql.gz", "backupBytes": 24686, "backupSeconds": 0.3244164169882424, "restoreVerifySeconds": 0.8466235420200974, "checksumVerified": true, "matchesCurrentSource": true, "counts": {"users": 69, "courses": 8, "assignments": 8, "enrollments": 55, "purchases"
+midterm-restore-2 {"backupKey": "mysql/20261106-075957-01702809.sql.gz", "backupBytes": 24686, "backupSeconds": 0.23154837498441339, "restoreVerifySeconds": 0.9378659169888124, "checksumVerified": true, "matchesCurrentSource": true, "counts": {"users": 69, "courses": 8, "assignments": 8, "enrollments": 55, "purchases
+midterm-restore-3 {"backupKey": "mysql/20261106-075958-31a7db88.sql.gz", "backupBytes": 24686, "backupSeconds": 0.22396116598974913, "restoreVerifySeconds": 1.025655083998572, "checksumVerified": true, "matchesCurrentSource": true, "counts": {"users": 69, "courses": 8, "assignments": 8, "enrollments": 55, "purchases"
+=== python3 scripts/experiments.py --only restore exit 0 07:59:59
+=== python3 scripts/observability-check.py start 08:00:11
+{
+  "grafanaVersion": "12.3.1",
+  "datasources": [
+    {
+      "name": "Prometheus",
+      "uid": "prometheus",
+      "type": "prometheus",
+      "url": "http://prometheus:9090"
+    },
+    {
+      "name": "VictoriaLogs",
+      "uid": "victorialogs",
+      "type": "victoriametrics-logs-datasource",
+      "url": "http://vlogs-victoria-logs-single-server:9428"
+    }
+  ],
+  "officialRoadRunnerPanels": 9,
+  "metrics": {
+    "rr_http_request_duration_seconds_count": {
+      "series": 18
+    },
+    "university_purchases": {
+      "series": 8
+    },
+    "envoy_http_downstream_rq_total": {
+      "series": 16
+    }
+  },
+  "correlatedPaymentLogs": 3
+}
+=== python3 scripts/observability-check.py exit 0 08:00:12
+=== python3 scripts/summarize.py start 08:00:24
+# Consolidated experiment results
+
+Environment: orbstack-local. Image(s): midterm/university:local-20261106120520.
+All values are measured; means over the listed runs. "Passed" uses each scenario's built-in pass criterion; empty cells are not applicable.
+
+| Exp. | Scenario | Profile | Runs | Passed | Success | Availability | Detection (s) | Recovery (s) | Latency | Recovery actions | Data integrity | Notes |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 Instance failure | api_crash | Baseline | 3 |  | 140/182 | 76.9% | 0.3 | 2.84 | max 149 ms |  |  | 3 outage(s) in 37 s observed; failure rate 0.082/s |
+| 1 Instance failure | api_crash | FT | 3 | 2/3 | 179/180 | 99.4% | 0.25 | 0.2 | max 95 ms |  |  | 1 outage(s) in 37 s observed; failure rate 0.027/s |
+| 2 Dependency: MySQL | mysql_outage | Baseline | 3 |  | 70/106 | 66.0% | 0.23 | 13.21 | max 3013 ms |  |  | 3 outage(s) in 57 s observed; failure rate 0.053/s |
+| 2 Dependency: MySQL | mysql_outage | FT | 3 | 3/3 | 57/122 | 46.7% | 0.25 | 16.21 | max 3062 ms |  |  | 3 outage(s) in 62 s observed; failure rate 0.048/s |
+| 2 Dependency: cache | cache_outage | Baseline | 3 |  | 62/200 | 31.0% | 0.23 | 10.01 | max 243 ms |  |  | 3 outage(s) in 42 s observed; failure rate 0.071/s |
+| 2 Dependency: cache | cache_outage | FT | 3 | 3/3 | 189/189 | 100.0% |  | none needed | max 265 ms |  |  | 0 outage(s) in 41 s observed; failure rate 0.000/s |
+| 2 Dependency: queue Redis | broker down during checkout | FT | 3 | 3/3 | 3/3 accepted and completed |  |  | 17.39 |  | relay restart + receiver backoff | 3/3 with 1 attempt | recovery measured from Redis ready |
+| 3 Delay / timeout | circuit breaker | FT | 3 | 3/3 | 3/3 good purchase succeeded |  | 8.26 | 22.14 |  | 1 openings/run | 3/3 exactly-once; 0 duplicate | detection = time until open; recovery = good purchase to success |
+| 3 Delay / timeout | provider 3 s vs 2 s deadline | Baseline | 3 | 3/3 | 3/3 terminal |  |  | 3.77 | attempt max 2008 ms | 1 attempts/purchase | 3/3 no receipt or enrollment | recovery = time to terminal state |
+| 3 Delay / timeout | provider 3 s vs 2 s deadline | FT | 3 | 3/3 | 3/3 terminal |  |  | 35.06 | attempt max 2004 ms | 3 attempts/purchase | 3/3 no receipt or enrollment | recovery = time to terminal state |
+| 4 Interrupted transaction | published message lost | Baseline | 3 |  | 0/3 recovered |  |  | never (censored) |  |  | 3 purchase(s) stuck pending | observed 30 s |
+| 4 Interrupted transaction | published message lost | FT | 3 | 3/3 | 3/3 recovered |  |  | 11.47 |  | outbox reconciliation | 3/3 exactly-once; 0 duplicate |  |
+| 4 Interrupted transaction | worker killed after_outbox_publish | FT | 3 | 3/3 | 3/3 recovered |  |  | 9.69 |  | lease expiry + replay | 3/3 exactly-once; 0 duplicate |  |
+| 4 Interrupted transaction | worker killed after_provider_success | FT | 3 | 3/3 | 3/3 recovered |  |  | 9.14 |  | lease expiry + replay | 3/3 exactly-once; 0 duplicate |  |
+| 5 Load spike | 300 req/s for 30 s | Baseline | 1 |  | 6211/9000 | 69.0% |  |  | p50 6 / p95 9 / p99 56 ms | 2789 × 429 (admission control) |  | goodput 207.0 req/s; 0 5xx/connection errors; cool-down p95 22 ms; warm-up p95 26 ms |
+| 5 Load spike | 300 req/s for 30 s | FT | 1 | 1/1 | 9000/9000 | 100.0% |  |  | p50 6 / p95 150 / p99 1086 ms | 0 × 429 (admission control) |  | goodput 300.0 req/s; 0 5xx/connection errors; cool-down p95 77 ms; warm-up p95 23 ms |
+| 6 Monitoring / alert | ApiReplicasDegraded (api_degraded) | FT | 1 | 1/1 | 1/1 fired, 1/1 resolved |  | 30.82 | 10.27 |  |  |  | logs correlated 1/1; bound 60 s; detection = fault to alert firing; recovery = repair to alert resolved |
+| 6 Monitoring / alert | AuthFailureSpike (auth_spike) | FT | 1 | 1/1 | 1/1 fired, 1/1 resolved |  | 33.65 | 41.02 |  |  |  | logs correlated 1/1; bound 90 s; detection = fault to alert firing; recovery = repair to alert resolved |
+| 6 Monitoring / alert | DatabaseDown (database_down) | FT | 1 | 1/1 | 1/1 fired, 1/1 resolved |  | 12.98 | 4.11 |  |  |  | logs correlated 1/1; bound 40 s; detection = fault to alert firing; recovery = repair to alert resolved |
+| 6 Monitoring / alert | PaymentBacklogStuck (payment_backlog) | FT | 1 | 1/1 | 1/1 fired, 1/1 resolved |  | 75.42 | 6.17 |  |  | 1/1 exactly-once; 0 duplicate | bound 120 s; detection = fault to alert firing; recovery = repair to alert resolved |
+| 7 Unauthorized / invalid | 10 misuse cases | FT | 3 | 3/3 | 30/30 denied as expected |  |  |  |  |  | 30/30 audited in logs | 401/403/429 also logged as security.denied |
+| 8 Recovery / rollback | backup + isolated restore | FT | 3 | 3/3 | 3/3 checksum OK |  |  | 1.2 |  |  | 3/3 match source; 0 violations | recovery = dump + restore + verify (small dataset) |
+=== python3 scripts/summarize.py exit 0 08:00:24
+Done. Results: output/final/results.md; log: output/final/run-20261106T073501Z.log

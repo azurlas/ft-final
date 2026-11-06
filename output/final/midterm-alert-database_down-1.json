@@ -1,0 +1,47 @@
+{
+  "type": "alert",
+  "scenario": "database_down",
+  "namespace": "midterm",
+  "repetition": 1,
+  "events": {
+    "start": "2026-11-06T07:55:43Z",
+    "injected": "2026-11-06T07:55:47Z",
+    "fired": "2026-11-06T07:55:56Z",
+    "restored": "2026-11-06T07:56:01Z",
+    "resolved": "2026-11-06T07:56:05Z"
+  },
+  "firingAlert": {
+    "labels": {
+      "alertname": "DatabaseDown",
+      "profile": "resilient",
+      "severity": "critical"
+    },
+    "annotations": {
+      "summary": "MySQL unreachable from the resilient workers"
+    },
+    "state": "firing",
+    "activeAt": "2026-11-06T07:55:45.595739853Z",
+    "value": "0e+00"
+  },
+  "logCorrelation": [
+    {
+      "requestId": "2a9c3e93-eff1-4f1d-b3ec-bb0b9228ae24",
+      "found": true,
+      "records": 2,
+      "messages": [
+        "http.completed",
+        "http.problem"
+      ]
+    }
+  ],
+  "summary": {
+    "alert": "DatabaseDown",
+    "fired": true,
+    "detectionSeconds": 12.983957750024274,
+    "ruleActiveAt": "2026-11-06T07:55:45.595739853Z",
+    "resolved": true,
+    "resolveSecondsAfterRestore": 4.1063988750102,
+    "logsCorrelated": true,
+    "pass": true
+  }
+}

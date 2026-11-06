@@ -1,0 +1,211 @@
+{
+  "type": "security",
+  "namespace": "midterm",
+  "repetition": 3,
+  "utc": "2026-11-06T07:55:30Z",
+  "cases": [
+    {
+      "case": "no_token",
+      "expected": 401,
+      "status": 401,
+      "pass": true,
+      "requestId": "aecc498c-73a3-4ecd-b56b-7b266f5f4e30",
+      "latencyMs": 4.359541984740645,
+      "audit": {
+        "requestId": "aecc498c-73a3-4ecd-b56b-7b266f5f4e30",
+        "found": true,
+        "records": 2,
+        "messages": [
+          "http.completed",
+          "security.denied"
+        ]
+      },
+      "auditPass": true
+    },
+    {
+      "case": "forged_jwt",
+      "expected": 401,
+      "status": 401,
+      "pass": true,
+      "requestId": "395a5999-23fb-4b03-bb0b-e2bbc3577780",
+      "latencyMs": 4.407041007652879,
+      "audit": {
+        "requestId": "395a5999-23fb-4b03-bb0b-e2bbc3577780",
+        "found": true,
+        "records": 1,
+        "messages": [
+          "http.completed",
+          "security.authentication_failed",
+          "security.denied"
+        ]
+      },
+      "auditPass": true
+    },
+    {
+      "case": "tampered_jwt_claims",
+      "expected": 401,
+      "status": 401,
+      "pass": true,
+      "requestId": "68a9ca06-9d96-440f-bbc6-37b6e6388608",
+      "latencyMs": 5.108124983962625,
+      "audit": {
+        "requestId": "68a9ca06-9d96-440f-bbc6-37b6e6388608",
+        "found": true,
+        "records": 3,
+        "messages": [
+          "http.completed",
+          "security.authentication_failed",
+          "security.denied"
+        ]
+      },
+      "auditPass": true
+    },
+    {
+      "case": "register_as_admin",
+      "expected": 400,
+      "status": 400,
+      "pass": true,
+      "requestId": "9a958f56-3783-4686-9d8c-9d2a28418dd3",
+      "latencyMs": 6.157708005048335,
+      "audit": {
+        "requestId": "9a958f56-3783-4686-9d8c-9d2a28418dd3",
+        "found": true,
+        "records": 2,
+        "messages": [
+          "http.completed",
+          "http.problem"
+        ]
+      },
+      "auditPass": true
+    },
+    {
+      "case": "student_calls_admin_endpoint",
+      "expected": 403,
+      "status": 403,
+      "pass": true,
+      "requestId": "1f8d8812-696e-4ea7-bb78-90c9cd8a5dbb",
+      "latencyMs": 8.783500001300126,
+      "audit": {
+        "requestId": "1f8d8812-696e-4ea7-bb78-90c9cd8a5dbb",
+        "found": true,
+        "records": 3,
+        "messages": [
+          "http.completed",
+          "http.problem",
+          "security.denied"
+        ]
+      },
+      "auditPass": true
+    },
+    {
+      "case": "read_other_students_purchase",
+      "expected": 404,
+      "status": 404,
+      "pass": true,
+      "requestId": "e8ceba6c-c7fe-4302-bd18-c722737f6891",
+      "latencyMs": 10.564292024355382,
+      "audit": {
+        "requestId": "e8ceba6c-c7fe-4302-bd18-c722737f6891",
+        "found": true,
+        "records": 2,
+        "messages": [
+          "http.completed",
+          "http.problem"
+        ]
+      },
+      "auditPass": true
+    },
+    {
+      "case": "client_sets_price",
+      "expected": 400,
+      "status": 400,
+      "pass": true,
+      "requestId": "75ba44df-d6cb-4746-bd0e-234cf36bf2e0",
+      "latencyMs": 6.286291987635195,
+      "audit": {
+        "requestId": "75ba44df-d6cb-4746-bd0e-234cf36bf2e0",
+        "found": true,
+        "records": 2,
+        "messages": [
+          "http.completed",
+          "http.problem"
+        ]
+      },
+      "auditPass": true
+    },
+    {
+      "case": "admin_negative_price",
+      "expected": 400,
+      "status": 400,
+      "pass": true,
+      "requestId": "7315fd6f-b2a5-4958-9f94-a383368ee608",
+      "latencyMs": 9.792041964828968,
+      "audit": {
+        "requestId": "7315fd6f-b2a5-4958-9f94-a383368ee608",
+        "found": true,
+        "records": 1,
+        "messages": [
+          "http.completed",
+          "http.problem"
+        ]
+      },
+      "auditPass": true
+    },
+    {
+      "case": "oversized_upload",
+      "expected": 400,
+      "status": 400,
+      "pass": true,
+      "requestId": "a439ec61-0f72-47fe-a6fc-1050e1ab940f",
+      "latencyMs": 97.72504196735099,
+      "audit": {
+        "requestId": "a439ec61-0f72-47fe-a6fc-1050e1ab940f",
+        "found": true,
+        "records": 2,
+        "messages": [
+          "http.completed",
+          "http.problem"
+        ]
+      },
+      "auditPass": true
+    },
+    {
+      "case": "brute_force_login",
+      "expected": [
+        401,
+        401,
+        401,
+        401,
+        401,
+        429
+      ],
+      "status": [
+        401,
+        401,
+        401,
+        401,
+        401,
+        429
+      ],
+      "pass": true,
+      "requestId": "b8079ff9-a035-4220-ac86-9a3cd79dcd28",
+      "audit": {
+        "requestId": "b8079ff9-a035-4220-ac86-9a3cd79dcd28",
+        "found": true,
+        "records": 1,
+        "messages": [
+          "http.completed",
+          "security.authentication_failed",
+          "security.denied"
+        ]
+      },
+      "auditPass": true
+    }
+  ],
+  "summary": {
+    "cases": 10,
+    "passed": 10,
+    "audited": 10,
+    "pass": true
+  }
+}

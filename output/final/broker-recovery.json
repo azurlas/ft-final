@@ -1,0 +1,32 @@
+[
+  {
+    "scenario": "queue_dependency_outage",
+    "repetition": 1,
+    "purchaseId": 48,
+    "acceptedDuringOutage": true,
+    "status": "succeeded",
+    "attempts": 1,
+    "secondsAfterRedisReady": 3.276317709009163,
+    "secondsFromAcceptance": 13.061146916996222
+  },
+  {
+    "scenario": "queue_dependency_outage",
+    "repetition": 2,
+    "purchaseId": 49,
+    "acceptedDuringOutage": true,
+    "status": "succeeded",
+    "attempts": 1,
+    "secondsAfterRedisReady": 45.1445626670029,
+    "secondsFromAcceptance": 55.26197320903884
+  },
+  {
+    "scenario": "queue_dependency_outage",
+    "repetition": 3,
+    "purchaseId": 50,
+    "acceptedDuringOutage": true,
+    "status": "succeeded",
+    "attempts": 1,
+    "secondsAfterRedisReady": 3.747246625018306,
+    "secondsFromAcceptance": 13.866783583012875
+  }
+]

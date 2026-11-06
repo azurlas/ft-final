@@ -1,0 +1,653 @@
+[
+  {
+    "type": "circuit",
+    "namespace": "midterm",
+    "repetition": 1,
+    "utc": "2026-11-06T07:51:06Z",
+    "timeline": [
+      {
+        "t": 0.13,
+        "consecutive_failures": "0",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:50:34"
+      },
+      {
+        "t": 1.31,
+        "consecutive_failures": "2",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:50:35"
+      },
+      {
+        "t": 2.47,
+        "consecutive_failures": "2",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:50:36"
+      },
+      {
+        "t": 3.65,
+        "consecutive_failures": "2",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:50:38"
+      },
+      {
+        "t": 4.83,
+        "consecutive_failures": "4",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:50:39"
+      },
+      {
+        "t": 5.97,
+        "consecutive_failures": "4",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:50:40"
+      },
+      {
+        "t": 7.15,
+        "consecutive_failures": "4",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:50:41"
+      },
+      {
+        "t": 8.32,
+        "consecutive_failures": "4",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:50:42"
+      },
+      {
+        "t": 9.48,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "True",
+        "now": "2026-11-06 07:50:44"
+      },
+      {
+        "t": 10.62,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "True",
+        "now": "2026-11-06 07:50:45"
+      },
+      {
+        "t": 11.75,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "True",
+        "now": "2026-11-06 07:50:46"
+      },
+      {
+        "t": 12.91,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "True",
+        "now": "2026-11-06 07:50:47"
+      },
+      {
+        "t": 14.05,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "True",
+        "now": "2026-11-06 07:50:48"
+      },
+      {
+        "t": 15.29,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "True",
+        "now": "2026-11-06 07:50:49"
+      },
+      {
+        "t": 16.46,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "True",
+        "now": "2026-11-06 07:50:50"
+      },
+      {
+        "t": 17.64,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "True",
+        "now": "2026-11-06 07:50:52"
+      },
+      {
+        "t": 18.82,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "True",
+        "now": "2026-11-06 07:50:53"
+      },
+      {
+        "t": 19.99,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "True",
+        "now": "2026-11-06 07:50:54"
+      },
+      {
+        "t": 21.15,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "True",
+        "now": "2026-11-06 07:50:55"
+      },
+      {
+        "t": 22.34,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "True",
+        "now": "2026-11-06 07:50:56"
+      },
+      {
+        "t": 23.52,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "False",
+        "now": "2026-11-06 07:50:58"
+      },
+      {
+        "t": 24.68,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "False",
+        "now": "2026-11-06 07:50:59"
+      },
+      {
+        "t": 25.82,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:00"
+      },
+      {
+        "t": 27.0,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:01"
+      },
+      {
+        "t": 28.18,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:02"
+      },
+      {
+        "t": 29.32,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:03"
+      },
+      {
+        "t": 30.49,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:50:58",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:05"
+      },
+      {
+        "t": 31.65,
+        "consecutive_failures": "0",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:06"
+      }
+    ],
+    "summary": {
+      "initialConsecutiveFailures": 0,
+      "circuitOpened": true,
+      "circuitOpenings": 1,
+      "secondsToOpen": 9.481088208034635,
+      "failedPurchaseAttempts": [
+        3,
+        3
+      ],
+      "goodPurchaseStatus": "succeeded",
+      "goodPurchaseAttempts": 1,
+      "goodPurchaseFirstAttemptUtc": "2026-11-06 07:51:05",
+      "goodPurchaseSecondsToTerminal": 22.183893624984194,
+      "goodPurchaseIntegrity": {
+        "receipts": 1,
+        "enrollments": 1,
+        "attempts": 1
+      },
+      "pass": true
+    }
+  },
+  {
+    "type": "circuit",
+    "namespace": "midterm",
+    "repetition": 2,
+    "utc": "2026-11-06T07:51:40Z",
+    "timeline": [
+      {
+        "t": 0.14,
+        "consecutive_failures": "0",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:11"
+      },
+      {
+        "t": 1.28,
+        "consecutive_failures": "2",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:12"
+      },
+      {
+        "t": 2.43,
+        "consecutive_failures": "2",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:14"
+      },
+      {
+        "t": 3.6,
+        "consecutive_failures": "4",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:15"
+      },
+      {
+        "t": 4.78,
+        "consecutive_failures": "4",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:16"
+      },
+      {
+        "t": 5.95,
+        "consecutive_failures": "4",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:17"
+      },
+      {
+        "t": 7.1,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:18"
+      },
+      {
+        "t": 8.28,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:19"
+      },
+      {
+        "t": 9.47,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:21"
+      },
+      {
+        "t": 10.59,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:22"
+      },
+      {
+        "t": 11.73,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:23"
+      },
+      {
+        "t": 12.9,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:24"
+      },
+      {
+        "t": 14.07,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:25"
+      },
+      {
+        "t": 15.23,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:26"
+      },
+      {
+        "t": 16.4,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:28"
+      },
+      {
+        "t": 17.56,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:29"
+      },
+      {
+        "t": 18.69,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:30"
+      },
+      {
+        "t": 19.85,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:31"
+      },
+      {
+        "t": 20.99,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:32"
+      },
+      {
+        "t": 22.14,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:33"
+      },
+      {
+        "t": 23.3,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:34"
+      },
+      {
+        "t": 24.45,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:36"
+      },
+      {
+        "t": 25.6,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:37"
+      },
+      {
+        "t": 26.76,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:38"
+      },
+      {
+        "t": 27.92,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:51:33",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:39"
+      },
+      {
+        "t": 29.1,
+        "consecutive_failures": "0",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:40"
+      }
+    ],
+    "summary": {
+      "initialConsecutiveFailures": 0,
+      "circuitOpened": true,
+      "circuitOpenings": 1,
+      "secondsToOpen": 7.102126749989111,
+      "failedPurchaseAttempts": [
+        3,
+        3
+      ],
+      "goodPurchaseStatus": "succeeded",
+      "goodPurchaseAttempts": 1,
+      "goodPurchaseFirstAttemptUtc": "2026-11-06 07:51:39",
+      "goodPurchaseSecondsToTerminal": 21.99817149998853,
+      "goodPurchaseIntegrity": {
+        "receipts": 1,
+        "enrollments": 1,
+        "attempts": 1
+      },
+      "pass": true
+    }
+  },
+  {
+    "type": "circuit",
+    "namespace": "midterm",
+    "repetition": 3,
+    "utc": "2026-11-06T07:52:16Z",
+    "timeline": [
+      {
+        "t": 0.14,
+        "consecutive_failures": "0",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:45"
+      },
+      {
+        "t": 1.28,
+        "consecutive_failures": "2",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:47"
+      },
+      {
+        "t": 2.42,
+        "consecutive_failures": "2",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:48"
+      },
+      {
+        "t": 3.57,
+        "consecutive_failures": "4",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:49"
+      },
+      {
+        "t": 4.68,
+        "consecutive_failures": "4",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:50"
+      },
+      {
+        "t": 5.86,
+        "consecutive_failures": "4",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:51"
+      },
+      {
+        "t": 7.02,
+        "consecutive_failures": "4",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:51:52"
+      },
+      {
+        "t": 8.19,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:53"
+      },
+      {
+        "t": 9.38,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:55"
+      },
+      {
+        "t": 10.52,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:56"
+      },
+      {
+        "t": 11.7,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:57"
+      },
+      {
+        "t": 12.87,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:58"
+      },
+      {
+        "t": 14.04,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "True",
+        "now": "2026-11-06 07:51:59"
+      },
+      {
+        "t": 15.23,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "True",
+        "now": "2026-11-06 07:52:00"
+      },
+      {
+        "t": 16.36,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "True",
+        "now": "2026-11-06 07:52:02"
+      },
+      {
+        "t": 17.53,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "True",
+        "now": "2026-11-06 07:52:03"
+      },
+      {
+        "t": 18.71,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "True",
+        "now": "2026-11-06 07:52:04"
+      },
+      {
+        "t": 19.87,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "True",
+        "now": "2026-11-06 07:52:05"
+      },
+      {
+        "t": 21.04,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "True",
+        "now": "2026-11-06 07:52:06"
+      },
+      {
+        "t": 22.17,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "False",
+        "now": "2026-11-06 07:52:07"
+      },
+      {
+        "t": 23.34,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "False",
+        "now": "2026-11-06 07:52:09"
+      },
+      {
+        "t": 24.5,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "False",
+        "now": "2026-11-06 07:52:10"
+      },
+      {
+        "t": 25.68,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "False",
+        "now": "2026-11-06 07:52:11"
+      },
+      {
+        "t": 26.86,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "False",
+        "now": "2026-11-06 07:52:12"
+      },
+      {
+        "t": 28.01,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "False",
+        "now": "2026-11-06 07:52:13"
+      },
+      {
+        "t": 29.19,
+        "consecutive_failures": "6",
+        "opened_until": "2026-11-06 07:52:07",
+        "is_open": "False",
+        "now": "2026-11-06 07:52:14"
+      },
+      {
+        "t": 30.41,
+        "consecutive_failures": "0",
+        "opened_until": "None",
+        "is_open": "False",
+        "now": "2026-11-06 07:52:16"
+      }
+    ],
+    "summary": {
+      "initialConsecutiveFailures": 0,
+      "circuitOpened": true,
+      "circuitOpenings": 1,
+      "secondsToOpen": 8.187165917013772,
+      "failedPurchaseAttempts": [
+        3,
+        3
+      ],
+      "goodPurchaseStatus": "succeeded",
+      "goodPurchaseAttempts": 1,
+      "goodPurchaseFirstAttemptUtc": "2026-11-06 07:52:14",
+      "goodPurchaseSecondsToTerminal": 22.231730333005544,
+      "goodPurchaseIntegrity": {
+        "receipts": 1,
+        "enrollments": 1,
+        "attempts": 1
+      },
+      "pass": true
+    }
+  }
+]

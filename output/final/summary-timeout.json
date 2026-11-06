@@ -1,0 +1,266 @@
+[
+  {
+    "type": "timeout",
+    "namespace": "midterm-baseline",
+    "repetition": 1,
+    "utc": "2026-11-06T07:48:16Z",
+    "purchaseId": 6,
+    "attempts": [
+      {
+        "attempt_number": 1,
+        "status": "transient",
+        "error_code": "provider_unreachable",
+        "provider_reference": null,
+        "started_at": "2026-11-06 07:48:13",
+        "finished_at": "2026-11-06 07:48:16",
+        "duration_ms": 2008
+      }
+    ],
+    "summary": {
+      "status": "failed",
+      "terminal": true,
+      "secondsToTerminal": 3.778434499981813,
+      "attempts": 1,
+      "maxAttemptMs": 2008,
+      "attemptErrors": [
+        "provider_unreachable"
+      ],
+      "integrity": {
+        "receipts": 0,
+        "enrollments": 0,
+        "attempts": 1
+      },
+      "pass": true
+    }
+  },
+  {
+    "type": "timeout",
+    "namespace": "midterm",
+    "repetition": 1,
+    "utc": "2026-11-06T07:48:34Z",
+    "purchaseId": 51,
+    "attempts": [
+      {
+        "attempt_number": 1,
+        "status": "transient",
+        "error_code": "provider_unreachable",
+        "provider_reference": null,
+        "started_at": "2026-11-06 07:48:18",
+        "finished_at": "2026-11-06 07:48:21",
+        "duration_ms": 2004
+      },
+      {
+        "attempt_number": 2,
+        "status": "transient",
+        "error_code": "provider_unreachable",
+        "provider_reference": null,
+        "started_at": "2026-11-06 07:48:23",
+        "finished_at": "2026-11-06 07:48:26",
+        "duration_ms": 2003
+      },
+      {
+        "attempt_number": 3,
+        "status": "transient",
+        "error_code": "provider_unreachable",
+        "provider_reference": null,
+        "started_at": "2026-11-06 07:48:30",
+        "finished_at": "2026-11-06 07:48:33",
+        "duration_ms": 2002
+      }
+    ],
+    "summary": {
+      "status": "failed",
+      "terminal": true,
+      "secondsToTerminal": 16.967317707953043,
+      "attempts": 3,
+      "maxAttemptMs": 2004,
+      "attemptErrors": [
+        "provider_unreachable",
+        "provider_unreachable",
+        "provider_unreachable"
+      ],
+      "integrity": {
+        "receipts": 0,
+        "enrollments": 0,
+        "attempts": 3
+      },
+      "pass": true
+    }
+  },
+  {
+    "type": "timeout",
+    "namespace": "midterm-baseline",
+    "repetition": 2,
+    "utc": "2026-11-06T07:48:39Z",
+    "purchaseId": 7,
+    "attempts": [
+      {
+        "attempt_number": 1,
+        "status": "transient",
+        "error_code": "provider_unreachable",
+        "provider_reference": null,
+        "started_at": "2026-11-06 07:48:36",
+        "finished_at": "2026-11-06 07:48:39",
+        "duration_ms": 2002
+      }
+    ],
+    "summary": {
+      "status": "failed",
+      "terminal": true,
+      "secondsToTerminal": 3.7803121670149267,
+      "attempts": 1,
+      "maxAttemptMs": 2002,
+      "attemptErrors": [
+        "provider_unreachable"
+      ],
+      "integrity": {
+        "receipts": 0,
+        "enrollments": 0,
+        "attempts": 1
+      },
+      "pass": true
+    }
+  },
+  {
+    "type": "timeout",
+    "namespace": "midterm",
+    "repetition": 2,
+    "utc": "2026-11-06T07:49:09Z",
+    "purchaseId": 52,
+    "attempts": [
+      {
+        "attempt_number": 1,
+        "status": "transient",
+        "error_code": "provider_unreachable",
+        "provider_reference": null,
+        "started_at": "2026-11-06 07:48:41",
+        "finished_at": "2026-11-06 07:48:45",
+        "duration_ms": 2002
+      },
+      {
+        "attempt_number": 2,
+        "status": "transient",
+        "error_code": "provider_unreachable",
+        "provider_reference": null,
+        "started_at": "2026-11-06 07:48:48",
+        "finished_at": "2026-11-06 07:48:51",
+        "duration_ms": 2002
+      },
+      {
+        "attempt_number": 3,
+        "status": "transient",
+        "error_code": "provider_unreachable",
+        "provider_reference": null,
+        "started_at": "2026-11-06 07:49:06",
+        "finished_at": "2026-11-06 07:49:09",
+        "duration_ms": 2001
+      }
+    ],
+    "summary": {
+      "status": "failed",
+      "terminal": true,
+      "secondsToTerminal": 29.240416417014785,
+      "attempts": 3,
+      "maxAttemptMs": 2002,
+      "attemptErrors": [
+        "provider_unreachable",
+        "provider_unreachable",
+        "provider_unreachable"
+      ],
+      "integrity": {
+        "receipts": 0,
+        "enrollments": 0,
+        "attempts": 3
+      },
+      "pass": true
+    }
+  },
+  {
+    "type": "timeout",
+    "namespace": "midterm-baseline",
+    "repetition": 3,
+    "utc": "2026-11-06T07:49:14Z",
+    "purchaseId": 8,
+    "attempts": [
+      {
+        "attempt_number": 1,
+        "status": "transient",
+        "error_code": "provider_unreachable",
+        "provider_reference": null,
+        "started_at": "2026-11-06 07:49:11",
+        "finished_at": "2026-11-06 07:49:14",
+        "duration_ms": 2001
+      }
+    ],
+    "summary": {
+      "status": "failed",
+      "terminal": true,
+      "secondsToTerminal": 3.7374131249962375,
+      "attempts": 1,
+      "maxAttemptMs": 2001,
+      "attemptErrors": [
+        "provider_unreachable"
+      ],
+      "integrity": {
+        "receipts": 0,
+        "enrollments": 0,
+        "attempts": 1
+      },
+      "pass": true
+    }
+  },
+  {
+    "type": "timeout",
+    "namespace": "midterm",
+    "repetition": 3,
+    "utc": "2026-11-06T07:50:14Z",
+    "purchaseId": 53,
+    "attempts": [
+      {
+        "attempt_number": 1,
+        "status": "transient",
+        "error_code": "provider_unreachable",
+        "provider_reference": null,
+        "started_at": "2026-11-06 07:49:27",
+        "finished_at": "2026-11-06 07:49:30",
+        "duration_ms": 2004
+      },
+      {
+        "attempt_number": 2,
+        "status": "transient",
+        "error_code": "provider_unreachable",
+        "provider_reference": null,
+        "started_at": "2026-11-06 07:49:53",
+        "finished_at": "2026-11-06 07:49:56",
+        "duration_ms": 2004
+      },
+      {
+        "attempt_number": 3,
+        "status": "transient",
+        "error_code": "provider_unreachable",
+        "provider_reference": null,
+        "started_at": "2026-11-06 07:50:11",
+        "finished_at": "2026-11-06 07:50:14",
+        "duration_ms": 2001
+      }
+    ],
+    "summary": {
+      "status": "failed",
+      "terminal": true,
+      "secondsToTerminal": 58.97053483396303,
+      "attempts": 3,
+      "maxAttemptMs": 2004,
+      "attemptErrors": [
+        "provider_unreachable",
+        "provider_unreachable",
+        "provider_unreachable"
+      ],
+      "integrity": {
+        "receipts": 0,
+        "enrollments": 0,
+        "attempts": 3
+      },
+      "pass": true
+    }
+  }
+]

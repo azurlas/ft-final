@@ -3,7 +3,7 @@
 
 - requests.csv      every availability probe sample (raw data for plots)
 - reliability.csv   availability / MTTR / MTBF / MTTF / failure rate per profile and scenario (+ .json)
-- results.csv       one consolidated row per experiment, scenario and profile (baseline vs FT)
+- results.csv/json  one consolidated row per experiment, scenario and profile (baseline vs FT)
 - results.md        the same table in Markdown, ready for the report
 
 Every value is computed from measured runs; nothing is estimated. Empty cells mean "not applicable".
@@ -276,6 +276,7 @@ def main():
     write_csv('reliability.csv', reliability)
     (ROOT / 'reliability.json').write_text(json.dumps(reliability, indent=2) + '\n')
     write_csv('results.csv', rows, COLUMNS)
+    (ROOT / 'results.json').write_text(json.dumps(rows, indent=2) + '\n')
 
     app_images = images()
     header = ['Exp.', 'Scenario', 'Profile', 'Runs', 'Passed', 'Success', 'Availability', 'Detection (s)',

@@ -1,0 +1,51 @@
+{
+  "base": "http://midterm.k8s.orb.local",
+  "utc": "2026-11-06T07:35:57Z",
+  "payments": [
+    {
+      "fixture": "success",
+      "purchaseId": 33,
+      "status": "succeeded",
+      "attempts": 1,
+      "elapsedSeconds": 1.079
+    },
+    {
+      "fixture": "retry_once",
+      "purchaseId": 34,
+      "status": "succeeded",
+      "attempts": 2,
+      "elapsedSeconds": 3.757
+    },
+    {
+      "fixture": "retry_twice",
+      "purchaseId": 35,
+      "status": "succeeded",
+      "attempts": 3,
+      "elapsedSeconds": 9.095
+    },
+    {
+      "fixture": "failure",
+      "purchaseId": 36,
+      "status": "failed",
+      "attempts": 3,
+      "elapsedSeconds": 8.979
+    },
+    {
+      "fixture": "decline",
+      "purchaseId": 37,
+      "status": "declined",
+      "attempts": 1,
+      "elapsedSeconds": 1.076
+    },
+    {
+      "fixture": "timeout",
+      "purchaseId": 38,
+      "status": "failed",
+      "attempts": 3,
+      "elapsedSeconds": 16.01
+    }
+  ],
+  "fileChecksumVerified": true,
+  "ownershipVerified": true,
+  "pdfBytes": 22224
+}

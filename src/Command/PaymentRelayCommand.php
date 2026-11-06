@@ -14,6 +14,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{InputInterface,InputOption};
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Messenger\Exception\TransportException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Psr\Log\LoggerInterface;
 
@@ -43,6 +44,13 @@ final class PaymentRelayCommand extends Command
                 try {
                     $this->reconcile();
                     $this->publish();
+                } catch (TransportException|\RedisException $e) {
+                    // The Redis transport keeps its connection for the life of the process and does not
+                    // reconnect after a broker restart. Exit so Supervisor starts a fresh relay; the
+                    // pause keeps restarts slow while the broker is still down. Outbox rows stay durable.
+                    $this->logger->warning('payment.relay_broker_unavailable', ['exception_class' => $e::class]);
+                    sleep(2);
+                    return Command::FAILURE;
                 } catch (\Throwable $e) {
                     $this->logger->warning('payment.relay_dependency_unavailable', ['exception_class' => $e::class]);
                     $this->doctrine->resetManager();

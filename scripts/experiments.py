@@ -103,19 +103,11 @@ def checkpoint_recovery(ns,base,hook,rep):
         result={'type':'checkpoint','scenario':hook,'namespace':ns,'repetition':rep,'purchaseId':pid,'checkpointObserved':True,'status':p['status'],'recovered':True,'recoverySeconds':time.monotonic()-checkpoint,'elapsedSeconds':time.monotonic()-accepted,'counts':{k:int(v) for k,v in counts.items()}}
     finally:kubectl(ns,'set','env','deploy/worker','EXPERIMENT_HOOK-');scale(ns,'deployment','worker',workers);ready(ns,'deployment','worker')
     (OUT/f'{ns}-{hook}-{rep}.json').write_text(json.dumps(result,indent=2)+'\n');print(ns,hook,rep,'recovered',flush=True);return result
-def load(ns,base):
-    def request(_):
-        t=time.monotonic()
-        try:
-            with urllib.request.urlopen(base+'/api/courses',timeout=10) as r:r.read();status=r.status
-        except urllib.error.HTTPError as e:status=e.code
-        except OSError:status=0
-        return {'status':status,'latencyMs':(time.monotonic()-t)*1000}
-    started=time.monotonic()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=20) as pool:samples=list(pool.map(request,range(300)))
-    result={'type':'load','namespace':ns,'concurrency':20,'requests':300,'elapsedSeconds':time.monotonic()-started,'statusCounts':{str(s):sum(x['status']==s for x in samples) for s in set(x['status'] for x in samples)},'p95LatencyMs':sorted(x['latencyMs'] for x in samples)[284],'samples':samples};(OUT/f'{ns}-load.json').write_text(json.dumps(result,indent=2)+'\n');print(ns,'load',result['statusCounts'],flush=True);return result
+# Final-project scenarios (experiments 3, 5, 6, 7) live in scenarios.py.
+NEW=('timeout','circuit','spike','alerts','security')
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--repetitions',type=int,default=3);p.add_argument('--only',choices=['availability','queue','checkpoints','load','all'],default='all');args=p.parse_args();results=[]
+    import scenarios
+    p=argparse.ArgumentParser();p.add_argument('--repetitions',type=int,default=3);p.add_argument('--only',choices=['availability','queue','checkpoints',*NEW,'all'],default='all');args=p.parse_args();results=[]
     inventory={'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'environment':ENVIRONMENT,'repetitions':args.repetitions,'deployments':{ns:json.loads(kubectl(ns,'get','deployments','-o','json')) for ns in ('midterm','midterm-baseline')},'pods':{ns:json.loads(kubectl(ns,'get','pods','-o','json')) for ns in ('midterm','midterm-baseline')},'configHashes':{ns:hashlib.sha256(kubectl(ns,'get','configmap','university-config','-o','json').encode()).hexdigest() for ns in ('midterm','midterm-baseline')}}
     # Deployment env contains only secret references, never generated values.
     (OUT/'inventory.json').write_text(json.dumps(inventory,indent=2)+'\n')
@@ -125,10 +117,11 @@ def main():
             if args.only in ('availability','all'):
                 for scenario in ('api_crash','cache_outage','mysql_outage'):results.append(availability(ns,base,scenario,rep))
             if args.only in ('queue','all'):results.append(payment_queue_loss(ns,base,rep))
-        if args.only in ('load','all'):results.append(load(ns,base))
     if args.only in ('checkpoints','all'):
         for rep in range(1,args.repetitions+1):
             for hook in ('after_provider_success','after_outbox_publish'):results.append(checkpoint_recovery(RESILIENT,BASE[RESILIENT],hook,rep))
+    for name in NEW:
+        if args.only in (name,'all'):results+=scenarios.run(name,args.repetitions)
     (OUT/f'summary-{args.only}.json').write_text(json.dumps([{k:v for k,v in x.items() if k!='samples'} for x in results],indent=2)+'\n')
 if __name__=='__main__':
     with argocd_paused():main()

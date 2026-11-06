@@ -43,7 +43,7 @@ python3 scripts/observability-check.py
 python3 scripts/summarize.py
 ```
 
-Results go to `output/final/`. The scripts only touch the four project namespaces and restore changed replica counts in `finally` blocks. `--only restore` runs these two commands and records their timing; to run them by hand:
+Results go to `output/final/`. `scripts/summarize.py` turns them into `results.md` / `results.csv` (one consolidated row per experiment and profile, baseline vs FT), `reliability.csv` (availability, MTTR, MTBF, MTTF, failure rate) and `requests.csv` (every availability probe). Each `experiments.py` call also writes `inventory-<scenario>.json`; `results.md` lists the application image(s) found and flags a mix of builds. The scripts only touch the four project namespaces and restore changed replica counts in `finally` blocks. `--only restore` runs these two commands and records their timing; to run them by hand:
 
 ```sh
 kubectl --context orbstack -n midterm exec deploy/api -c api -- php bin/console app:backup

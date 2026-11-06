@@ -110,7 +110,7 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--repetitions',type=int,default=3);p.add_argument('--only',choices=['availability','queue','checkpoints',*NEW,'all'],default='all');args=p.parse_args();results=[]
     inventory={'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'environment':ENVIRONMENT,'repetitions':args.repetitions,'deployments':{ns:json.loads(kubectl(ns,'get','deployments','-o','json')) for ns in ('midterm','midterm-baseline')},'pods':{ns:json.loads(kubectl(ns,'get','pods','-o','json')) for ns in ('midterm','midterm-baseline')},'configHashes':{ns:hashlib.sha256(kubectl(ns,'get','configmap','university-config','-o','json').encode()).hexdigest() for ns in ('midterm','midterm-baseline')}}
     # Deployment env contains only secret references, never generated values.
-    (OUT/'inventory.json').write_text(json.dumps(inventory,indent=2)+'\n')
+    (OUT/f'inventory-{args.only}.json').write_text(json.dumps(inventory,indent=2)+'\n')
     for ns in (BASELINE,RESILIENT):
         base=BASE[ns]
         for rep in range(1,args.repetitions+1):

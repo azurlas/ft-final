@@ -88,7 +88,7 @@ Run each with 3 repetitions (unless noted), on **baseline vs FT** where the comp
 
 Local check (2026-11-06, API + worker + mock against the compose test dependencies; Grafana, Prometheus and the cluster not available): `security` 10/10 cases passed and audited; `timeout` failed after 3 attempts of ≤ 2.0s with no receipt or enrollment; `circuit` opened, re-opened 3 times after failed half-open probes (taken by the still-failing purchases), and the good purchase succeeded with 1 attempt after ~76s; `spike` ran end to end. `alerts` is untested until it runs on Contabo.
 
-`summarize.py` produces `output/final/results.csv` and a Markdown consolidated table: success ratio, failure rate, MTTR, detection time, retries, circuit openings, missing/duplicate records, baseline vs FT. Mark measured values separately from theoretical ones.
+**Done:** `summarize.py` produces `output/final/results.csv` and a Markdown consolidated table (`results.md`): success ratio, failure rate, MTTR, detection time, retries, circuit openings, missing/duplicate records, baseline vs FT. Mark measured values separately from theoretical ones.
 
 ### 3.5 Report-supporting artefacts in the repo
 

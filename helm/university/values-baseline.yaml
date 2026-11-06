@@ -1,5 +1,5 @@
 profile: baseline
-hostname: baseline.midterm.k8s.orb.local
+hostname: baseline.sailaubek.dev
 apiReplicas: 1
 workerReplicas: 1
 gatewayReplicas: 1

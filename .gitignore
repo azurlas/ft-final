@@ -9,7 +9,6 @@
 /output/secrets/
 /output/tmp/
 /output/reports/course-report.pdf
-/output/reports/rendered/
 /rr
 .DS_Store
 
@@ -19,7 +18,3 @@
 /scripts/__pycache__/
 
 /.php-cs-fixer.cache
-
-/output/deployment-state.json
-/output/deployment-state.tmp
-/output/.deployment.lock

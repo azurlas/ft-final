@@ -1,5 +1,0 @@
-# OrbStack shares locally built Docker images with its Kubernetes cluster.
-image: midterm/university:dev
-storageClass: local-path
-tls:
-  enabled: true

@@ -38,15 +38,16 @@ python3 scripts/experiments.py --only circuit               # circuit breaker op
 python3 scripts/experiments.py --only spike                 # load spike (B vs FT)
 python3 scripts/experiments.py --only security              # misuse cases denied and audited (FT)
 python3 scripts/experiments.py --only alerts --repetitions 1  # alert detection and log correlation (FT)
+python3 scripts/experiments.py --only restore              # backup + isolated restore verification (FT)
 python3 scripts/observability-check.py
 python3 scripts/summarize.py
 ```
 
-Results go to `output/final/`. The scripts only touch the four project namespaces and restore changed replica counts in `finally` blocks. Backup and isolated restore verification:
+Results go to `output/final/`. The scripts only touch the four project namespaces and restore changed replica counts in `finally` blocks. `--only restore` runs these two commands and records their timing; to run them by hand:
 
 ```sh
-kubectl --context orbstack -n midterm exec deploy/api -- php bin/console app:backup
-kubectl --context orbstack -n midterm exec deploy/api -- php bin/console app:restore-verify mysql/<returned-key>.sql.gz
+kubectl --context orbstack -n midterm exec deploy/api -c api -- php bin/console app:backup
+kubectl --context orbstack -n midterm exec deploy/api -c api -- php bin/console app:restore-verify mysql/<returned-key>.sql.gz
 ```
 
 ## Tests

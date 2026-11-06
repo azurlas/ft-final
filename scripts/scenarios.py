@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Final-project experiments 3, 5, 6 and 7, run through scripts/experiments.py:
+"""Final-project experiments 3, 5, 6, 7 and 8, run through scripts/experiments.py:
 
     python3 scripts/experiments.py --only timeout      # 3: provider delay vs. 2 s deadline (B vs FT)
     python3 scripts/experiments.py --only circuit      # 3: circuit breaker opens and defers calls (FT)
     python3 scripts/experiments.py --only spike        # 5: warm-up / spike / cool-down load (B vs FT)
     python3 scripts/experiments.py --only alerts       # 6: inject faults, measure alert detection (FT)
     python3 scripts/experiments.py --only security     # 7: misuse cases denied and audited (FT)
+    python3 scripts/experiments.py --only restore      # 8: backup + isolated restore verification (FT)
 
 Each run writes one JSON file per scenario and repetition to output/final/.
 """
@@ -195,6 +196,10 @@ def circuit_scenario(rep):
     deadline = time.monotonic() + 60
     while (state := circuit_state(ns)) and state['is_open'] and time.monotonic() < deadline:
         time.sleep(2)
+    # A successful payment resets consecutive_failures to 0 (e.g. after the timeout scenario),
+    # so every run starts from the same circuit state.
+    reset_user = create_user(base)
+    wait_terminal(reset_user, checkout(reset_user, ids['Payment Success'], 'success')['id'])
     initial = circuit_state(ns)
     failing = [create_user(base) for _ in range(2)]
     good_user = create_user(base)
@@ -239,39 +244,55 @@ def circuit_scenario(rep):
 
 # --- experiment 5: load spike ------------------------------------------------
 
-PHASES = (('warmup', 20, 5), ('spike', 30, 40), ('cooldown', 20, 5))
+# (phase, seconds, target requests/second). Envoy's local rate limit is 200 req/s per proxy pod:
+# the 300 req/s spike exceeds the baseline's single gateway but not the resilient profile's two.
+PHASES = (('warmup', 20, 20), ('spike', 30, 300), ('cooldown', 20, 20))
 
 
 def spike_scenario(ns, phases=PHASES):
-    """Closed-loop clients repeatedly GET the catalogue; concurrency jumps during the spike phase."""
+    """Open-loop load on the catalogue: requests are sent at a fixed rate per phase, independent of
+    response times, so a slow or rejecting server cannot lower the offered load."""
     base, samples, lock = BASE[ns], [], threading.Lock()
     started = time.monotonic()
 
-    def client(phase, until):
-        while time.monotonic() < until:
-            r = http(base, 'GET', '/api/courses', timeout=10)
-            with lock:
-                samples.append({'phase': phase, 't': time.monotonic() - started, 'status': r['status'], 'latencyMs': r['latencyMs']})
+    def one(phase, scheduled):
+        r = http(base, 'GET', '/api/courses', timeout=10)
+        with lock:
+            samples.append({'phase': phase, 't': scheduled - started, 'status': r['status'], 'latencyMs': r['latencyMs'],
+                            'startDelayMs': (time.monotonic() - scheduled) * 1000 - r['latencyMs']})
 
-    for phase, seconds, concurrency in phases:
-        until = time.monotonic() + seconds
-        with concurrent.futures.ThreadPoolExecutor(max_workers=concurrency) as pool:
-            for _ in range(concurrency):
-                pool.submit(client, phase, until)
+    # Enough threads for 300 req/s even at ~2 s latency, so the generator never falls behind.
+    with concurrent.futures.ThreadPoolExecutor(max_workers=600) as pool:
+        for phase, seconds, rate in phases:
+            phase_start = time.monotonic()
+            for i in range(int(seconds * rate)):
+                scheduled = phase_start + i / rate
+                delay = scheduled - time.monotonic()
+                if delay > 0:
+                    time.sleep(delay)
+                pool.submit(one, phase, scheduled)
+            # Do not let the next phase start early if the dispatcher finished ahead of time.
+            remaining = phase_start + seconds - time.monotonic()
+            if remaining > 0:
+                time.sleep(remaining)
     per_phase = {}
-    for phase, seconds, concurrency in phases:
+    for phase, seconds, rate in phases:
         rows = [s for s in samples if s['phase'] == phase]
         ok = [s['latencyMs'] for s in rows if s['status'] == 200]
         per_phase[phase] = {
-            'seconds': seconds, 'concurrency': concurrency, 'requests': len(rows),
-            'throughputRps': len(rows) / seconds, 'ok': len(ok),
+            'seconds': seconds, 'targetRps': rate, 'requests': len(rows),
+            'offeredRps': len(rows) / seconds, 'goodputRps': len(ok) / seconds, 'ok': len(ok),
             'rateLimited429': sum(s['status'] == 429 for s in rows),
             'serverErrors5xx': sum(s['status'] >= 500 for s in rows),
             'connectionErrors': sum(s['status'] == 0 for s in rows),
             'p50Ms': percentile(ok, 50), 'p95Ms': percentile(ok, 95), 'p99Ms': percentile(ok, 99),
             'meanMs': statistics.mean(ok) if ok else None,
+            # Large values mean the load generator itself fell behind; the run is then not valid.
+            'maxClientStartDelayMs': max((s['startDelayMs'] for s in rows), default=None),
         }
     spike = per_phase['spike']
+    # Pass: no server errors, and latency of accepted requests stays below 1 s. 429s are admission
+    # control (reported separately), not failures.
     summary = {'phases': per_phase,
                'pass': spike['serverErrors5xx'] + spike['connectionErrors'] <= 0.01 * max(1, spike['requests']) and (spike['p95Ms'] or 1e9) < 1000}
     return write(f'{ns}-spike', {'type': 'spike', 'namespace': ns, 'utc': utc(), 'summary': summary, 'samples': samples})
@@ -442,6 +463,34 @@ def security_scenario(rep):
     return write(f'{ns}-security-{rep}', {'type': 'security', 'namespace': ns, 'repetition': rep, 'utc': utc(), 'cases': results, 'summary': summary})
 
 
+# --- experiment 8: backup and isolated restore -------------------------------
+
+def console_json(*args):
+    """Run a console command in the resilient API pod and return its last JSON line."""
+    out = kubectl(RESILIENT, 'exec', 'deploy/api', '-c', 'api', '--', 'php', 'bin/console', *args, timeout=300)
+    lines = [line for line in out.splitlines() if line.startswith('{') and '"level_name"' not in line]
+    return json.loads(lines[-1])
+
+
+def restore_scenario(rep):
+    """Take a fresh MySQL dump, restore it into a new isolated database and compare row hashes."""
+    started = time.monotonic()
+    backup = console_json('app:backup')
+    dumped = time.monotonic()
+    restored = console_json('app:restore-verify', backup['key'])
+    finished = time.monotonic()
+    summary = {
+        'backupKey': backup['key'], 'backupBytes': backup.get('bytes'),
+        'backupSeconds': dumped - started, 'restoreVerifySeconds': finished - dumped,
+        'checksumVerified': restored.get('checksumVerified'), 'matchesCurrentSource': restored.get('matchesCurrentSource'),
+        'counts': restored.get('counts'), 'violations': restored.get('violations'),
+        'restoreDatabase': restored.get('database'),
+    }
+    summary['pass'] = bool(summary['checksumVerified'] and summary['matchesCurrentSource'] and not summary['violations'])
+    return write(f'{RESILIENT}-restore-{rep}', {'type': 'restore', 'namespace': RESILIENT, 'repetition': rep, 'utc': utc(),
+                                                 'backup': backup, 'restore': restored, 'summary': summary})
+
+
 def run(only, repetitions):
     results = []
     for rep in range(1, repetitions + 1):
@@ -453,6 +502,8 @@ def run(only, repetitions):
             results += alerts_scenario(rep)
         elif only == 'security':
             results.append(security_scenario(rep))
+        elif only == 'restore':
+            results.append(restore_scenario(rep))
     if only == 'spike':
         results += [spike_scenario(ns) for ns in (BASELINE, RESILIENT)]
     return results

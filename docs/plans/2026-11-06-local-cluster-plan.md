@@ -26,6 +26,31 @@ Findings:
 - **Security trial on the cluster:** 10/10 cases returned the expected status and were found in VictoriaLogs by request ID.
 - The first `smoke.py` run right after deploy failed once with "No route to host" while the `.orb.local` route warmed up; later runs passed. Wait about a minute after deploy before experiments.
 
+## Trial run (2026-11-06, 1 repetition each, image `local-20261106120520` after fixes)
+
+Every scenario ran once. Raw trial files stay outside the repo; the final runs replace them.
+
+| Scenario | Trial result |
+| --- | --- |
+| availability | Baseline 79% / 19% / 52% probe success for API crash / cache outage / MySQL outage; resilient 100% / 100% / 39%. Same pattern as the midterm |
+| queue, checkpoints | Pass |
+| timeout | Pass. Baseline: failed after 1 attempt (4.3s). Resilient: 3 attempts (15.9s). Each attempt stops at about 2.0s; no receipt or enrollment |
+| circuit | Pass after a fix (below). Opened twice; the good purchase succeeded with exactly 1 attempt |
+| spike (fixed rate 20 → 300 → 20 req/s) | Baseline: about 207 req/s served, 2,799 fast 429s (31%), accepted p95 27 ms. Resilient: 300 req/s served, 0 × 429, p95 778 ms, 8 connection errors, slower cool-down. Trade-off: rejection vs. latency |
+| security | 10/10 cases with the expected status and an audit record |
+| alerts | DatabaseDown 13.6s, ApiReplicasDegraded 27.3s, AuthFailureSpike 33.6s, PaymentBacklogStuck 79.1s detection; all resolved after repair; logs correlated |
+| broker-recovery | 3/3 recovered with 1 attempt (after the relay fix) |
+| restore | Backup 0.39s, restore + verify 0.83s, checksum OK, matches source, 0 violations |
+| observability-check | Pass (9 official panels, metrics present, correlated payment logs) |
+
+Fixed during the trial:
+- **Relay never reconnected after a queue Redis restart (real bug, report it).** The long-running `app:payment-relay` kept a dead Redis connection, so purchases accepted during a broker outage stayed `pending` forever (alert scenario and broker trial both failed). It was introduced or exposed after the midterm measurements, which used an older image. The relay now exits on a Messenger `TransportException` / `RedisException` after 2s, and Supervisor restarts it with a fresh connection, the same pattern the consumer already uses. Verified: 3/3 broker outages and the long backlog outage recover with 1 receipt / 1 attempt / 1 enrollment.
+- **Circuit runs started with leftover failures** from the timeout scenario. A successful payment now resets the counter before each run.
+- **Spike measured the rate limiter, not the app**: back-to-back clients exceeded Envoy's 200 req/s per pod even in warm-up. It now sends a fixed rate per phase, with enough client threads (600) that the generator never falls behind (max start delay < 50 ms, recorded per phase).
+- Added `--only restore` so experiment 8 writes a timed JSON result like the others.
+
+Open risk: once, right after the spike, the Kubernetes API was unreachable for about a minute and every app container plus the Envoy Gateway controller restarted together. There were no OOM or node events, and the containers used about 4.3 of 8 GiB. The cause is unknown. For the final runs: close other heavy apps, keep the Mac on power, check `kubectl --context orbstack get pods -A` between scenarios, and consider raising OrbStack memory to 10–12 GiB.
+
 ## 1. Target setup
 
 Same layout as the midterm, so the midterm comparison still holds:
@@ -113,8 +138,7 @@ python3 scripts/experiments.py --only circuit           # exp 3 (FT, 3 reps), ru
 python3 scripts/experiments.py --only spike             # exp 5 (B vs FT, 1 run each)
 python3 scripts/experiments.py --only security          # exp 7 (FT, 3 reps)
 python3 scripts/experiments.py --only alerts --repetitions 1   # exp 6 (FT, ~15 min)
-kubectl --context orbstack -n midterm exec deploy/api -- php bin/console app:backup            # exp 8
-kubectl --context orbstack -n midterm exec deploy/api -- php bin/console app:restore-verify <key>
+python3 scripts/experiments.py --only restore            # exp 8 (FT, 3 reps)
 python3 scripts/observability-check.py
 python3 scripts/summarize.py
 ```

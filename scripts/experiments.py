@@ -103,8 +103,8 @@ def checkpoint_recovery(ns,base,hook,rep):
         result={'type':'checkpoint','scenario':hook,'namespace':ns,'repetition':rep,'purchaseId':pid,'checkpointObserved':True,'status':p['status'],'recovered':True,'recoverySeconds':time.monotonic()-checkpoint,'elapsedSeconds':time.monotonic()-accepted,'counts':{k:int(v) for k,v in counts.items()}}
     finally:kubectl(ns,'set','env','deploy/worker','EXPERIMENT_HOOK-');scale(ns,'deployment','worker',workers);ready(ns,'deployment','worker')
     (OUT/f'{ns}-{hook}-{rep}.json').write_text(json.dumps(result,indent=2)+'\n');print(ns,hook,rep,'recovered',flush=True);return result
-# Final-project scenarios (experiments 3, 5, 6, 7) live in scenarios.py.
-NEW=('timeout','circuit','spike','alerts','security')
+# Final-project scenarios (experiments 3, 5, 6, 7, 8) live in scenarios.py.
+NEW=('timeout','circuit','spike','alerts','security','restore')
 def main():
     import scenarios
     p=argparse.ArgumentParser();p.add_argument('--repetitions',type=int,default=3);p.add_argument('--only',choices=['availability','queue','checkpoints',*NEW,'all'],default='all');args=p.parse_args();results=[]

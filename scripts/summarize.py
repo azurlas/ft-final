@@ -68,6 +68,16 @@ COLUMNS = ['experiment', 'scenario', 'profile', 'runs', 'passed', 'success', 'av
            'recovery_s', 'latency', 'recovery_actions', 'integrity', 'notes']
 
 
+def availability_pass(scenario, run):
+    """FT criteria from docs/experiments.md (E1, E2)."""
+    stats = run['stats']
+    if scenario in ('api_crash', 'cache_outage'):
+        return stats['requestAvailability'] >= 0.99
+    # MySQL: fail safe (only 503 or client timeout) and recover within 60 s.
+    failed = {s['status'] for s in run['samples'] if s['status'] != 200}
+    return failed <= {0, 503} and not stats['recoveryRightCensored'] and (stats['mttrSeconds'] or 0) < 60
+
+
 def availability_rows(runs):
     groups = collections.defaultdict(list)
     for r in runs:
@@ -84,6 +94,7 @@ def availability_rows(runs):
         failures = sum(s['outageCount'] for s in stats)
         window = sum(s['windowSeconds'] for s in stats)
         rows.append(row(exp[scenario], scenario, PROFILE[ns], len(group),
+                        None if ns == BASELINE else sum(availability_pass(scenario, r) for r in group),
                         success=f'{ok}/{total}', availability=pct(ok, total),
                         detection_s=fmt(mean(detection)), recovery_s=fmt(mttr) if mttr is not None else ('none needed' if not failures else 'censored'),
                         latency=f"max {fmt(max(s['maxLatencyMs'] for s in stats), 0)} ms",
@@ -172,13 +183,21 @@ def spike_rows(files):
         phases = r['summary']['phases']
         spike = phases['spike']
         errors = spike['serverErrors5xx'] + spike['connectionErrors']
-        rows.append(row('5 Load spike', f"{spike['targetRps']} req/s for {spike['seconds']} s", PROFILE[r['namespace']], 1, int(r['summary']['pass']),
+        # Valid only if the load generator kept to its schedule (docs/experiments.md, E5).
+        valid = all((p.get('maxClientStartDelayMs') or 0) < 100 for p in phases.values())
+        rows.append(row('5 Load spike', f"{spike['targetRps']} req/s for {spike['seconds']} s", PROFILE[r['namespace']], 1,
+                        None if r['namespace'] == BASELINE else int(r['summary']['pass'] and valid),
                         success=f"{spike['ok']}/{spike['requests']}", availability=pct(spike['ok'], spike['requests']),
                         latency=f"p50 {fmt(spike['p50Ms'], 0)} / p95 {fmt(spike['p95Ms'], 0)} / p99 {fmt(spike['p99Ms'], 0)} ms",
                         recovery_actions=f"{spike['rateLimited429']} × 429 (admission control)",
                         notes=f"goodput {fmt(spike['goodputRps'], 1)} req/s; {errors} 5xx/connection errors; "
-                              f"cool-down p95 {fmt(phases['cooldown']['p95Ms'], 0)} ms; warm-up p95 {fmt(phases['warmup']['p95Ms'], 0)} ms"))
+                              f"cool-down p95 {fmt(phases['cooldown']['p95Ms'], 0)} ms; warm-up p95 {fmt(phases['warmup']['p95Ms'], 0)} ms"
+                              + ('' if valid else '; INVALID: load generator fell behind')))
     return rows
+
+
+# Expected detection upper bounds (docs/experiments.md, E6): rule window + scrape/evaluation delay.
+ALERT_BOUND_S = {'DatabaseDown': 40, 'ApiReplicasDegraded': 60, 'AuthFailureSpike': 90, 'PaymentBacklogStuck': 120}
 
 
 def alert_rows(files):
@@ -189,13 +208,15 @@ def alert_rows(files):
     for scenario, group in sorted(by_scenario.items()):
         correlated = [s['logsCorrelated'] for s in group if s['logsCorrelated'] is not None]
         integrity = [s['integrity'] for s in group if s.get('integrity')]
-        rows.append(row('6 Monitoring / alert', f"{group[0]['alert']} ({scenario})", 'FT', len(group), sum(s['pass'] for s in group),
+        bound = ALERT_BOUND_S.get(group[0]['alert'], 1e9)
+        passed = sum(s['pass'] and (s['detectionSeconds'] or 1e9) <= bound for s in group)
+        rows.append(row('6 Monitoring / alert', f"{group[0]['alert']} ({scenario})", 'FT', len(group), passed,
                         success=f"{sum(s['fired'] for s in group)}/{len(group)} fired, {sum(s['resolved'] for s in group)}/{len(group)} resolved",
                         detection_s=fmt(mean([s['detectionSeconds'] for s in group])),
                         recovery_s=fmt(mean([s['resolveSecondsAfterRestore'] for s in group])),
                         integrity=counts_text([{'counts': i} for i in integrity]) if integrity else '',
                         notes=(f'logs correlated {sum(correlated)}/{len(correlated)}; ' if correlated else '')
-                              + 'detection = fault to alert firing; recovery = repair to alert resolved'))
+                              + f'bound {bound} s; detection = fault to alert firing; recovery = repair to alert resolved'))
     return rows
 
 
